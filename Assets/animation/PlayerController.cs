@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Photon.Pun;
 
-public class PlayerController: MonoBehaviour
+public class PlayerController: MonoBehaviourPun
 {
     Quaternion targetRotation;
     Animator animator;
@@ -14,6 +15,7 @@ public class PlayerController: MonoBehaviour
     public float walkSpeed = 1.0f;
     public float runSpeed = 2.0f;
     bool canMove = true;
+    GameObject myCamera;
     // Use this for initialization
     void Start()
     {
@@ -25,6 +27,11 @@ public class PlayerController: MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (!photonView.IsMine)
+        {
+            return;
+        }
         //カメラの向きで補正した入力ベクトルの取得
         var horizontal = Input.GetAxis("Horizontal");
         var vertical = Input.GetAxis("Vertical");
@@ -104,38 +111,42 @@ public class PlayerController: MonoBehaviour
             canMove = false;
         }
 
+    }
 
-
-
-        IEnumerator waitMotion()
+    IEnumerator waitMotion()
+    {
+        float count = 0f;
+        while (true)
         {
-            float count = 0f;
-            while (true)
+            yield return null;
+            count += Time.deltaTime;
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
             {
-                yield return null;
-                count += Time.deltaTime;
-                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
-                {
-                    checkWait = false;
-                    count = 0f;
-                    break;
-
-                }
-                if (count > 3.0f)
-                {
-                    if (speed == 0)
-                    {
-                        animator.SetTrigger("waitting");
-                        checkWait = false;
-                        break;
-                    }
-                    //break;
-                }
+                checkWait = false;
+                count = 0f;
+                break;
 
             }
-
-
+            if (count > 3.0f)
+            {
+                if (speed == 0)
+                {
+                    animator.SetTrigger("waitting");
+                    checkWait = false;
+                    break;
+                }
+                //break;
+            }
 
         }
+
+
+
     }
+
+    public void searchBox(Vector3 playerPosi, Vector3 targetPosi)
+    {
+
+    }
+
 }
