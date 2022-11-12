@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using util;
+using Photon.Pun;
 
-public class ProgressBarCon : ProgressBar
+public class ProgressBarCon : ProgressBar, IPunObservable
 {
-
+    [SerializeField] PhotonView photonview;
     private void Update()
     {
         if(isActive)
@@ -31,10 +32,39 @@ public class ProgressBarCon : ProgressBar
         }
     }
 
-    new void CompleteTask()
+    override public void CompleteTask()
     {
-        Destroy(this.gameObject);
+        base.CompleteTask();
+        this.gameObject.SetActive(false);   
+        
     }
 
-    
+    public void stopProgress()
+    {
+        isActive = false;
+    }
+
+    public bool taskCompleteCheck()
+    {
+        return istaskCompleted;
+    }
+
+    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+
+        if (stream.IsWriting)
+        {
+            if (!photonView.IsMine)
+            {
+                return;
+            }
+            //データの送信
+            stream.SendNext(progressTime);
+
+        }
+        else
+        {
+            this.progressTime = (float)stream.ReceiveNext();
+        }
+    }
 }

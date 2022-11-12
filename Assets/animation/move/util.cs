@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 /// <summary>
 /// 共通して利用できるクラスはこちらに作成する
 /// </summary>
 namespace util
 {
-    public class ProgressBar:MonoBehaviour
+    public class ProgressBar: MonoBehaviourPunCallbacks
     {
-        [SerializeField] protected bool isActive = false;
+        [SerializeField] public bool isActive = false;
         [SerializeField] protected GameObject progressPanel;
         protected RectTransform panelTransform;
         [SerializeField] protected float maxWidth;
-        [Range(0f,1f)] protected float progressRatio;
+        [Range(0f,1f)] public float progressRatio;
         [SerializeField] protected float needTime;
         protected float progressTime;
+        protected bool istaskCompleted = false;
+
         private void Awake()
         {
             panelTransform = progressPanel.GetComponent<RectTransform>();
@@ -46,9 +49,9 @@ namespace util
 
         }
 
-        protected void CompleteTask()
+        virtual public void CompleteTask()
         {
-            Debug.Log("COMPLETE");
+            istaskCompleted = true;
         }
 
         protected void TaskStop()
@@ -60,6 +63,7 @@ namespace util
         {
             isActive = true;
         }
+
 
     }
 
