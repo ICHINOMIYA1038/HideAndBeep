@@ -46,15 +46,23 @@ public class PlayerController: MonoBehaviourPun
             return;
         }
 
-       
+        if (Input.GetMouseButtonDown(1) && !animator.GetCurrentAnimatorStateInfo(0).IsName("light"))
+        {
+            animator.SetTrigger("light");
+        }
+
+        if (Input.GetMouseButtonDown(1) && animator.GetCurrentAnimatorStateInfo(0).IsName("light"))
+        {
+            animator.SetTrigger("Lightstop");
+        }
 
         //速度の取得
 
-        
 
 
 
-        if(canMove ==true)
+
+        if (canMove ==true)
         {
             //カメラの向きで補正した入力ベクトルの取得
             var horizontal = Input.GetAxis("Horizontal");

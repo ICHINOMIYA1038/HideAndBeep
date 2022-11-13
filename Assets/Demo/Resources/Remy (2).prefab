@@ -1523,8 +1523,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3662278840571923650}
-  m_LocalRotation: {x: 0.15855654, y: -0.8025456, z: 0.24442072, w: 0.520614}
-  m_LocalPosition: {x: 6.6425486, y: 0, z: 22.086426}
+  m_LocalRotation: {x: 0.1585565, y: -0.80254567, z: 0.24442075, w: 0.52061385}
+  m_LocalPosition: {x: 6.6425486, y: 0, z: 22.08643}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2092,7 +2092,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3662278841442964136}
-  m_LocalRotation: {x: 0.14872138, y: -0.80763024, z: 0.23000214, w: 0.52222073}
+  m_LocalRotation: {x: 0.1487214, y: -0.8076302, z: 0.23000212, w: 0.52222073}
   m_LocalPosition: {x: 6.6212435, y: 0, z: 22.133957}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2827,6 +2827,12 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 2
     Name: stop
+  - Type: 9
+    SynchronizeType: 2
+    Name: light
+  - Type: 9
+    SynchronizeType: 2
+    Name: Lightstop
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
@@ -2867,6 +2873,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 5392924333976175242}
   - {fileID: 7020863360415411484}
+  - {fileID: 114101202039002609}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -4112,6 +4119,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Flashlight
       objectReference: {fileID: 0}
+    - target: {fileID: 1229193494168842, guid: 0ddea81a21def2441b61569e0a44ca14, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4619044427919406, guid: 0ddea81a21def2441b61569e0a44ca14, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -4184,6 +4195,22 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 108003487599132438, guid: 0ddea81a21def2441b61569e0a44ca14, type: 3}
+      propertyPath: m_Intensity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 108598554077249260, guid: 0ddea81a21def2441b61569e0a44ca14, type: 3}
+      propertyPath: m_Intensity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 108910276342904206, guid: 0ddea81a21def2441b61569e0a44ca14, type: 3}
+      propertyPath: m_Intensity
+      value: 0.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 114101202544116884, guid: 0ddea81a21def2441b61569e0a44ca14, type: 3}
+      propertyPath: photonview
+      value: 
+      objectReference: {fileID: -7692856748909806828}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ddea81a21def2441b61569e0a44ca14, type: 3}
 --- !u!4 &4848275478740311 stripped
@@ -4191,3 +4218,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4848275991718962, guid: 0ddea81a21def2441b61569e0a44ca14, type: 3}
   m_PrefabInstance: {fileID: 569151845}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &114101202039002609 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114101202544116884, guid: 0ddea81a21def2441b61569e0a44ca14, type: 3}
+  m_PrefabInstance: {fileID: 569151845}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5babb3fbc35544ea399e2886e69046, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
