@@ -87,8 +87,7 @@ public class bauScript : MonoBehaviour {
 			}
 			rb.AddForce (new Vector3(0,1,1));
 		}
-
-
-
 	}
+
+	//vWkEVgAtq
 }
