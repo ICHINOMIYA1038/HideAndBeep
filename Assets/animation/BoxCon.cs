@@ -75,7 +75,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
                
                     playerController = other.gameObject.GetComponent<PlayerController>();
                     
-                    playerController.searchBox(transform.position - new Vector3(0f, 0f, 2f), transform.position);
+                    playerController.searchBox(transform.position - new Vector3(0f, 0f, 3f), transform.position);
                     playerController.canMove = false;
                     progressBar.isActive = true;
                     progressbarInstance.SetActive(true);

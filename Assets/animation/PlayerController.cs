@@ -21,6 +21,7 @@ public class PlayerController: MonoBehaviourPun
     // Use this for initialization
     void Start()
     {
+
         if (!photonView.IsMine)
         {
             return;
