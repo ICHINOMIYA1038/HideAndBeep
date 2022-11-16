@@ -7,32 +7,34 @@ using Cinemachine;
 
 public class RandomMatchMaker : MonoBehaviourPunCallbacks
 {
-    //インスペクターから設定できる
+    //?C???X?y?N?^?[??????????????
     public GameObject PhotonObject;
     
 
     void Start()
     {
-        //先ほどの設定を用いてサーバーに接続できる。
+        //???????????????p?????T?[?o?[?????????????B
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    // このデモ
+    // ?????f??
     void Update()
     {
         
     }
 
-    //セツゾクスルトヨバレル
+    //?Z?c?]?N?X???g???o????
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinRandomRoom();
     }
 
-    //今回はロビーを私用しないため、そのまま部屋に入れる。
+    //?????????r?[?????p???????????A?????????????????????B
     public override void OnJoinedLobby()
     {
+        PhotonNetwork.NickName = "youichi";
         PhotonNetwork.JoinRandomRoom();
+
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -44,15 +46,21 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        GameObject Player = PhotonNetwork.Instantiate(
+        GameObject player = PhotonNetwork.Instantiate(
                 PhotonObject.name,
                 new Vector3(0f, 1f, 0f),
                 Quaternion.identity,
                 0
                 );
-        Player.GetComponentInChildren<Camera>().enabled = true;
-        Player.GetComponentInChildren<Camera>().depth -= 1;
-        Player.GetComponentInChildren<CinemachineFreeLook>().enabled = true;
+        GameManager gamemanager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+
+        player.GetComponentInChildren<Camera>().enabled = true;
+        player.GetComponentInChildren<Camera>().depth -= 1;
+        player.GetComponentInChildren<CinemachineFreeLook>().enabled = true;
+        PlayerController playerController = player.GetComponent<PlayerController>();
+
+        playerController.setName("taro");
+        gamemanager.addNewPlayer(playerController);
 
 
     }
