@@ -1,6 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 public class SingletonMonoBehaviour<T> : MonoBehaviourPunCallbacks where T : MonoBehaviourPunCallbacks
 {
@@ -23,6 +24,8 @@ public class SingletonMonoBehaviour<T> : MonoBehaviourPunCallbacks where T : Mon
             return instance;
         }
     }
+
+  
 
 
 }

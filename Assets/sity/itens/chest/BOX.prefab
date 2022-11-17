@@ -145,6 +145,7 @@ MonoBehaviour:
   lid: {fileID: 3000509077077076996}
   waitTime: 3
   photonview: {fileID: 814982931}
+  ItemState: 0
 --- !u!54 &1806386931
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -401,6 +402,10 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 9067840553481745216, guid: 7d92609ad0fdd7348ba30dcd4d7e0e82, type: 3}
+      propertyPath: boxController
+      value: 
+      objectReference: {fileID: 210098227}
     - target: {fileID: 9067840553481745223, guid: 7d92609ad0fdd7348ba30dcd4d7e0e82, type: 3}
       propertyPath: m_Pivot.x
       value: 0

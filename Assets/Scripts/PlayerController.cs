@@ -139,9 +139,12 @@ public class PlayerController: MonoBehaviourPun
 
     }
 
-    private void OnItemChange(int index)
+    public void OnItemChange(int index)
     {
-       
+        var hashtable = new ExitGames.Client.Photon.Hashtable();
+        hashtable["ItemState"] = index;
+        hashtable["Message"] = "こんにちは";
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
     }
 
     IEnumerator waitMotion()

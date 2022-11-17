@@ -4,23 +4,50 @@ using UnityEngine;
 using Photon.Realtime;
 using Photon.Pun;
 using Cinemachine;
+using UnityEngine.UI;
+using TMPro;
 
 public class RandomMatchMaker : MonoBehaviourPunCallbacks
 {
     //?C???X?y?N?^?[??????????????
     public GameObject PhotonObject;
-    
+    [SerializeField] GameObject joinRoomCanvas;
+    [SerializeField] GameObject readyRoomCanvas;
+    [SerializeField] GameObject mainCanvas;
+    [SerializeField] GameObject UICamera;
+
+    [SerializeField] Button joinRoomBtn;
+    [SerializeField] Button readyBtn;
+
+    [SerializeField] TextMeshProUGUI playerName;
+
+    private void Awake()
+    {
+        UICamera.SetActive(true);
+        joinRoomCanvas.SetActive(true);
+        readyRoomCanvas.SetActive(false);
+        mainCanvas.SetActive(false);
+
+        joinRoomBtn.onClick.AddListener(joinRoomClick);
+       
+    }
+
 
     void Start()
     {
-        //???????????????p?????T?[?o?[?????????????B
-        PhotonNetwork.ConnectUsingSettings();
+       
     }
 
     // ?????f??
     void Update()
     {
         
+    }
+
+    void joinRoomClick()
+    {
+        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.NickName = playerName.text;
     }
 
     //?Z?c?]?N?X???g???o????
@@ -32,7 +59,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     //?????????r?[?????p???????????A?????????????????????B
     public override void OnJoinedLobby()
     {
-        PhotonNetwork.NickName = "youichi";
+       
         PhotonNetwork.JoinRandomRoom();
 
     }
@@ -46,6 +73,20 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        joinRoomCanvas.SetActive(false);
+        readyRoomCanvas.SetActive(true);
+        mainCanvas.SetActive(false);
+
+        readyBtn.onClick.AddListener(onReady);
+
+    }
+
+    public void onReady()
+    {
+        UICamera.SetActive(false);
+        joinRoomCanvas.SetActive(false);
+        readyRoomCanvas.SetActive(false);
+        mainCanvas.SetActive(true);
         GameObject player = PhotonNetwork.Instantiate(
                 PhotonObject.name,
                 new Vector3(0f, 1f, 0f),
@@ -59,10 +100,15 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         player.GetComponentInChildren<CinemachineFreeLook>().enabled = true;
         PlayerController playerController = player.GetComponent<PlayerController>();
 
-        playerController.setName("taro");
+        playerController.setName(PhotonNetwork.NickName);
         gamemanager.addNewPlayer(playerController);
 
-
+        var hashtable = new ExitGames.Client.Photon.Hashtable();
+        hashtable["ItemState"] = 0;
+        hashtable["Message"] = "こんにちは";
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
     }
+
+
     
 }

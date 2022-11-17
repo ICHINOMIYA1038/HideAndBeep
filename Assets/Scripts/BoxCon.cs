@@ -13,14 +13,17 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
     [SerializeField] ProgressBarCon progressBar;
     [SerializeField] GameObject lid;
     PlayerController playerController;
-    //?L?????Z????????????????????
     [SerializeField] float waitTime = 3.0f;
     [SerializeField] PhotonView photonview;
+    [SerializeField] int ItemState;
      
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (ItemState == 0)
+        {
+            ItemState = (int)Random.Range(1, 3);
+        }
     }
 
     // Update is called once per frame
@@ -30,12 +33,15 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
         {
             return;
         }
-        if (progressBar.taskCompleteCheck())
-        {
-            lid.transform.eulerAngles = new Vector3(90f, 0f, 0f);
-            playerController.stopAction();
-            isOpen = true;
-        }
+        
+    }
+
+    public void CompleteTask()
+    {
+        lid.transform.eulerAngles = new Vector3(90f, 0f, 0f);
+        playerController.stopAction();
+        playerController.OnItemChange(ItemState);
+        isOpen = true;
     }
 
 
