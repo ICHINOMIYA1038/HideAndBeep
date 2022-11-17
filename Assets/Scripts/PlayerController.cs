@@ -18,11 +18,15 @@ public class PlayerController: MonoBehaviourPun
     public bool canMove = true;
     GameObject myCamera;
     Rigidbody rb;
-    int itemState;
+    public int itemState;
     static readonly int HasNoItem = 0;
     static readonly int HasLight = 1;
     static readonly int HasWhistle = 2;
     static readonly int Hasamulet = 3;
+    [SerializeField] GameObject ItemLight;
+    [SerializeField] GameObject ItemWhistle;
+    [SerializeField] GameObject ItemAmulet;
+    [SerializeField] GameObject blankImage;
 
 
 
@@ -39,6 +43,9 @@ public class PlayerController: MonoBehaviourPun
         Cursor.lockState = CursorLockMode.Locked;
         rb = GetComponent<Rigidbody>();
         Application.targetFrameRate =60;
+        ItemAmulet.SetActive(false);
+        ItemWhistle.SetActive(false);
+        ItemLight.SetActive(false);
 
     }
 
@@ -54,16 +61,23 @@ public class PlayerController: MonoBehaviourPun
         {
             return;
         }
-
-        if (Input.GetMouseButtonDown(1) && !animator.GetCurrentAnimatorStateInfo(0).IsName("light"))
+        if (itemState == 0)
         {
-            animator.SetTrigger("light");
-        }
 
-        if (Input.GetMouseButtonDown(1) && animator.GetCurrentAnimatorStateInfo(0).IsName("light"))
-        {
-            animator.SetTrigger("Lightstop");
         }
+        if (itemState == 1)
+        {
+            if (Input.GetMouseButtonDown(1) && !animator.GetCurrentAnimatorStateInfo(0).IsName("light"))
+            {
+                animator.SetTrigger("light");
+            }
+
+            if (Input.GetMouseButtonDown(1) && animator.GetCurrentAnimatorStateInfo(0).IsName("light"))
+            {
+                animator.SetTrigger("Lightstop");
+            }
+        }
+        
 
         //速度の取得
 
@@ -141,10 +155,35 @@ public class PlayerController: MonoBehaviourPun
 
     public void OnItemChange(int index)
     {
+        itemState = index;
         var hashtable = new ExitGames.Client.Photon.Hashtable();
         hashtable["ItemState"] = index;
         hashtable["Message"] = "こんにちは";
         PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
+        if(index==HasNoItem)
+        {
+            ItemLight.SetActive(false);
+            ItemAmulet.SetActive(false);
+            ItemWhistle.SetActive(false);
+        }
+        if (index == HasLight)
+        {
+            ItemLight.SetActive(true);
+            ItemAmulet.SetActive(false);
+            ItemWhistle.SetActive(false);
+        }
+        if (index == Hasamulet)
+        {
+            ItemLight.SetActive(false);
+            ItemAmulet.SetActive(true);
+            ItemWhistle.SetActive(false);
+        }
+        if (index == HasWhistle)
+        {
+            ItemLight.SetActive(false);
+            ItemAmulet.SetActive(false);
+            ItemWhistle.SetActive(true);
+        }
     }
 
     IEnumerator waitMotion()

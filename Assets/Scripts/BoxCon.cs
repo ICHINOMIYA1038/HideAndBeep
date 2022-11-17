@@ -20,10 +20,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
     // Start is called before the first frame update
     void Start()
     {
-        if (ItemState == 0)
-        {
-            ItemState = (int)Random.Range(1, 3);
-        }
+
     }
 
     // Update is called once per frame
@@ -40,7 +37,10 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
     {
         lid.transform.eulerAngles = new Vector3(90f, 0f, 0f);
         playerController.stopAction();
+        int charaItem = playerController.itemState;
         playerController.OnItemChange(ItemState);
+        ItemState = charaItem;
+        playerController = null;
         isOpen = true;
     }
 
@@ -49,7 +49,20 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
     {
         if(isOpen)
         {
-            return;
+            if (other.gameObject.tag == "Player"&& playerController == null)
+            {
+                if (Input.GetKey(KeyCode.E))
+                {
+
+                    photonview.RequestOwnership();
+                    playerController = other.gameObject.GetComponent<PlayerController>();
+                    int charaItem = playerController.itemState;
+                    playerController.OnItemChange(ItemState);
+                    ItemState = charaItem;
+                    playerController = null;
+                }
+            }
+                return;
         }
 
 
@@ -96,6 +109,11 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
      
     }
 
+    void InputCheck()
+    {
+
+    }
+
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         
@@ -109,11 +127,13 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
             }
             //?f?[?^?????M
             stream.SendNext(isOpen);
+            stream.SendNext(ItemState);
 
         }
         else
         {
             this.isOpen = (bool)stream.ReceiveNext();
+            this.ItemState = (int)stream.ReceiveNext();
         }
     }
 
