@@ -9,9 +9,10 @@ public class MapManager : MonoBehaviour
     float[,] soundMap;
     Vector3[] soundPosition;
     [SerializeField]GameObject[] items;
-    Renderer[,] renderers;
+    [SerializeField] Renderer[,] renderers;
     int widthNum = 3;
     int heightNum = 3;
+    [SerializeField] Vector3 testPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -19,21 +20,19 @@ public class MapManager : MonoBehaviour
         soundMap = new float[heightNum, widthNum];
         soundPosition = new Vector3[9];
 
-        for(int i=0;i<9;i++)
-        Debug.Log(items[i].name);
+        renderers = new Renderer[widthNum, heightNum];
 
-        for(int i =0; i<3; i++)
+        for (int i = 0; i<3; i++)
         {
-            for(int j = 0; j < 3; j++)
+            for(int j = 0; j<3; j++)
             {
+               
                 soundPosition[i * 3 + j] = items[i * 3 + j].transform.position;
-                renderers[i,j] = items[i * 3 + j].GetComponent<MeshRenderer>();
+                renderers[i,j] = items[i * 3 + j].GetComponent<Renderer>();
             }
         }
 
-        CatchSound(5, new Vector3(0, 0, 0));
-
-
+        CatchSound(1f, testPosition);
 
 
     }
@@ -44,13 +43,13 @@ public class MapManager : MonoBehaviour
 
     }
 
-    void CatchSound(int soundLevel, Vector3 position)
+    void CatchSound(float soundLevel, Vector3 position)
     {
         int row = 0;
         int column = 0;
         int length = alocationSound(position);
         showIndex(ref row, ref column, length);
-        upDateParameter(row, column, length);
+        upDateParameter(row, column, soundLevel);
 
 
     }
@@ -67,8 +66,8 @@ public class MapManager : MonoBehaviour
                 minimumIndex = posi.Index;
             }
         }
-
         return minimumIndex;
+        
     }
 
     void showIndex(ref int row, ref int column, int length)
@@ -79,38 +78,51 @@ public class MapManager : MonoBehaviour
 
     }
 
-    void upDateParameter(int row, int column, int level)
+    void upDateParameter(int row, int column, float level)
     {
 
         soundMap[row, column] += level;
 
-        float scaleFacter = 0.8f;
-        soundMap[row - 1, column - 1] += level * scaleFacter;
-        soundMap[row + 1, column - 1] += level * scaleFacter;
-        soundMap[row - 1, column + 1] += level * scaleFacter;
-        soundMap[row + 1, column + 1] += level * scaleFacter;
+        float scaleFacter = 0.95f;
 
-        soundMap[row, column + 1] += level * scaleFacter;
-        soundMap[row, column - 1] += level * scaleFacter;
-        soundMap[row - 1, column] += level * scaleFacter;
-        soundMap[row + 1, column] += level * scaleFacter;
+            if(row - 1 >= 0)
+        {
+            soundMap[row - 1, column] += level * scaleFacter;
+            soundMap[row - 1, column + 1] += level * scaleFacter;
+        }
+            if(column - 1 >= 0)
+        {
+            soundMap[row, column - 1] += level * scaleFacter;
+            soundMap[row + 1, column - 1] += level * scaleFacter;
+        }
+            if(row-1 >= 0 && column - 1 >= 0)
+        {
+            soundMap[row - 1, column - 1] += level * scaleFacter;
+        }
+            
+        
+            soundMap[row + 1, column + 1] += level * scaleFacter;
+            soundMap[row, column + 1] += level * scaleFacter;
+            soundMap[row + 1, column] += level * scaleFacter;
 
         Normarize();
 
-        upDateColor(row, column);
-        upDateColor(row + 1, column + 1);
         upDateColor(row + 1, column - 1);
         upDateColor(row, column - 1);
-        upDateColor(row, column + 1);
-        upDateColor(row - 1 , column + 1);
-        upDateColor(row - 1, column - 1);
-        upDateColor(row + 1 , column);
+        upDateColor(row - 1, column + 1);
         upDateColor(row - 1, column);
+        upDateColor(row, column);
+        upDateColor(row + 1, column + 1);
+        upDateColor(row, column + 1);
+        upDateColor(row + 1 , column);
+        upDateColor(row -1, column -1);
+
 
     }
 
     void upDateColor(int row, int column)
     {
+        if(row>=0&&column>=0)
         renderers[row,column].material.color = new Color(soundMap[row, column], 0f, 0f, 1f);
     }
 
