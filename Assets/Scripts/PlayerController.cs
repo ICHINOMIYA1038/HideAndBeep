@@ -51,7 +51,14 @@ public class PlayerController: MonoBehaviourPun
 
     // Update is called once per frame
     void Update()
-    {   if(animator == null)
+    {
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+        if(animator == null)
         {
             TryGetComponent(out animator);
         }

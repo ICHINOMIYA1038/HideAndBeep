@@ -9,10 +9,11 @@ using Photon.Chat;
 public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCallbacks
 {
     bool isOpen = false;
+    bool playerEnterTrigger = false;
     [SerializeField] GameObject progressbarInstance;
     [SerializeField] ProgressBarCon progressBar;
     [SerializeField] GameObject lid;
-    PlayerController playerController;
+    [SerializeField]PlayerController playerController;
     [SerializeField] float waitTime = 3.0f;
     [SerializeField] PhotonView photonview;
     [SerializeField] int ItemState;
@@ -26,11 +27,10 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
     // Update is called once per frame
     void Update()
     {
-        if(isOpen==true)
+        if(playerEnterTrigger)
         {
-            return;
+            InputCheck();
         }
-        
     }
 
     public void CompleteTask()
@@ -40,37 +40,46 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
         int charaItem = playerController.itemState;
         playerController.OnItemChange(ItemState);
         ItemState = charaItem;
-        playerController = null;
         isOpen = true;
     }
 
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
+    {
+        playerEnterTrigger = true;
+        playerController = other.gameObject.GetComponent<PlayerController>();
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        playerEnterTrigger = false;
+        playerController = null;
+    }
+
+
+    
+
+
+
+
+    private void InputCheck()
     {
         if(isOpen)
         {
-            if (other.gameObject.tag == "Player"&& playerController == null)
+            if (!playerController.animator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
             {
-                if (Input.GetKey(KeyCode.E))
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.E))
                 {
-
-                    photonview.RequestOwnership();
-                    playerController = other.gameObject.GetComponent<PlayerController>();
                     int charaItem = playerController.itemState;
                     playerController.OnItemChange(ItemState);
+                    photonview.RequestOwnership();
                     ItemState = charaItem;
-                    playerController = null;
                 }
-            }
-                return;
         }
 
-
-
-        if (other.gameObject.tag == "Player")
-        {
-
-            if (progressBar.isActive && playerController != null)
+        if (progressBar.isActive)
             {
 
                 if(Input.GetKey(KeyCode.Q))
@@ -78,41 +87,34 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
                     playerController.stopAction();
                     progressBar.isActive = false;
                     progressbarInstance.SetActive(false);
-                    playerController = null;
 
                 }
 
+         }
+
+        if (Input.GetKey(KeyCode.E) && progressBar.isActive == false)
+        {
+            photonview.RequestOwnership();
+
+
+            if (!playerController.animator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
+            {
+                return;
             }
 
-            if (Input.GetKey(KeyCode.E) && progressBar.isActive == false&&playerController==null)
-                {
-                    photonview.RequestOwnership();
 
-                if (other.gameObject.GetComponent<PlayerController>() != null)
-                {
-                    if (!other.gameObject.GetComponent<PlayerController>().animator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
-                    {
-                        return;
-                    }
-                }
-               
-                    playerController = other.gameObject.GetComponent<PlayerController>();
-                    
-                    playerController.searchBox(transform.position - new Vector3(0f, 0f, 3f), transform.position);
-                    playerController.canMove = false;
-                    progressBar.isActive = true;
-                    progressbarInstance.SetActive(true);
-               
-                }
-                
+
+            playerController.searchBox(transform.position - new Vector3(0f, 0f, 3f), transform.position);
+            playerController.canMove = false;
+            progressBar.isActive = true;
+            progressbarInstance.SetActive(true);
+
+
+        }
             }
+
      
-    }
 
-    void InputCheck()
-    {
-
-    }
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
