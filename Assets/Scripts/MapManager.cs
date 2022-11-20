@@ -7,13 +7,14 @@ using System;
 public class MapManager : MonoBehaviour
 {
     float[,] soundMap;
-    Vector3[] soundPosition;
+    [SerializeField] Vector3[] soundPosition;
+    [SerializeField] GameObject flag;
     [SerializeField]GameObject[] items;
     [SerializeField] Renderer[,] renderers;
     int widthNum = 3;
     int heightNum = 3;
     [SerializeField] Vector3 testPosition;
-
+      
     // Start is called before the first frame update
     void Start()
     {
