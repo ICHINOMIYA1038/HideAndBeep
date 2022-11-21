@@ -87,7 +87,7 @@ public class ZombieController : MonoBehaviour
         agent.SetDestination(agent.transform.position);
         if(HearSound())
         {
-            behaviorMode = WAITING_MODE;
+            behaviorMode = DETECT_MODE;
         }
         if ((targetPosition - agent.transform.position).magnitude < 50f)
         {
@@ -110,7 +110,7 @@ public class ZombieController : MonoBehaviour
     }
     void Detect()
     {
-        isFinding = false;
+        
     }
     void MoveTo()
     {

@@ -27,13 +27,14 @@ public class PlayerController: MonoBehaviourPun
     [SerializeField] GameObject ItemWhistle;
     [SerializeField] GameObject ItemAmulet;
     [SerializeField] GameObject blankImage;
+    [SerializeField] SoundManager soundmanager;
 
 
 
     // Use this for initialization
     void Start()
     {
-
+        soundmanager = GameObject.FindWithTag("GameManager").GetComponent<SoundManager>();
         if (!photonView.IsMine)
         {
             return;
@@ -52,8 +53,8 @@ public class PlayerController: MonoBehaviourPun
     // Update is called once per frame
     void Update()
     {
-
-        if(Input.GetKeyDown(KeyCode.Escape))
+       
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             Cursor.lockState = CursorLockMode.None;
         }
@@ -117,6 +118,8 @@ public class PlayerController: MonoBehaviourPun
             var rotationSpeed = 600 * Time.deltaTime;
             transform.position += velocity * speed * 1f * Time.deltaTime;
 
+            
+
             //移動方向を向く
             if (velocity.magnitude > 0.5f)
             {
@@ -155,6 +158,13 @@ public class PlayerController: MonoBehaviourPun
             {
                 animator.SetTrigger("punch3");
             }
+
+            ///Sound処理
+            if (speed == runSpeed)
+            {
+                soundmanager.soundDetect(transform.position, 12f, 0.8f);
+            }
+
         }
 
 

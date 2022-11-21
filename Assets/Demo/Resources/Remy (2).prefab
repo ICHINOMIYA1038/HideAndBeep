@@ -2782,6 +2782,7 @@ MonoBehaviour:
   ItemWhistle: {fileID: 6789501586180931459}
   ItemAmulet: {fileID: 3040588595907373504}
   blankImage: {fileID: 0}
+  soundmanager: {fileID: 0}
 --- !u!54 &3662278840520844971
 Rigidbody:
   m_ObjectHideFlags: 0

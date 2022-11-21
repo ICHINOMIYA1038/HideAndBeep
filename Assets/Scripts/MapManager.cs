@@ -9,10 +9,10 @@ public class MapManager : MonoBehaviour
     float[,] soundMap;
     [SerializeField] Vector3[] soundPosition;
     [SerializeField] GameObject flag;
-    [SerializeField]GameObject[] items;
+    [SerializeField] GameObject[] items;
     [SerializeField] Renderer[,] renderers;
-    int widthNum = 3;
-    int heightNum = 3;
+    [SerializeField] int widthNum = 3;
+    [SerializeField] int heightNum = 3;
     [SerializeField] Vector3 testPosition;
       
     // Start is called before the first frame update
