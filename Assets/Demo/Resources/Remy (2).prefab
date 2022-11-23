@@ -2774,8 +2774,8 @@ MonoBehaviour:
   speed: 0
   velocity: {x: 0, y: 0, z: 0}
   checkWait: 0
-  walkSpeed: 5
-  runSpeed: 12
+  walkSpeed: 15
+  runSpeed: 24
   canMove: 1
   itemState: 0
   ItemLight: {fileID: 1147966035814043}

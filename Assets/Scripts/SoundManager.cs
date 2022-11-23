@@ -36,7 +36,7 @@ public class SoundManager : MonoBehaviour
             for(int j=0; j< 20; j++)
             {
                 soundPosition[i * 20 + j] = new Vector3(i * interval, 0f, j * interval) + offset;
-                soundPosition[i * 20 + j + 400] = new Vector3(i * interval, 15f, j * interval) + offset;
+                soundPosition[i * 20 + j + 400] = new Vector3(i * interval, 22.5f, j * interval) + offset;
             }
             
         }
@@ -194,7 +194,7 @@ public class SoundManager : MonoBehaviour
 
     }
 
-    public Vector3 MaxPosition()
+    public soundData MaxPosition()
     {
         float maxLevel = 0f;
         int maxIndex = 0;
@@ -206,7 +206,16 @@ public class SoundManager : MonoBehaviour
                 maxIndex = level.Index;
             }
         }
+        soundData sound = new soundData();
+        sound.Value = maxLevel;
+        sound.Position = soundPosition[maxIndex];
 
-        return soundPosition[maxIndex];
+        return sound;
+    }
+
+    public struct soundData
+    {
+        public float Value;
+        public Vector3 Position;
     }
 }

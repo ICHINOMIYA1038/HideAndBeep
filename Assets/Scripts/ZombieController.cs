@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using static SoundManager;
 
 public class ZombieController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class ZombieController : MonoBehaviour
     [SerializeField] Vector3 targetPosition;
     [SerializeField] bool isFinding;
     [SerializeField] GameObject prey;
+    [SerializeField] SoundManager soundManager;
     /// <summary>
     /// behaviorMode :0 Wait 1 MoveAround 2 Detect 3 MoveTo 4 Arrive 5 Find 
     /// </summary>
@@ -21,6 +23,10 @@ public class ZombieController : MonoBehaviour
     static readonly int DETECT_MODE = 2;
     static readonly int MOVETO_MODE = 3;
     static readonly int FIND_MODE = 4;
+
+    float walkSpeed = 3.5f;
+    float runSpeed = 10f;
+    float detectSpeed = 5f;
 
 
     // Start is called before the first frame update
@@ -45,7 +51,7 @@ public class ZombieController : MonoBehaviour
         }
         if (behaviorMode == DETECT_MODE)
         {
-            Detect();
+            
         }
         if (behaviorMode == MOVETO_MODE)
         {
@@ -68,13 +74,13 @@ public class ZombieController : MonoBehaviour
         }
         if (isFinding)
         {
-            agent.speed = 10f;
+            agent.speed = runSpeed;
             animator.SetBool("Run", true);
 
         }
-        if (!isFinding)
+        if (!isFinding && animator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
         {
-            agent.speed = 3.5f;
+            agent.speed = walkSpeed;
             animator.SetBool("Run", false);
         }
 
@@ -85,21 +91,23 @@ public class ZombieController : MonoBehaviour
         isFinding = false;
         agent.speed = 0f;
         agent.SetDestination(agent.transform.position);
-        if(HearSound())
-        {
-            behaviorMode = DETECT_MODE;
-        }
         if ((targetPosition - agent.transform.position).magnitude < 50f)
         {
             CatchSight();
         }
+        if (HearSound())
+        {
+            behaviorMode = DETECT_MODE;
+;
+        }
+        
 
 
     }
     void MoveAround()
     {
         isFinding = false;
-        agent.speed = 3.5f;
+        agent.speed = walkSpeed;
         targetPosition = new Vector3(Random.Range(-50f, 100f), Random.Range(-50f, 100f), Random.Range(-50f, 100f));
         agent.SetDestination(targetPosition);
         if ((targetPosition - agent.transform.position).magnitude < 50f)
@@ -108,10 +116,53 @@ public class ZombieController : MonoBehaviour
         }
         
     }
-    void Detect()
+    IEnumerator Detect()
+    {
+        agent.speed = detectSpeed;
+        agent.SetDestination(targetPosition);
+       
+        while ((agent.transform.position - targetPosition).magnitude >1f)
+        {
+            if (CatchSight())
+            {
+                yield break;
+            }
+            
+            yield return null;
+        }
+        StartCoroutine("SearchAround");
+
+    }
+
+    IEnumerator SearchAround()
     {
         
+        float deltaAngle = -5f;
+        for(int i = 0; i < 16; i++)
+        {
+            transform.RotateAround(agent.transform.position, transform.up, deltaAngle);
+            if (CatchSight())
+            {
+                yield break;
+            }
+            yield return null;
+        }
+        for (int i = 0; i < 32; i++)
+        {
+            transform.RotateAround(agent.transform.position, transform.up, -deltaAngle);
+            if (CatchSight())
+            {
+                yield break;
+            }
+            yield return null;
+        }
+        behaviorMode = WAITING_MODE;
+
+
+
     }
+
+
     void MoveTo()
     {
         isFinding = false;
@@ -128,13 +179,29 @@ public class ZombieController : MonoBehaviour
         agent.SetDestination(targetPosition);
         if ((targetPosition - agent.transform.position).magnitude > 50f)
         {
-            behaviorMode = MOVEAROUND_MODE;
+            behaviorMode = WAITING_MODE;
         }
     }
 
     bool HearSound()
     {
-        return false;
+        if (soundManager == null)
+        {
+            return false;
+        }
+        soundData mySoundData = soundManager.MaxPosition();
+        if(mySoundData.Value > 10f)
+        {
+            targetPosition = mySoundData.Position;
+            StartCoroutine("Detect");
+            
+           
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     bool CatchSight()
     {

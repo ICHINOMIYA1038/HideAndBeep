@@ -2763,11 +2763,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e3a709a1663454e9480e0a479d3332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
   speed: 0
   velocity: {x: 0, y: 0, z: 0}
   checkWait: 0
   walkSpeed: 1
   runSpeed: 2
+  canMove: 1
+  itemState: 0
+  ItemLight: {fileID: 0}
+  ItemWhistle: {fileID: 0}
+  ItemAmulet: {fileID: 0}
+  blankImage: {fileID: 0}
+  soundmanager: {fileID: 0}
 --- !u!1 &5844868093761936898
 GameObject:
   m_ObjectHideFlags: 0

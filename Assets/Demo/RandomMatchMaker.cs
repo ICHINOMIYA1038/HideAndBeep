@@ -11,6 +11,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 {
     //?C???X?y?N?^?[??????????????
     public GameObject PhotonObject;
+    [SerializeField] GameObject StartPosi;
     [SerializeField] GameObject joinRoomCanvas;
     [SerializeField] GameObject readyRoomCanvas;
     [SerializeField] GameObject mainCanvas;
@@ -23,6 +24,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+
         UICamera.SetActive(true);
         joinRoomCanvas.SetActive(true);
         readyRoomCanvas.SetActive(false);
@@ -87,9 +89,10 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         joinRoomCanvas.SetActive(false);
         readyRoomCanvas.SetActive(false);
         mainCanvas.SetActive(true);
+        Vector3 spawnPosition = StartPosi.transform.position;
         GameObject player = PhotonNetwork.Instantiate(
                 PhotonObject.name,
-                new Vector3(0f, 1f, 0f),
+                spawnPosition,
                 Quaternion.identity,
                 0
                 );
