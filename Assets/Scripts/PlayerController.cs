@@ -28,12 +28,16 @@ public class PlayerController: MonoBehaviourPun
     [SerializeField] GameObject ItemAmulet;
     [SerializeField] GameObject blankImage;
     [SerializeField] SoundManager soundmanager;
+    [SerializeField] GameObject[] enemys;
+    [SerializeField] AudioSource audiosource;
+
 
 
 
     // Use this for initialization
     void Start()
     {
+        enemys = GameObject.FindGameObjectsWithTag("Enemy");
         soundmanager = GameObject.FindWithTag("GameManager").GetComponent<SoundManager>();
         if (!photonView.IsMine)
         {
@@ -53,6 +57,8 @@ public class PlayerController: MonoBehaviourPun
     // Update is called once per frame
     void Update()
     {
+
+
        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -69,6 +75,29 @@ public class PlayerController: MonoBehaviourPun
         {
             return;
         }
+
+        
+        float distance = 100;
+        foreach(var enemy in enemys)
+        {
+            distance = (enemy.transform.position - transform.position).magnitude;
+            
+        }
+        if (distance < 80f && audiosource.isPlaying == false)
+        {
+            audiosource.Play();
+            audiosource.volume = 1f * (1 - (distance / 80f));
+        }
+        else if (distance < 80f && audiosource.isPlaying == true)
+        {
+            audiosource.volume = 1f * (1 - (distance / 80f));
+        }
+        else if (distance > 80f && audiosource.isPlaying == true)
+        {
+            audiosource.Stop();
+        }
+        
+
         if (itemState == 0)
         {
 

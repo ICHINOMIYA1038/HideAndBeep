@@ -19,6 +19,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     PlayerController[] playerControllers;
 
+
+
     int score = 0;
 
     public int Score
