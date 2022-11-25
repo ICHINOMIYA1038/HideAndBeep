@@ -1525,7 +1525,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3662278840571923650}
-  m_LocalRotation: {x: 0.013269768, y: -0.8386911, z: 0.020455854, w: 0.5440613}
+  m_LocalRotation: {x: 0.013269768, y: -0.8386911, z: 0.020455848, w: 0.5440613}
   m_LocalPosition: {x: -1.1070724, y: -7.644616, z: -4.106003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1606,8 +1606,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3662278840835659094}
-  m_LocalRotation: {x: 0.024788376, y: -0.15485659, z: 0.0038867677, w: 0.9876183}
-  m_LocalPosition: {x: -0.16463189, y: 6.590312, z: -10.839901}
+  m_LocalRotation: {x: 0.25297555, y: -0.42645192, z: 0.12554768, w: 0.8592904}
+  m_LocalPosition: {x: 55.46232, y: 6.590444, z: 9.206012}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1735,7 +1735,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3662278841207063261}
-  m_LocalRotation: {x: -0.006501988, y: -0.83888066, z: -0.010023061, w: 0.5441843}
+  m_LocalRotation: {x: -0.0065019885, y: -0.83888066, z: -0.010023062, w: 0.54418427}
   m_LocalPosition: {x: -1.1070724, y: -7.644616, z: -4.106003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2125,7 +2125,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3662278841442964136}
-  m_LocalRotation: {x: 0.0033713765, y: -0.83892447, z: 0.005197106, w: 0.54421264}
+  m_LocalRotation: {x: 0.0033713756, y: -0.83892447, z: 0.005197103, w: 0.5442127}
   m_LocalPosition: {x: -1.1070724, y: -7.644616, z: -4.106003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2817,6 +2817,8 @@ MonoBehaviour:
   soundmanager: {fileID: 0}
   enemys: []
   audiosource: {fileID: 7967808663507577483}
+  bgm: {fileID: 8300000, guid: 9791eb85d4b264d07aa6f3b4ded9e874, type: 3}
+  chaseBGM: {fileID: 8300000, guid: ef6da88faa7b02b45891e37be5c6e093, type: 3}
 --- !u!54 &3662278840520844971
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2928,10 +2930,10 @@ AudioSource:
   m_GameObject: {fileID: 4472759297899478385}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 2761092201740904156, guid: d9b212f28421afe4f8e12259055bddc5, type: 2}
   m_audioClip: {fileID: 8300000, guid: 9791eb85d4b264d07aa6f3b4ded9e874, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 1
   Mute: 0

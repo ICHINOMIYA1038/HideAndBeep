@@ -18,11 +18,11 @@ public class ZombieController : MonoBehaviour
     [SerializeField]
     [Range(0, 5)]
     int behaviorMode = 0;
-    static readonly int WAITING_MODE = 0;
-    static readonly int MOVEAROUND_MODE = 1;
-    static readonly int DETECT_MODE = 2;
-    static readonly int MOVETO_MODE = 3;
-    static readonly int FIND_MODE = 4;
+    public static readonly int WAITING_MODE = 0;
+    public static readonly int MOVEAROUND_MODE = 1;
+    public static readonly int DETECT_MODE = 2;
+    public static readonly int MOVETO_MODE = 3;
+    public static readonly int FIND_MODE = 4;
 
     float walkSpeed = 3.5f;
     float runSpeed = 10f;
@@ -239,5 +239,8 @@ public class ZombieController : MonoBehaviour
         return false;
     }
 
-    
+    public int getEnemyState()
+    {
+        return behaviorMode;
+    }
 }

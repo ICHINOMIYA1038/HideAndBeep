@@ -29,8 +29,11 @@ public class PlayerController: MonoBehaviourPun
     [SerializeField] GameObject blankImage;
     [SerializeField] SoundManager soundmanager;
     [SerializeField] GameObject[] enemys;
+    ZombieController[] zombieControllers;
     [SerializeField] AudioSource audiosource;
-
+    float audioMaxDistance = 80f;
+    [SerializeField] AudioClip bgm;
+    [SerializeField] AudioClip chaseBGM;
 
 
 
@@ -38,6 +41,11 @@ public class PlayerController: MonoBehaviourPun
     void Start()
     {
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
+        zombieControllers = new ZombieController[2];
+        for (int i = 0; i < 2; i++)
+        {
+            zombieControllers[i] = enemys[i].GetComponent<ZombieController>();
+        }
         soundmanager = GameObject.FindWithTag("GameManager").GetComponent<SoundManager>();
         if (!photonView.IsMine)
         {
@@ -77,20 +85,43 @@ public class PlayerController: MonoBehaviourPun
         }
 
         
+
+
+        //Sound
         float distance = 100;
-        foreach(var enemy in enemys)
+
+        if (zombieControllers[0].getEnemyState() == ZombieController.FIND_MODE || zombieControllers[1].getEnemyState() == ZombieController.FIND_MODE)
         {
-            distance = (enemy.transform.position - transform.position).magnitude;
-            
+            audiosource.clip = chaseBGM;
         }
-        if (distance < 80f && audiosource.isPlaying == false)
+        if (zombieControllers[0].getEnemyState() != ZombieController.FIND_MODE && zombieControllers[1].getEnemyState() != ZombieController.FIND_MODE)
+        {
+            audiosource.clip = bgm;
+        }
+
+        foreach (var enemy in enemys)
+        {
+            
+            
+            if ((enemy.transform.position - transform.position).magnitude < distance)
+            {
+                distance = (enemy.transform.position - transform.position).magnitude;
+            }
+                
+        }
+
+        
+
+        if (distance < audioMaxDistance && audiosource.isPlaying == false)
         {
             audiosource.Play();
-            audiosource.volume = 1f * (1 - (distance / 80f));
+            audiosource.volume = 1f * (1 - Mathf.Pow((distance / audioMaxDistance), 2));
+            Debug.Log(audiosource.volume);
         }
-        else if (distance < 80f && audiosource.isPlaying == true)
-        {
-            audiosource.volume = 1f * (1 - (distance / 80f));
+        else if (distance < audioMaxDistance && audiosource.isPlaying == true)
+         {
+            audiosource.volume = 1f * (1 - Mathf.Pow((distance / audioMaxDistance),2));
+            Debug.Log(audiosource.volume);
         }
         else if (distance > 80f && audiosource.isPlaying == true)
         {
