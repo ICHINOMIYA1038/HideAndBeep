@@ -11,6 +11,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 {
     //?C???X?y?N?^?[??????????????
     public GameObject PhotonObject;
+    public GameObject PhotonObject2;
     [SerializeField] GameObject StartPosi;
     [SerializeField] GameObject joinRoomCanvas;
     [SerializeField] GameObject readyRoomCanvas;
@@ -69,7 +70,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         RoomOptions roomOptions = new RoomOptions();
-        roomOptions.MaxPlayers = 8;
+        roomOptions.MaxPlayers = 2;
         PhotonNetwork.CreateRoom("roomName", roomOptions);
     }
 
@@ -85,19 +86,34 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
     public void onReady()
     {
+        
         UICamera.SetActive(false);
         joinRoomCanvas.SetActive(false);
         readyRoomCanvas.SetActive(false);
         mainCanvas.SetActive(true);
-        Vector3 spawnPosition = StartPosi.transform.position;
-        GameObject player = PhotonNetwork.Instantiate(
-                PhotonObject.name,
-                spawnPosition,
-                Quaternion.identity,
-                0
-                );
+        GameObject player;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Vector3 spawnPosition = StartPosi.transform.position;
+             player = PhotonNetwork.Instantiate(
+                    PhotonObject2.name,
+                    spawnPosition,
+                    Quaternion.identity,
+                    0
+                    );
+        }
+        else
+        {
+            Vector3 spawnPosition = StartPosi.transform.position;
+             player = PhotonNetwork.Instantiate(
+                    PhotonObject.name,
+                    spawnPosition,
+                    Quaternion.identity,
+                    0
+                    );
+        }
         GameManager gamemanager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
-
+        gamemanager.sceneState = 1;
         player.GetComponentInChildren<Camera>().enabled = true;
         player.GetComponentInChildren<Camera>().depth -= 1;
         player.GetComponentInChildren<CinemachineFreeLook>().enabled = true;

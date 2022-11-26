@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Photon.Pun;
+using Cinemachine;
 
 public class PlayerController: MonoBehaviourPun
 {
@@ -34,12 +35,16 @@ public class PlayerController: MonoBehaviourPun
     float audioMaxDistance = 80f;
     [SerializeField] AudioClip bgm;
     [SerializeField] AudioClip chaseBGM;
+    [SerializeField] CinemachineFreeLook NormalCamera;
+    [SerializeField] CinemachineVirtualCamera gameOvercamera;
+    bool isMovie = false;
 
 
 
     // Use this for initialization
     void Start()
     {
+        
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
         zombieControllers = new ZombieController[2];
         for (int i = 0; i < 2; i++)
@@ -65,26 +70,28 @@ public class PlayerController: MonoBehaviourPun
     // Update is called once per frame
     void Update()
     {
-
-
-       
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
-
-        if(animator == null)
-        {
-            TryGetComponent(out animator);
-        }
-        
-
         if (!photonView.IsMine)
         {
             return;
         }
 
+
+        if (isMovie == true)
+        {
+            return;
+        }
         
+
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+        if (animator == null)
+        {
+            TryGetComponent(out animator);
+        }
 
 
         //Sound
@@ -121,7 +128,6 @@ public class PlayerController: MonoBehaviourPun
         else if (distance < audioMaxDistance && audiosource.isPlaying == true)
          {
             audiosource.volume = 1f * (1 - Mathf.Pow((distance / audioMaxDistance),2));
-            Debug.Log(audiosource.volume);
         }
         else if (distance > 80f && audiosource.isPlaying == true)
         {
@@ -323,6 +329,21 @@ public class PlayerController: MonoBehaviourPun
     public string getName()
     {
         return playerName;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            gameOvercamera.LookAt = collision.gameObject.transform;
+            NormalCamera.Priority = -1;
+            gameOvercamera.Priority = 10;
+            isMovie = true;
+            rb.constraints = RigidbodyConstraints.FreezePosition
+            | RigidbodyConstraints.FreezeRotationX
+            | RigidbodyConstraints.FreezeRotationY
+            | RigidbodyConstraints.FreezeRotationZ;
+        }
     }
 
 

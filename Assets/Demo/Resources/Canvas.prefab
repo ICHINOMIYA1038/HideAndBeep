@@ -254,7 +254,10 @@ MonoBehaviour:
   isActive: 0
   progressPanel: {fileID: 9067840553635605739}
   maxWidth: 400
+  progressRatio: 0
   needTime: 5
+  photonview: {fileID: 0}
+  boxController: {fileID: 0}
 --- !u!1 &9067840553635605739
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,7 +27,11 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
     // Update is called once per frame
     void Update()
     {
-        if(playerEnterTrigger)
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+        if (playerEnterTrigger)
         {
             InputCheck();
         }
@@ -46,14 +50,21 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
     private void OnTriggerEnter(Collider other)
     {
-        playerEnterTrigger = true;
-        playerController = other.gameObject.GetComponent<PlayerController>();
+        if (other.gameObject.CompareTag("Player"))
+        {
+            playerEnterTrigger = true;
+            playerController = other.gameObject.GetComponent<PlayerController>();
+        }
+        
     }
 
     private void OnTriggerExit(Collider other)
     {
-        playerEnterTrigger = false;
-        playerController = null;
+        if (other.gameObject.CompareTag("Player"))
+        {
+            playerEnterTrigger = false;
+            playerController = null;
+        }
     }
 
 
@@ -64,7 +75,8 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
     private void InputCheck()
     {
-        if(isOpen)
+       
+        if(isOpen&&playerController!=null)
         {
             if (!playerController.animator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
             {
@@ -92,7 +104,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
          }
 
-        if (Input.GetKey(KeyCode.E) && progressBar.isActive == false)
+        if (Input.GetKey(KeyCode.E) && progressBar.isActive == false&&playerController!=null)
         {
             photonview.RequestOwnership();
 

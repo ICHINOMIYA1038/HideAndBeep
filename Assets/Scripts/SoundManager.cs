@@ -14,6 +14,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField]GameObject[] items;
     [SerializeField] Renderer[] renderers;
      int pointNum=800;
+    [SerializeField] GameManager gameManager;
     
     [SerializeField] Vector3 testPosition;
     float deltaTimeSound = 1f;
@@ -59,6 +60,10 @@ public class SoundManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gameManager.sceneState != 1)
+        {
+            return;
+        }
         
         deltaTimeSound -= 1f*Time.deltaTime;
         if(deltaTimeSound < 0)
