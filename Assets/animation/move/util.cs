@@ -68,7 +68,10 @@ namespace util
     }
 
 
-
+    public interface IcanInteract
+    {
+        void CompleteTask();
+    }
 
     //ダメージを受ける処理のインターフェース
     public interface iApplicableDamaged

@@ -313,7 +313,21 @@ public class PlayerController: MonoBehaviourPun
             | RigidbodyConstraints.FreezeRotationZ;
 
     }
-    
+
+    public void pullLever(Vector3 playerPosi, Vector3 targetPosi)
+    {
+        transform.position = playerPosi;
+        transform.LookAt(targetPosi);
+        animator.SetTrigger("searchChest");
+        speed = 0f;
+        canMove = false;
+        rb.constraints = RigidbodyConstraints.FreezePosition
+            | RigidbodyConstraints.FreezeRotationX
+            | RigidbodyConstraints.FreezeRotationY
+            | RigidbodyConstraints.FreezeRotationZ;
+
+    }
+
     public void stopAction()
     {
         canMove = true;

@@ -60,10 +60,8 @@ GameObject:
   - component: {fileID: 7059891393255148365}
   - component: {fileID: 8442014720379023266}
   - component: {fileID: 1676004450558155855}
-  - component: {fileID: 210098226}
   - component: {fileID: 210098227}
   - component: {fileID: 1806386931}
-  - component: {fileID: 1806386930}
   - component: {fileID: 814982931}
   m_Layer: 0
   m_Name: BOX
@@ -116,18 +114,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.32, y: 1.16, z: 2.0541239}
   m_Center: {x: 0, y: 0.61, z: -0.5235257}
---- !u!114 &210098226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7059891393254659949}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39dec066a52228546966eef93b38ffbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &210098227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,6 +129,7 @@ MonoBehaviour:
   progressbarInstance: {fileID: 9067840553148348796}
   progressBar: {fileID: 9067840553148348743}
   lid: {fileID: 3000509077077076996}
+  playerController: {fileID: 0}
   waitTime: 3
   photonview: {fileID: 814982931}
   ItemState: 0
@@ -162,18 +149,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1806386930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7059891393254659949}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39dec066a52228546966eef93b38ffbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &814982931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,6 +377,14 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 9067840553481745216, guid: 7d92609ad0fdd7348ba30dcd4d7e0e82, type: 3}
+      propertyPath: boxCon
+      value: 
+      objectReference: {fileID: 210098227}
+    - target: {fileID: 9067840553481745216, guid: 7d92609ad0fdd7348ba30dcd4d7e0e82, type: 3}
+      propertyPath: photonview
+      value: 
+      objectReference: {fileID: 814982931}
     - target: {fileID: 9067840553481745216, guid: 7d92609ad0fdd7348ba30dcd4d7e0e82, type: 3}
       propertyPath: boxController
       value: 

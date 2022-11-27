@@ -5,8 +5,8 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using Photon.Chat;
-
-public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCallbacks
+using util;
+public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCallbacks,IcanInteract
 {
     bool isOpen = false;
     bool playerEnterTrigger = false;

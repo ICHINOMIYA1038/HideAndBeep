@@ -7,7 +7,9 @@ using Photon.Pun;
 public class ProgressBarCon : ProgressBar, IPunObservable
 {
     [SerializeField] PhotonView photonview;
-    [SerializeField] BoxCon boxController;
+    [SerializeField] IcanInteract interactController;
+    [SerializeField] BoxCon boxCon;
+    [SerializeField] LeverCon levercon;
     private void Update()
     {
         if(isActive)
@@ -15,6 +17,20 @@ public class ProgressBarCon : ProgressBar, IPunObservable
             Progress();
         }
         
+    }
+
+    private void Start()
+    {
+        //SerializeFieldÇ≈ÇÕÅAInterfaceÇÕìnÇπÇ»Ç¢ÇΩÇﬂÅAÇ±ÇÃÇÊÇ§Ç»é¿ëïÇ…ÇµÇΩÅB
+        if (boxCon != null)
+        {
+            interactController = boxCon;
+        }
+        if (levercon != null)
+        {
+            interactController = levercon;
+        }
+
     }
 
     new void Progress()
@@ -36,7 +52,7 @@ public class ProgressBarCon : ProgressBar, IPunObservable
     override public void CompleteTask()
     {
         base.CompleteTask();
-        boxController.CompleteTask();
+        interactController.CompleteTask();
         this.gameObject.SetActive(false);   
         
     }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 913207790413644581}
   - component: {fileID: 4252390017771932800}
   - component: {fileID: 2082758117416138826}
+  - component: {fileID: 5734611545131847300}
   m_Layer: 0
   m_Name: cafeteria_table
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5734611545131847300
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569578948670380447}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.036657006, y: 0.012972935, z: 0.007479695}
+  m_Center: {x: -0.0000027120113, y: -0.0007736072, z: 0.0037401516}
