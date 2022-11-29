@@ -24,6 +24,8 @@ public class PlayerController: MonoBehaviourPun
     static readonly int HasLight = 1;
     static readonly int HasWhistle = 2;
     static readonly int Hasamulet = 3;
+    [SerializeField] GameObject CameraLookAtObject;
+    Vector3 defaultLookAtPosition;
     [SerializeField] GameObject ItemLight;
     [SerializeField] GameObject ItemWhistle;
     [SerializeField] GameObject ItemAmulet;
@@ -44,7 +46,7 @@ public class PlayerController: MonoBehaviourPun
     // Use this for initialization
     void Start()
     {
-        
+        defaultLookAtPosition = CameraLookAtObject.transform.localPosition;
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
         zombieControllers = new ZombieController[2];
         for (int i = 0; i < 2; i++)
@@ -234,6 +236,7 @@ public class PlayerController: MonoBehaviourPun
         }
 
 
+
     }
 
     public void OnItemChange(int index)
@@ -318,7 +321,7 @@ public class PlayerController: MonoBehaviourPun
     {
         transform.position = playerPosi;
         transform.LookAt(targetPosi);
-        animator.SetTrigger("searchChest");
+       // animator.SetTrigger("searchChest");
         speed = 0f;
         canMove = false;
         rb.constraints = RigidbodyConstraints.FreezePosition
@@ -332,6 +335,21 @@ public class PlayerController: MonoBehaviourPun
     {
         canMove = true;
         animator.SetTrigger("stop");
+        rb.constraints = RigidbodyConstraints.FreezeRotationX
+            | RigidbodyConstraints.FreezeRotationZ;
+    }
+
+    public void Freeze()
+    {
+        canMove = false;
+        rb.constraints = RigidbodyConstraints.FreezePosition
+            | RigidbodyConstraints.FreezeRotationX
+            | RigidbodyConstraints.FreezeRotationY
+            | RigidbodyConstraints.FreezeRotationZ;
+    }
+    public void Free()
+    {
+        canMove = true;
         rb.constraints = RigidbodyConstraints.FreezeRotationX
             | RigidbodyConstraints.FreezeRotationZ;
     }
@@ -358,6 +376,20 @@ public class PlayerController: MonoBehaviourPun
             | RigidbodyConstraints.FreezeRotationY
             | RigidbodyConstraints.FreezeRotationZ;
         }
+    }
+
+    public void EnterLocker(Vector3 cameraPosition)
+    {
+        canMove = false;
+        speed = 0f;
+        animator.SetFloat("speed", 0);
+        CameraLookAtObject.transform.position = cameraPosition;
+
+    }
+    public void ExitLocker()
+    {
+        canMove = true;
+        CameraLookAtObject.transform.localPosition = defaultLookAtPosition;
     }
 
 

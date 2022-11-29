@@ -19,6 +19,7 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
     [SerializeField] PhotonView photonview;
     [SerializeField] int ItemState;
     [SerializeField] GameObject gate;
+    [SerializeField] GameManager gameManager;
      
     // Start is called before the first frame update
     void Start()
@@ -65,6 +66,7 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
         {
             playerEnterTrigger = true;
             playerController = other.gameObject.GetComponent<PlayerController>();
+            gameManager.ActiveInputAssist();
         }
         
     }
@@ -75,19 +77,12 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
         {
             playerEnterTrigger = false;
             playerController = null;
+            gameManager.DeactiveInputAssist();
         }
     }
 
-
-    
-
-
-
-
     private void InputCheck()
     {
-       
-        
 
         if (progressBar.isActive)
             {

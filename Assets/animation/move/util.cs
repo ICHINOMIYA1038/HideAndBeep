@@ -18,6 +18,7 @@ namespace util
         [SerializeField] protected float needTime;
         protected float progressTime;
         protected bool istaskCompleted = false;
+        
 
         private void Awake()
         {
@@ -71,6 +72,85 @@ namespace util
     public interface IcanInteract
     {
         void CompleteTask();
+    }
+
+    public abstract class InteractiveObject : MonoBehaviour
+    {
+        protected PlayerController playerController;
+        [SerializeField] protected PhotonView photonview;
+        [SerializeField] GameManager gameManager;
+        protected bool playerEnterTrigger = false;
+        protected bool interacted = false;
+        void Interacted()
+        {
+            if (interacted)
+            {
+                interacted = false;
+                OnInteract();
+
+
+            }
+            else if(!interacted)
+            {
+                interacted = true;
+                ReInteract();
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!photonview.IsMine)
+            {
+                return;
+            }
+            if (other.gameObject.CompareTag("Player"))
+            {
+                playerEnterTrigger = true;
+                playerController = other.gameObject.GetComponent<PlayerController>();
+                gameManager.ActiveInputAssist();
+            }
+
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (!photonview.IsMine)
+            {
+                return;
+            }
+            if (other.gameObject.CompareTag("Player"))
+            {
+                playerEnterTrigger = false;
+                playerController = null;
+                gameManager.DeactiveInputAssist();
+            }
+        }
+
+
+        void Update()
+        {
+            if (!photonview.IsMine)
+            {
+                return;
+            }
+            if (playerEnterTrigger)
+            {
+                InputCheck();
+            }
+        }
+
+        void InputCheck()
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Interacted();
+            }
+        }
+
+        protected abstract void OnInteract();
+
+        protected abstract void ReInteract();
+
     }
 
     //ダメージを受ける処理のインターフェース

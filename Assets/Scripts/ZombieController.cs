@@ -282,4 +282,21 @@ public class ZombieController : MonoBehaviour
     {
         gameManager.gameOver();
     }
+
+    public void seeLocker(GameObject locker)
+    {
+        agent.SetDestination(locker.transform.position);
+
+        float a = Random.Range(0f, 1f);
+        if(a < 0.7f)
+        {
+            OpenLocker(locker);
+        }
+
+    }
+
+    public void OpenLocker(GameObject locker)
+    {
+
+    }
 }

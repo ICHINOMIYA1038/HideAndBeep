@@ -24,6 +24,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] GameObject subItemPanel2;
     [SerializeField] GameObject mainCanvas;
     [SerializeField] GameObject gameOverCanvas;
+    [SerializeField] GameObject InputAssist;
     [SerializeField] TextMeshProUGUI player1Name;
     [SerializeField] TextMeshProUGUI player2Name;
 
@@ -103,6 +104,16 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     void Update()
     {
 
+    }
+
+    public void ActiveInputAssist()
+    {
+        InputAssist.SetActive(true);
+    }
+
+    public void DeactiveInputAssist()
+    {
+        InputAssist.SetActive(false);
     }
 
     public void addNewPlayer(PlayerController controller)

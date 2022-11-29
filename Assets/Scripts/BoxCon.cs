@@ -8,6 +8,7 @@ using Photon.Chat;
 using util;
 public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCallbacks,IcanInteract
 {
+    [SerializeField] GameManager gameManager;
     bool isOpen = false;
     bool playerEnterTrigger = false;
     [SerializeField] GameObject progressbarInstance;
@@ -54,6 +55,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
         {
             playerEnterTrigger = true;
             playerController = other.gameObject.GetComponent<PlayerController>();
+            gameManager.ActiveInputAssist();
         }
         
     }
@@ -64,6 +66,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
         {
             playerEnterTrigger = false;
             playerController = null;
+            gameManager.DeactiveInputAssist();
         }
     }
 
