@@ -42,6 +42,60 @@ public class LockerScript : InteractiveObject
 
     }
 
+    public void Opend()
+    {
+        StartCoroutine("EnemyOpen");
+    }
+
+    public void Closed()
+    {
+        StartCoroutine("EnemyClose");
+    }
+
+    public IEnumerator EnemyOpen()
+    {
+        if (interacted == true)
+        {
+            yield break;
+        }
+        if (interacted == false)
+        {
+
+            while (Mathf.Cos(door.transform.localEulerAngles.y * Mathf.PI / 180) > 0 && interacted == false)
+            {
+                door.transform.Rotate(0, -Time.deltaTime * openSpeed, 0);
+                yield return null;
+            }
+            playerController.Free();
+            yield break;
+        }
+    }
+
+    public IEnumerator Enemyclose()
+    {
+        if (interacted == false)
+        {
+            yield break;
+        }
+        if (interacted == true)
+        {
+
+            while (Mathf.Sin(door.transform.localEulerAngles.y * Mathf.PI / 180) < 0 && interacted == true)
+            {
+                door.transform.Rotate(0, +Time.deltaTime * openSpeed, 0);
+                yield return null;
+            }
+            if (lockerIncheck.inLocker == true)
+            {
+                yield break;
+            }
+            else
+            {
+                yield break;
+            }
+
+        }
+    }
 
     public IEnumerator open()
     {

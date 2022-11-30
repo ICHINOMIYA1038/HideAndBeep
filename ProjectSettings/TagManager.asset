@@ -9,6 +9,7 @@ TagManager:
   - GameManager
   - Wall
   - Enemy
+  - Locker
   layers:
   - Default
   - TransparentFX

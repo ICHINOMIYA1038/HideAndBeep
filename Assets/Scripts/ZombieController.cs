@@ -18,12 +18,13 @@ public class ZombieController : MonoBehaviour
     [SerializeField] SoundManager soundManager;
     [SerializeField] GameManager gameManager;
     [SerializeField] PhotonView photonView;
+    LockerScript InteractiveLocker;
     [SerializeField]
     /// <summary>
     /// behaviorMode :0 Wait 1 MoveAround 2 Detect 3 MoveTo 4 Arrive 5 Find 
     /// </summary>
     [Range(0, 5)]
-    int behaviorMode = 0;
+    public int behaviorMode = 0;
     public static readonly int WAITING_MODE = 0;
     public static readonly int MOVEAROUND_MODE = 1;
     public static readonly int DETECT_MODE = 2;
@@ -34,6 +35,7 @@ public class ZombieController : MonoBehaviour
     float runSpeed = 10f;
     float detectSpeed = 5f;
     bool isMovie = false;
+    bool canMove = true;
 
     // Start is called before the first frame update
     void Start()
@@ -52,6 +54,10 @@ public class ZombieController : MonoBehaviour
             return;
         }
         if (isMovie == true)
+        {
+            return;
+        }
+        if (!canMove)
         {
             return;
         }
@@ -112,8 +118,7 @@ public class ZombieController : MonoBehaviour
         }
         if (HearSound())
         {
-            behaviorMode = DETECT_MODE;
-            ;
+            behaviorMode = DETECT_MODE;;
         }
 
 
@@ -135,11 +140,18 @@ public class ZombieController : MonoBehaviour
     {
         agent.speed = detectSpeed;
         agent.SetDestination(targetPosition);
-
+        float timer = 0;
         while ((agent.transform.position - targetPosition).magnitude > 1f)
         {
+            timer += Time.deltaTime;
             if (CatchSight())
             {
+                yield break;
+            }
+            if (timer > 10f)
+            {
+                
+                behaviorMode = WAITING_MODE;
                 yield break;
             }
 
@@ -225,15 +237,15 @@ public class ZombieController : MonoBehaviour
         float ViewAngle = 60f;
         float deltaAngle = -ViewAngle;
         RaycastHit hit;
-        Ray ray = new Ray(agent.transform.position + new Vector3(0f, 7f, 0f), Quaternion.AngleAxis(deltaAngle, transform.up) * agent.transform.forward);
-        Ray ray2 = new Ray(agent.transform.position + new Vector3(0f, 7f, 0f), agent.transform.up);
-        Ray ray3 = new Ray(agent.transform.position + new Vector3(0f, 7f, 0f), agent.transform.forward);
+        //Ray ray = new(agent.transform.position + new Vector3(0f, 15f, 0f), Quaternion.AngleAxis(deltaAngle, transform.up) * agent.transform.forward);
+        //Ray ray2 = new Ray(agent.transform.position + new Vector3(0f, 15f, 0f), agent.transform.up);
+        Ray ray3 = new Ray(agent.transform.position + new Vector3(0f, 10f, 0f), agent.transform.forward);
 
 
         while (deltaAngle < ViewAngle)
         {
             deltaAngle += 5f;
-            if (Physics.Raycast(ray, out hit, 50f))
+            if (Physics.Raycast(ray3, out hit, 30f))
             {
                 if (hit.transform.gameObject.tag == "Player")
                 {
@@ -242,12 +254,20 @@ public class ZombieController : MonoBehaviour
                     behaviorMode = FIND_MODE;
                     return true;
                 }
+                if (hit.transform.gameObject.tag == "Locker")
+                {
+                    InteractiveLocker = hit.transform.gameObject.GetComponentInChildren<LockerScript>();
+                    
+                    seeLocker(hit.transform.gameObject,InteractiveLocker);
+                    
+                    return true;
+                }
 
             }
 
-            Debug.DrawLine(ray.origin, ray.direction * 30f, Color.blue, 1f);
-            Debug.DrawLine(ray2.origin, ray2.direction * 30f, Color.green, 1f);
-            Debug.DrawLine(ray3.origin, ray3.direction * 30f, Color.red, 1f);
+            //Debug.DrawLine(ray.origin, ray.direction * 30f, Color.blue, 1f);
+            //Debug.DrawLine(ray2.origin, ray2.direction * 30f, Color.green, 1f);
+            Debug.DrawLine(ray3.origin, ray3.origin + ray3.direction * 30f, Color.red, 1f);
 
         }
 
@@ -283,20 +303,38 @@ public class ZombieController : MonoBehaviour
         gameManager.gameOver();
     }
 
-    public void seeLocker(GameObject locker)
+    public void seeLocker(GameObject locker,LockerScript lockerScript)
     {
-        agent.SetDestination(locker.transform.position);
+        agent.SetDestination(locker.transform.GetChild(4).position);
+        
 
         float a = Random.Range(0f, 1f);
-        if(a < 0.7f)
-        {
-            OpenLocker(locker);
-        }
+        Freeze();
+        OpenLocker(locker);
+      
+        
+        lockerScript.open();
+        
 
     }
 
     public void OpenLocker(GameObject locker)
     {
+        animator.SetTrigger("open");
+        Debug.Log("OpenLocker");
+    }
 
+    public void Freeze()
+    {
+        canMove = false;
+        agent.speed = 0f;
+        animator.SetFloat("speed", 0);
+
+    }
+    public void Free()
+    {
+        canMove = true;
+        agent.speed = 0f;
+        animator.SetFloat("speed", 0);
     }
 }

@@ -384,12 +384,14 @@ public class PlayerController: MonoBehaviourPun
         speed = 0f;
         animator.SetFloat("speed", 0);
         CameraLookAtObject.transform.position = cameraPosition;
+        soundmanager.soundDetect(transform.position, 12f, 0.8f);
 
     }
     public void ExitLocker()
     {
         canMove = true;
         CameraLookAtObject.transform.localPosition = defaultLookAtPosition;
+        soundmanager.soundDetect(transform.position, 12f, 30f);
     }
 
 
