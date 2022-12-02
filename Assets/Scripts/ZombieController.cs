@@ -11,6 +11,7 @@ public class ZombieController : MonoBehaviour
     Rigidbody rb;
     Animator animator;
     NavMeshAgent agent;
+    [SerializeField] GameObject effect;
     [SerializeField] CinemachineVirtualCamera vcam;
     [SerializeField] Vector3 targetPosition;
     [SerializeField] bool isFinding;
@@ -18,6 +19,7 @@ public class ZombieController : MonoBehaviour
     [SerializeField] SoundManager soundManager;
     [SerializeField] GameManager gameManager;
     [SerializeField] PhotonView photonView;
+    [SerializeField] Collider zombieCollider;
     LockerScript InteractiveLocker;
     [SerializeField]
     /// <summary>
@@ -30,6 +32,7 @@ public class ZombieController : MonoBehaviour
     public static readonly int DETECT_MODE = 2;
     public static readonly int MOVETO_MODE = 3;
     public static readonly int FIND_MODE = 4;
+    public static readonly int SUSPECT_LOCKER_MODE = 5;
 
     float walkSpeed = 3.5f;
     float runSpeed = 10f;
@@ -81,6 +84,10 @@ public class ZombieController : MonoBehaviour
         if (behaviorMode == FIND_MODE)
         {
             Find();
+        }
+        if (behaviorMode == SUSPECT_LOCKER_MODE)
+        {
+           
         }
 
         //アニメーション制御
@@ -287,14 +294,43 @@ public class ZombieController : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("Player")&&gameManager.sceneState==1)
         {
-            isMovie = true;
-            vcam.enabled = true;
-            vcam.Priority = 30;
-            gameOver();
-            animator.SetTrigger("jump");
-            Debug.Log("over");
-           gameManager.sceneState = 0;
+            PlayerController pcon;
+            pcon = collision.gameObject.GetComponent<PlayerController>();
+            Collider Pcollider = pcon.GetComponent<Collider>();
+            if (pcon.itemState != PlayerController.Hasamulet)
+            {
+                isMovie = true;
+                vcam.enabled = true;
+                vcam.Priority = 30;
+                gameOver();
+                animator.SetTrigger("jump");
+                gameManager.sceneState = 0;
+                
+            }
+            else
+            {
+                Debug.Log("Effect");
+                pcon.OnItemChange(0);
+                Freeze();
+                damaged();
+                Instantiate(effect, agent.transform.position, Quaternion.identity);
+                Pcollider.isTrigger = true;
 
+
+
+            }
+
+
+        }
+
+        if (collision.gameObject.CompareTag("Locker") && gameManager.sceneState == 1)
+        {
+            Debug.Log("Locker");
+            animator.SetBool("Run", false);
+            agent.SetDestination(agent.transform.position);
+            agent.speed = 0;
+            behaviorMode = SUSPECT_LOCKER_MODE;
+            OpenLocker(collision.gameObject);
         }
     }
 
@@ -320,7 +356,7 @@ public class ZombieController : MonoBehaviour
 
     public void OpenLocker(GameObject locker)
     {
-        animator.SetTrigger("open");
+        animator.SetTrigger("Open");
         Debug.Log("OpenLocker");
     }
 
@@ -328,6 +364,7 @@ public class ZombieController : MonoBehaviour
     {
         canMove = false;
         agent.speed = 0f;
+        agent.SetDestination(agent.transform.position);
         animator.SetFloat("speed", 0);
 
     }
@@ -336,5 +373,9 @@ public class ZombieController : MonoBehaviour
         canMove = true;
         agent.speed = 0f;
         animator.SetFloat("speed", 0);
+    }
+    public void damaged()
+    {
+        animator.SetTrigger("Damaged");
     }
 }

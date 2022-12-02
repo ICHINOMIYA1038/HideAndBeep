@@ -988,12 +988,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad8bb8f40098463680163ea959fa501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  effect: {fileID: 0}
   vcam: {fileID: 5097994679061421260}
   targetPosition: {x: 0, y: 0, z: 0}
   isFinding: 0
   prey: {fileID: 0}
   soundManager: {fileID: 0}
   gameManager: {fileID: 0}
+  photonView: {fileID: 0}
+  zombieCollider: {fileID: 8321422090304311489}
   behaviorMode: 0
 --- !u!82 &1759284647
 AudioSource:
@@ -1271,6 +1274,12 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 2
     Name: jump
+  - Type: 9
+    SynchronizeType: 2
+    Name: Open
+  - Type: 9
+    SynchronizeType: 0
+    Name: Damaged
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0

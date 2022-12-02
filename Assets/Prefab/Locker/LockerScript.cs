@@ -9,15 +9,24 @@ public class LockerScript : InteractiveObject
     [SerializeField] float openSpeed =1f;
     [SerializeField] LockerIncheck lockerIncheck;
     [SerializeField] GameObject cameraPosition;
-
+    [SerializeField] AudioSource audio;
+    [SerializeField] AudioClip clip1;
+    [SerializeField] AudioClip clip2;
+    SoundManager soundManager;
+    public void Start()
+    {
+        soundManager = gameManager.GetComponent<SoundManager>();
+    }
     protected override void OnInteract()
     {
         if(!photonview.IsMine)
         {
             return;
         }
+        soundManager.soundDetect(transform.position, 12f, 0.8f);
         playerController.Freeze();
         StartCoroutine("open");
+        openSound();
         if (lockerIncheck.inLocker == true)
         {
             playerController.ExitLocker();
@@ -31,6 +40,7 @@ public class LockerScript : InteractiveObject
         {
             return;
         }
+        soundManager.soundDetect(transform.position, 12f, 0.8f);
         playerController.Freeze();
         
         if (lockerIncheck.inLocker == true)
@@ -39,17 +49,20 @@ public class LockerScript : InteractiveObject
             Debug.Log("IntoTheLocker");
         }
         StartCoroutine("close");
+        closeSound();
 
     }
 
     public void Opend()
     {
         StartCoroutine("EnemyOpen");
+        openSound();
     }
 
     public void Closed()
     {
         StartCoroutine("EnemyClose");
+        closeSound();
     }
 
     public IEnumerator EnemyOpen()
@@ -143,5 +156,15 @@ public class LockerScript : InteractiveObject
             }
             
         }
+    }
+
+    public void  openSound()
+    {
+        audio.PlayOneShot(clip1);
+    }
+
+    public void closeSound()
+    {
+        audio.PlayOneShot(clip2);
     }
 }

@@ -22,8 +22,8 @@ public class PlayerController: MonoBehaviourPun
     public int itemState;
     static readonly int HasNoItem = 0;
     static readonly int HasLight = 1;
-    static readonly int HasWhistle = 2;
-    static readonly int Hasamulet = 3;
+    public static readonly int HasWhistle = 2;
+    public static readonly int Hasamulet = 3;
     [SerializeField] GameObject CameraLookAtObject;
     Vector3 defaultLookAtPosition;
     [SerializeField] GameObject ItemLight;
@@ -384,14 +384,14 @@ public class PlayerController: MonoBehaviourPun
         speed = 0f;
         animator.SetFloat("speed", 0);
         CameraLookAtObject.transform.position = cameraPosition;
-        soundmanager.soundDetect(transform.position, 12f, 0.8f);
-
+       
     }
+
     public void ExitLocker()
     {
         canMove = true;
         CameraLookAtObject.transform.localPosition = defaultLookAtPosition;
-        soundmanager.soundDetect(transform.position, 12f, 30f);
+        
     }
 
 

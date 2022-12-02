@@ -78,7 +78,7 @@ namespace util
     {
         protected PlayerController playerController;
         [SerializeField] protected PhotonView photonview;
-        [SerializeField] GameManager gameManager;
+        [SerializeField] protected GameManager gameManager;
         protected bool playerEnterTrigger = false;
         protected bool interacted = false;
         void Interacted()
