@@ -33,12 +33,14 @@ public class ZombieController : MonoBehaviour
     public static readonly int MOVETO_MODE = 3;
     public static readonly int FIND_MODE = 4;
     public static readonly int SUSPECT_LOCKER_MODE = 5;
-
+    public static readonly int DAMAGED_MODE = 6;
     float walkSpeed = 3.5f;
     float runSpeed = 10f;
     float detectSpeed = 5f;
     bool isMovie = false;
     bool canMove = true;
+    public bool beingDamaged = false;
+    [SerializeField]float detectRange;
 
     // Start is called before the first frame update
     void Start()
@@ -87,7 +89,11 @@ public class ZombieController : MonoBehaviour
         }
         if (behaviorMode == SUSPECT_LOCKER_MODE)
         {
-           
+            SuspectLocker();
+        }
+        if (behaviorMode == DAMAGED_MODE)
+        {
+            
         }
 
         //アニメーション制御
@@ -119,9 +125,12 @@ public class ZombieController : MonoBehaviour
         isFinding = false;
         agent.speed = 0f;
         agent.SetDestination(agent.transform.position);
-        if ((targetPosition - agent.transform.position).magnitude < 50f)
+        if ((targetPosition - agent.transform.position).magnitude < 70f)
         {
-            CatchSight();
+            if (CatchSight())
+            {
+                return;
+            }
         }
         if (HearSound())
         {
@@ -155,12 +164,13 @@ public class ZombieController : MonoBehaviour
             {
                 yield break;
             }
-            if (timer > 10f)
+            if (timer > 20f)
             {
                 
                 behaviorMode = WAITING_MODE;
                 yield break;
             }
+            
 
             yield return null;
         }
@@ -211,9 +221,20 @@ public class ZombieController : MonoBehaviour
         isFinding = true;
         targetPosition = prey.transform.position;
         agent.SetDestination(targetPosition);
-        if ((targetPosition - agent.transform.position).magnitude > 50f)
+        if ((targetPosition - agent.transform.position).magnitude > detectRange)
         {
             behaviorMode = WAITING_MODE;
+        }
+        if (prey.GetComponent<PlayerController>().inLocker)
+        {
+            
+            prey = null;
+            isFinding = false;
+            animator.SetBool("Run", false);
+            animator.SetBool("Wait", true);
+            agent.SetDestination(agent.transform.position);
+            agent.speed = 0f;
+            behaviorMode = SUSPECT_LOCKER_MODE;
         }
     }
 
@@ -252,17 +273,19 @@ public class ZombieController : MonoBehaviour
         while (deltaAngle < ViewAngle)
         {
             deltaAngle += 5f;
-            if (Physics.Raycast(ray3, out hit, 30f))
+            ray3.direction = Quaternion.AngleAxis(deltaAngle, transform.up) * agent.transform.forward;
+            if (Physics.Raycast(ray3, out hit, detectRange))
             {
                 if (hit.transform.gameObject.tag == "Player")
                 {
                     prey = hit.transform.gameObject;
-                    Debug.Log(prey.name);
                     behaviorMode = FIND_MODE;
                     return true;
                 }
                 if (hit.transform.gameObject.tag == "Locker")
                 {
+                    prey = hit.transform.gameObject;
+
                     InteractiveLocker = hit.transform.gameObject.GetComponentInChildren<LockerScript>();
                     
                     seeLocker(hit.transform.gameObject,InteractiveLocker);
@@ -299,6 +322,10 @@ public class ZombieController : MonoBehaviour
             Collider Pcollider = pcon.GetComponent<Collider>();
             if (pcon.itemState != PlayerController.Hasamulet)
             {
+                if (beingDamaged)
+                {
+                    return;
+                }
                 isMovie = true;
                 vcam.enabled = true;
                 vcam.Priority = 30;
@@ -314,9 +341,6 @@ public class ZombieController : MonoBehaviour
                 Freeze();
                 damaged();
                 Instantiate(effect, agent.transform.position, Quaternion.identity);
-                Pcollider.isTrigger = true;
-
-
 
             }
 
@@ -325,12 +349,11 @@ public class ZombieController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Locker") && gameManager.sceneState == 1)
         {
-            Debug.Log("Locker");
             animator.SetBool("Run", false);
             agent.SetDestination(agent.transform.position);
-            agent.speed = 0;
+            agent.speed = 0f;
             behaviorMode = SUSPECT_LOCKER_MODE;
-            OpenLocker(collision.gameObject);
+            seeLocker(collision.gameObject,collision.gameObject.GetComponent<LockerScript>());
         }
     }
 
@@ -376,6 +399,66 @@ public class ZombieController : MonoBehaviour
     }
     public void damaged()
     {
+        behaviorMode = DAMAGED_MODE;
+        Freeze();
         animator.SetTrigger("Damaged");
+        beingDamaged = true;
+        StartCoroutine("DamageEvent");
+    }
+
+    IEnumerator DamageEvent()
+    {
+        yield return new WaitForSeconds(3);
+        beingDamaged = false;
+        Free();
+        behaviorMode = WAITING_MODE;
+        yield break;
+    }
+    public bool changeStateEvent(int i)
+    {
+        if(behaviorMode == i)
+        {
+            return false;
+        }
+        if(behaviorMode != i)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void SuspectLocker()
+    {
+        agent.speed = 0f;
+        float ViewAngle = 60f;
+        float deltaAngle = -ViewAngle;
+        RaycastHit hit;
+        //Ray ray = new(agent.transform.position + new Vector3(0f, 15f, 0f), Quaternion.AngleAxis(deltaAngle, transform.up) * agent.transform.forward);
+        //Ray ray2 = new Ray(agent.transform.position + new Vector3(0f, 15f, 0f), agent.transform.up);
+        Ray ray3 = new Ray(agent.transform.position + new Vector3(0f, 10f, 0f), agent.transform.forward);
+
+
+        while (deltaAngle < ViewAngle)
+        {
+         
+            deltaAngle += 5f;
+            if (Physics.Raycast(ray3, out hit, detectRange))
+            {
+                if (hit.transform.gameObject.tag == "Locker")
+                {
+                    prey = hit.transform.gameObject;
+
+                    InteractiveLocker = hit.transform.gameObject.GetComponentInChildren<LockerScript>();
+
+                    seeLocker(hit.transform.gameObject, InteractiveLocker);
+                }
+
+            }
+
+            //Debug.DrawLine(ray.origin, ray.direction * 30f, Color.blue, 1f);
+            //Debug.DrawLine(ray2.origin, ray2.direction * 30f, Color.green, 1f);
+            Debug.DrawLine(ray3.origin, ray3.origin + ray3.direction * 30f, Color.red, 1f);
+
+        }
     }
 }

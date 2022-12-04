@@ -25,7 +25,6 @@ public class caligrahyGenerator : MonoBehaviour
         {
             papers[i] = caligraphy.transform.GetChild(i).gameObject;
             var texts = papers[i].GetComponentsInChildren<TextMeshProUGUI>();
-            Debug.Log(texts[1]);
             mainTexts[i] = texts[0];
             subTexts[i] = texts[1];
 

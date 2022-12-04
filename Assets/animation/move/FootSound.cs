@@ -23,7 +23,6 @@ public class FootSound : MonoBehaviour
     {
         if (audioSource != null)
         {
-            Debug.Log("sound");
             audioSource.PlayOneShot(soundClip,1);
         }
     }
@@ -35,7 +34,6 @@ public class FootSound : MonoBehaviour
         }
         if (audioSource != null)
         {
-            Debug.Log("sound");
             audioSource.PlayOneShot(soundClip2,1);
         }
     }
@@ -48,7 +46,6 @@ public class FootSound : MonoBehaviour
         }
         if (audioSource != null)
         {
-            Debug.Log("sound");
             audioSource.PlayOneShot(soundClip2, 0.3f);
         }
     }
@@ -61,7 +58,6 @@ public class FootSound : MonoBehaviour
         }
         if (audioSource != null)
         {
-            Debug.Log("sound");
             audioSource.PlayOneShot(soundClip2, 0.3f);
         }
     }

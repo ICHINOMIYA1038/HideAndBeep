@@ -8,6 +8,63 @@ using Photon.Pun;
 /// </summary>
 namespace util
 {
+    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent (typeof(BoxCollider))]
+    [RequireComponent(typeof(PhotonView))]
+    public class SoundObject : InteractiveObject
+    {
+
+        [SerializeField] AudioSource audiosource;
+        [SerializeField] AudioClip clip;
+        SoundManager soundManager;
+        [SerializeField]  float timer;
+        [SerializeField] float range;
+        [SerializeField] float soundLevel;
+        [SerializeField] float cooltime;
+
+        private void Start()
+        {
+            soundManager = gameManager.GetComponent<SoundManager>();
+        }
+
+        public void playSound()
+        {
+            audiosource.PlayOneShot(clip);
+            gameManager.enemyDamaged(transform.position, range);
+            soundManager.soundDetect(transform.position, range, soundLevel);
+        }
+
+        virtual public void Effect()
+        {
+
+        }
+
+        IEnumerator activate()
+        {
+            yield return new WaitForSeconds(timer);
+            playSound();
+            Effect();
+            StartCoroutine("WaitCoolTime");
+        }
+
+        IEnumerator WaitCoolTime()
+        {
+            yield return new WaitForSeconds(cooltime);
+            canInteract = true;
+        }
+
+        protected override void OnInteract()
+        {
+            StartCoroutine("activate");
+            canInteract = false;
+        }
+
+        protected override void ReInteract()
+        {
+            StartCoroutine("activate");
+            canInteract = false;
+        }
+    }
     public class ProgressBar: MonoBehaviourPunCallbacks
     {
         [SerializeField] public bool isActive = false;
@@ -19,7 +76,7 @@ namespace util
         protected float progressTime;
         protected bool istaskCompleted = false;
         
-
+        
         private void Awake()
         {
             panelTransform = progressPanel.GetComponent<RectTransform>();
@@ -80,20 +137,21 @@ namespace util
         [SerializeField] protected PhotonView photonview;
         [SerializeField] protected GameManager gameManager;
         protected bool playerEnterTrigger = false;
-        protected bool interacted = false;
+        public bool interacted = false;
+        public bool canInteract = true;
         void Interacted()
-        {
+        {  if(!canInteract)
+            {
+                return;
+            }
             if (interacted)
             {
-                interacted = false;
-                OnInteract();
-
+                ReInteract();
 
             }
             else if(!interacted)
             {
-                interacted = true;
-                ReInteract();
+                OnInteract(); 
             }
         }
 
@@ -107,7 +165,12 @@ namespace util
             {
                 playerEnterTrigger = true;
                 playerController = other.gameObject.GetComponent<PlayerController>();
-                gameManager.ActiveInputAssist();
+                if (canInteract)
+                {
+                    gameManager.ActiveInputAssist();
+                }
+              
+ 
             }
 
         }

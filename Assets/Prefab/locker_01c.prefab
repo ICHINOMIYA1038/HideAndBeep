@@ -303,7 +303,7 @@ MonoBehaviour:
   photonview: {fileID: 1466954962686107636}
   gameManager: {fileID: 0}
   door: {fileID: 100000}
-  openSpeed: 120
+  openSpeed: 30
   lockerIncheck: {fileID: 1215151978275177547}
   cameraPosition: {fileID: 7207807910827267881}
   audio: {fileID: 6196274170241001738}

@@ -1960,6 +1960,7 @@ MonoBehaviour:
   chaseBGM: {fileID: 8300000, guid: ef6da88faa7b02b45891e37be5c6e093, type: 3}
   NormalCamera: {fileID: 4788851612129393668}
   gameOvercamera: {fileID: 4885401040410493916}
+  inLocker: 0
 --- !u!114 &6892972767100855993
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -24,15 +24,17 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] GameObject subItemPanel2;
     [SerializeField] GameObject mainCanvas;
     [SerializeField] GameObject gameOverCanvas;
+    [SerializeField] GameObject gameClearCanvas;
     [SerializeField] GameObject InputAssist;
     [SerializeField] TextMeshProUGUI player1Name;
     [SerializeField] TextMeshProUGUI player2Name;
-
+    [SerializeField] ZombieController[] zombieCon;
     [SerializeField] Image playerImg1;
     [SerializeField] Image playerImg2;
     [SerializeField] Sprite img0;
     [SerializeField] Sprite img1;
     [SerializeField] Sprite img2;
+    [SerializeField] GameObject gameClearCamera;
 
     PlayerController[] playerControllers;
 
@@ -49,9 +51,37 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     }
 
+    public void gameClear()
+    {
+        mainCanvas.SetActive(false);
+        gameClearCanvas.SetActive(true);
+        StartCoroutine("gameClearPanel");
+        playerControllers[1].gameClear();
+        gameClearCamera.SetActive(true);
+
+
+    }
+
     IEnumerator gameOverPanel()
     {
         CanvasGroup canvasGroup = gameOverCanvas.GetComponent<CanvasGroup>();
+        yield return new WaitForSeconds(2);
+        for (int i = 0; i < 200; i++)
+        {
+            canvasGroup.alpha += 0.005f;
+            yield return null;
+
+        }
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+        PhotonNetwork.Disconnect();
+    }
+
+    IEnumerator gameClearPanel()
+    {
+        CanvasGroup canvasGroup = gameClearCanvas.GetComponent<CanvasGroup>();
         yield return new WaitForSeconds(2);
         for (int i = 0; i < 200; i++)
         {
@@ -98,12 +128,23 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     }
     void Start()
     {
-
+        
     }
 
     void Update()
     {
 
+    }
+
+    public void enemyDamaged(Vector3 position,float range)
+    {
+        foreach (ZombieController zombie in zombieCon)
+        {
+           if((zombie.transform.position - position).magnitude < range)
+            {
+                zombie.damaged();
+            }
+        }
     }
 
     public void ActiveInputAssist()
@@ -147,7 +188,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         
         // カスタムプロパティが更新されたプレイヤーのプレイヤー名とIDをコンソールに出力する
-        Debug.Log($"{targetPlayer.NickName}({targetPlayer.ActorNumber})");
+        //Debug.Log($"{targetPlayer.NickName}({targetPlayer.ActorNumber})");
 
         // 更新されたプレイヤーのカスタムプロパティのペアをコンソールに出力する
         foreach (var prop in changedProps)

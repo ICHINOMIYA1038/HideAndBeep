@@ -15,6 +15,7 @@ public class LockerScript : InteractiveObject
     SoundManager soundManager;
     public void Start()
     {
+        interacted = false;
         soundManager = gameManager.GetComponent<SoundManager>();
     }
     protected override void OnInteract()
@@ -30,7 +31,6 @@ public class LockerScript : InteractiveObject
         if (lockerIncheck.inLocker == true)
         {
             playerController.ExitLocker();
-            Debug.Log("Exit");
         }
     }
 
@@ -46,7 +46,6 @@ public class LockerScript : InteractiveObject
         if (lockerIncheck.inLocker == true)
         {
             playerController.EnterLocker(cameraPosition.transform.position);
-            Debug.Log("IntoTheLocker");
         }
         StartCoroutine("close");
         closeSound();
@@ -119,8 +118,8 @@ public class LockerScript : InteractiveObject
         }
         if (interacted == false)
         {
-
-            while (Mathf.Cos(door.transform.localEulerAngles.y * Mathf.PI / 180) > 0 && interacted == false)
+            interacted = true;
+            while (Mathf.Cos(door.transform.localEulerAngles.y * Mathf.PI / 180) > 0)
             {
                 door.transform.Rotate(0, -Time.deltaTime * openSpeed, 0);
                 yield return null;
@@ -128,6 +127,7 @@ public class LockerScript : InteractiveObject
             playerController.Free();
             yield break;
         }
+        
     }
 
     public IEnumerator close()
@@ -139,8 +139,8 @@ public class LockerScript : InteractiveObject
         }
         if (interacted == true)
         {
-
-            while (Mathf.Sin(door.transform.localEulerAngles.y * Mathf.PI / 180) < 0 && interacted == true)
+            interacted = false;
+            while (Mathf.Sin(door.transform.localEulerAngles.y * Mathf.PI / 180) < 0)
             {
                 door.transform.Rotate(0, +Time.deltaTime * openSpeed, 0);
                 yield return null;
@@ -156,6 +156,7 @@ public class LockerScript : InteractiveObject
             }
             
         }
+      
     }
 
     public void  openSound()

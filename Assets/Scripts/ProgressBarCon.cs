@@ -10,6 +10,7 @@ public class ProgressBarCon : ProgressBar, IPunObservable
     [SerializeField] IcanInteract interactController;
     [SerializeField] BoxCon boxCon;
     [SerializeField] LeverCon levercon;
+    [SerializeField] BookShelf shelfcon;
     private void Update()
     {
         if(isActive)
@@ -29,6 +30,10 @@ public class ProgressBarCon : ProgressBar, IPunObservable
         if (levercon != null)
         {
             interactController = levercon;
+        }
+        if (shelfcon != null)
+        {
+            interactController = shelfcon;
         }
 
     }
@@ -76,7 +81,6 @@ public class ProgressBarCon : ProgressBar, IPunObservable
             {
                 return;
             }
-            //?f?[?^?????M
             stream.SendNext(progressTime);
 
         }

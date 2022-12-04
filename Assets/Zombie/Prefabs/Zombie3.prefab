@@ -988,7 +988,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad8bb8f40098463680163ea959fa501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effect: {fileID: 0}
+  effect: {fileID: 304595516495008782, guid: 9bc141ed56df8654bb04627d333abe1c, type: 3}
   vcam: {fileID: 5097994679061421260}
   targetPosition: {x: 0, y: 0, z: 0}
   isFinding: 0
@@ -998,6 +998,8 @@ MonoBehaviour:
   photonView: {fileID: 0}
   zombieCollider: {fileID: 8321422090304311489}
   behaviorMode: 0
+  beingDamaged: 0
+  detectRange: 70
 --- !u!82 &1759284647
 AudioSource:
   m_ObjectHideFlags: 0

@@ -24,6 +24,7 @@ public class PlayerController: MonoBehaviourPun
     static readonly int HasLight = 1;
     public static readonly int HasWhistle = 2;
     public static readonly int Hasamulet = 3;
+    public static readonly int HasKey = 4;
     [SerializeField] GameObject CameraLookAtObject;
     Vector3 defaultLookAtPosition;
     [SerializeField] GameObject ItemLight;
@@ -40,6 +41,7 @@ public class PlayerController: MonoBehaviourPun
     [SerializeField] CinemachineFreeLook NormalCamera;
     [SerializeField] CinemachineVirtualCamera gameOvercamera;
     bool isMovie = false;
+    public bool inLocker = false;
 
 
 
@@ -341,6 +343,8 @@ public class PlayerController: MonoBehaviourPun
 
     public void Freeze()
     {
+        speed = 0f;
+        animator.SetFloat("speed", 0);
         canMove = false;
         rb.constraints = RigidbodyConstraints.FreezePosition
             | RigidbodyConstraints.FreezeRotationX
@@ -365,7 +369,7 @@ public class PlayerController: MonoBehaviourPun
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy") && collision.gameObject.GetComponent<ZombieController>().beingDamaged == false&&itemState!=Hasamulet)
         {
             gameOvercamera.LookAt = collision.gameObject.transform;
             NormalCamera.Priority = -1;
@@ -384,15 +388,32 @@ public class PlayerController: MonoBehaviourPun
         speed = 0f;
         animator.SetFloat("speed", 0);
         CameraLookAtObject.transform.position = cameraPosition;
-       
+        inLocker = true;
     }
 
     public void ExitLocker()
     {
         canMove = true;
         CameraLookAtObject.transform.localPosition = defaultLookAtPosition;
-        
+        inLocker = false;
     }
 
+    public void gameClear()
+    {
+        canMove = false;
+        
+        StartCoroutine(gameClearCamera());
+    }
+
+    IEnumerator gameClearCamera()
+    {
+        for(int i = 0; i < 100; i++)
+        {
+            yield return null;
+            transform.position += transform.forward * speed * Time.deltaTime;
+        }
+        
+
+    }
 
 }

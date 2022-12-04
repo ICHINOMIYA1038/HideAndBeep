@@ -15,9 +15,7 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
     [SerializeField] ProgressBarCon progressBar;
     [SerializeField] GameObject lid;
     [SerializeField]PlayerController playerController;
-    [SerializeField] float waitTime = 3.0f;
     [SerializeField] PhotonView photonview;
-    [SerializeField] int ItemState;
     [SerializeField] GameObject gate;
     [SerializeField] GameManager gameManager;
      
@@ -42,7 +40,6 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
 
     public void CompleteTask()
     {
-        lid.transform.eulerAngles = new Vector3(90f, 0f, 0f);
         playerController.stopAction();
         isOpen = true;
         StartCoroutine("GateOpen");
@@ -109,7 +106,7 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
 
 
 
-            playerController.pullLever(transform.position - new Vector3(0f, 0f, 3f), transform.position);
+            playerController.pullLever(transform.position - new Vector3(0f, 10f, 3f), transform.position - new Vector3(0f,10f,0f));
             playerController.canMove = false;
             progressBar.isActive = true;
             progressbarInstance.SetActive(true);
@@ -134,13 +131,11 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
             }
             //?f?[?^?????M
             stream.SendNext(isOpen);
-            stream.SendNext(ItemState);
 
         }
         else
         {
             this.isOpen = (bool)stream.ReceiveNext();
-            this.ItemState = (int)stream.ReceiveNext();
         }
     }
 
