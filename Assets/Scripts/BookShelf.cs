@@ -83,7 +83,6 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
                 playerController.stopAction();
                 progressBar.isActive = false;
                 progressbarInstance.SetActive(false);
-
             }
 
         }
@@ -100,7 +99,6 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
 
 
             playerController.canMove = false;
-            
             progressbarInstance.SetActive(true);
             progressBar.isActive = true;
 

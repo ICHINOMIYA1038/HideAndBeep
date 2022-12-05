@@ -2950,6 +2950,7 @@ MonoBehaviour:
   chaseBGM: {fileID: 8300000, guid: ef6da88faa7b02b45891e37be5c6e093, type: 3}
   NormalCamera: {fileID: 3662278841241994376}
   gameOvercamera: {fileID: 495027540396678001}
+  inLocker: 0
 --- !u!54 &3662278840520844971
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3160,6 +3161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7294e61b35c6449b6b51ed129a5c89bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
   soundClip: {fileID: 8300000, guid: ba788f1f4130e42d3b0899617b68924d, type: 3}
   soundClip2: {fileID: 8300000, guid: ff4fc607661d64502811881ecd2cef64, type: 3}
 --- !u!1 &5134454773542193331

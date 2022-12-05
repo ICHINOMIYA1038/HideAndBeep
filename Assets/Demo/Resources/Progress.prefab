@@ -33,10 +33,10 @@ RectTransform:
   m_Father: {fileID: 9067840553481745223}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -298, y: -120.52}
-  m_SizeDelta: {x: 127.458, y: 33.515}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 6.1174, y: 43.6426}
+  m_SizeDelta: {x: 149.0928, y: 32.7137}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9067840553197124445
 CanvasRenderer:
@@ -257,7 +257,9 @@ MonoBehaviour:
   progressRatio: 0
   needTime: 5
   photonview: {fileID: 0}
-  boxController: {fileID: 0}
+  boxCon: {fileID: 0}
+  levercon: {fileID: 0}
+  shelfcon: {fileID: 0}
 --- !u!1 &9067840553635605739
 GameObject:
   m_ObjectHideFlags: 0

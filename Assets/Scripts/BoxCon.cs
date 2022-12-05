@@ -40,7 +40,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
     public void CompleteTask()
     {
-        lid.transform.eulerAngles = new Vector3(90f, 0f, 0f);
+        lid.transform.localEulerAngles = new Vector3(90f, 0f, 0f);
         playerController.stopAction();
         int charaItem = playerController.itemState;
         playerController.OnItemChange(ItemState);
@@ -119,7 +119,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
 
 
-            playerController.searchBox(transform.position - new Vector3(0f, 0f, 3f), transform.position);
+            playerController.searchBox(transform.position - transform.forward*3f, transform.position);
             playerController.canMove = false;
             progressBar.isActive = true;
             progressbarInstance.SetActive(true);

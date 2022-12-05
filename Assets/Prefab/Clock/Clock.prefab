@@ -33,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 8108158884447531353}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 105.73521, y: 51.797813, z: -59.43697}
-  m_LocalScale: {x: 5.71, y: 5.71, z: 5.71}
+  m_LocalScale: {x: 2.6, y: 2.6, z: 2.6}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -110,6 +110,8 @@ MonoBehaviour:
   timer: 3
   range: 100
   soundLevel: 0
+  cooltime: 0
+  anim: {fileID: 0}
 --- !u!114 &8860571639371320123
 MonoBehaviour:
   m_ObjectHideFlags: 0

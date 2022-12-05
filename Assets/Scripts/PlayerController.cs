@@ -155,7 +155,14 @@ public class PlayerController: MonoBehaviourPun
                 animator.SetTrigger("Lightstop");
             }
         }
-        
+        if (itemState == HasWhistle)
+        {
+            if (Input.GetMouseButtonDown(1) && !animator.GetCurrentAnimatorStateInfo(0).IsName("light"))
+            {
+                animator.SetTrigger("Open");
+            }
+        }
+
 
         //速度の取得
 
@@ -401,7 +408,6 @@ public class PlayerController: MonoBehaviourPun
     public void gameClear()
     {
         canMove = false;
-        
         StartCoroutine(gameClearCamera());
     }
 

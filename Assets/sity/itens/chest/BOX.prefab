@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 748c2d9b1baaaaf44a8a9d24b6316cb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
   progressbarInstance: {fileID: 9067840553148348796}
   progressBar: {fileID: 9067840553148348743}
   lid: {fileID: 3000509077077076996}
@@ -359,11 +360,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9067840553197124435, guid: 7d92609ad0fdd7348ba30dcd4d7e0e82, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -249
+      value: -14
       objectReference: {fileID: 0}
     - target: {fileID: 9067840553197124435, guid: 7d92609ad0fdd7348ba30dcd4d7e0e82, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -158.38
+      value: 46.621
       objectReference: {fileID: 0}
     - target: {fileID: 9067840553197124444, guid: 7d92609ad0fdd7348ba30dcd4d7e0e82, type: 3}
       propertyPath: m_fontSize
