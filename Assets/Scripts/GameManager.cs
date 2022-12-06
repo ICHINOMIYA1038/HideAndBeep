@@ -35,6 +35,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] Sprite img1;
     [SerializeField] Sprite img2;
     [SerializeField] GameObject gameClearCamera;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip gameClearSE;
+    [SerializeField] AudioClip gameOverSE;
+
 
     PlayerController[] playerControllers;
 
@@ -58,6 +62,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         StartCoroutine("gameClearPanel");
         playerControllers[1].gameClear();
         gameClearCamera.SetActive(true);
+        audioSource.PlayOneShot(gameClearSE);
 
 
     }
@@ -82,14 +87,22 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     IEnumerator gameClearPanel()
     {
         CanvasGroup canvasGroup = gameClearCanvas.GetComponent<CanvasGroup>();
-        yield return new WaitForSeconds(2);
-        for (int i = 0; i < 200; i++)
+        yield return new WaitForSeconds(2.5f);
+        for (int i = 0; i < 500; i++)
         {
-            canvasGroup.alpha += 0.005f;
+            canvasGroup.alpha += 0.002f;
             yield return null;
 
         }
-        yield return new WaitForSeconds(3);
+        float alpha=0;
+        for (int i = 0; i < 500; i++)
+        {
+            alpha = i*0.002f;
+            gameClearCanvas.GetComponentInChildren<Image>().color = new Vector4(0f, 0f, 0f, alpha);
+            yield return null;
+
+        }
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;

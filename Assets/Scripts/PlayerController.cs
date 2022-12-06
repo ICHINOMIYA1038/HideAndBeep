@@ -40,14 +40,19 @@ public class PlayerController: MonoBehaviourPun
     [SerializeField] AudioClip chaseBGM;
     [SerializeField] CinemachineFreeLook NormalCamera;
     [SerializeField] CinemachineVirtualCamera gameOvercamera;
+    [SerializeField] AudioSource seAudioSource;
+    [SerializeField] AudioClip seMagic;
+    [SerializeField] AudioClip seWhistle;
     bool isMovie = false;
     public bool inLocker = false;
+    GameManager gameManager;
 
 
 
     // Use this for initialization
     void Start()
     {
+        gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         defaultLookAtPosition = CameraLookAtObject.transform.localPosition;
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
         zombieControllers = new ZombieController[2];
@@ -136,6 +141,7 @@ public class PlayerController: MonoBehaviourPun
         else if (distance > 80f && audiosource.isPlaying == true)
         {
             audiosource.Stop();
+            
         }
         
 
@@ -160,6 +166,14 @@ public class PlayerController: MonoBehaviourPun
             if (Input.GetMouseButtonDown(1) && !animator.GetCurrentAnimatorStateInfo(0).IsName("light"))
             {
                 animator.SetTrigger("Open");
+                
+                seAudioSource.PlayOneShot(seWhistle);
+
+                soundmanager.soundDetect(this.transform.position, 30f, 30f);
+
+                gameManager.enemyDamaged(transform.position, 30f);
+
+
             }
         }
 
@@ -372,6 +386,11 @@ public class PlayerController: MonoBehaviourPun
     public string getName()
     {
         return playerName;
+    }
+
+    public　void magic()
+    {
+        seAudioSource.PlayOneShot(seMagic);
     }
 
     private void OnCollisionEnter(Collision collision)

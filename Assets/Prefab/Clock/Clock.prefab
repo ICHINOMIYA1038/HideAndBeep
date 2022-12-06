@@ -106,12 +106,12 @@ MonoBehaviour:
   interacted: 0
   canInteract: 1
   audiosource: {fileID: 7799769669040636593}
-  clip: {fileID: 8300000, guid: 3dd645f09abd9483c8ef0fe860bac079, type: 3}
+  clip: {fileID: 8300000, guid: f537481969e644f558211401bf39008b, type: 3}
   timer: 3
-  range: 100
-  soundLevel: 0
-  cooltime: 0
-  anim: {fileID: 0}
+  range: 30
+  soundLevel: 30
+  cooltime: 10
+  anim: {fileID: 7986895563874981673}
 --- !u!114 &8860571639371320123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,9 +265,10 @@ Animation:
   m_GameObject: {fileID: 8108158884447531353}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 83c61cade927ff64f9395a21a4515bc8, type: 2}
-  m_Animations: []
+  m_Animation: {fileID: 7400000, guid: 04736355be001154f81e27b06200cf07, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 04736355be001154f81e27b06200cf07, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 1
+  m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0

@@ -41,6 +41,8 @@ public class ZombieController : MonoBehaviour
     bool canMove = true;
     public bool beingDamaged = false;
     [SerializeField]float detectRange;
+    [SerializeField] AudioSource audiosource;
+    [SerializeField] AudioClip damageSE;
 
     // Start is called before the first frame update
     void Start()
@@ -336,7 +338,7 @@ public class ZombieController : MonoBehaviour
             }
             else
             {
-                Debug.Log("Effect");
+                pcon.magic();
                 pcon.OnItemChange(0);
                 Freeze();
                 damaged();
@@ -404,6 +406,7 @@ public class ZombieController : MonoBehaviour
         animator.SetTrigger("Damaged");
         beingDamaged = true;
         StartCoroutine("DamageEvent");
+        audiosource.PlayOneShot(damageSE);
     }
 
     IEnumerator DamageEvent()
