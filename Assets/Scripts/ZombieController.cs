@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using static SoundManager;
@@ -21,6 +22,8 @@ public class ZombieController : MonoBehaviour
     [SerializeField] PhotonView photonView;
     [SerializeField] Collider zombieCollider;
     LockerScript InteractiveLocker;
+    [SerializeField] GameObject targetLocker;
+    [SerializeField]GameObject[] lockers;
     [SerializeField]
     /// <summary>
     /// behaviorMode :0 Wait 1 MoveAround 2 Detect 3 MoveTo 4 Arrive 5 Find 
@@ -43,10 +46,13 @@ public class ZombieController : MonoBehaviour
     [SerializeField]float detectRange;
     [SerializeField] AudioSource audiosource;
     [SerializeField] AudioClip damageSE;
+    bool isSearching = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        lockers = GameObject.FindGameObjectsWithTag("Locker");
+
         TryGetComponent<Animator>(out animator);
         TryGetComponent<NavMeshAgent>(out agent);
         TryGetComponent<PhotonView>(out photonView);
@@ -67,6 +73,15 @@ public class ZombieController : MonoBehaviour
         if (!canMove)
         {
             return;
+        }
+
+        if (prey != null)
+        {   
+            if(prey.GetComponent<PlayerController>().inLocker == true)
+            {
+                behaviorMode = SUSPECT_LOCKER_MODE;
+                isFinding = false;
+            }
         }
 
         if (behaviorMode == WAITING_MODE)
@@ -119,6 +134,34 @@ public class ZombieController : MonoBehaviour
             agent.speed = walkSpeed;
             animator.SetBool("Run", false);
         }
+
+    }
+
+    /// <summary>
+    /// ロッカーを近い順に並べるスクリプト
+    /// </summary>
+    void SortLockerDistance()
+    {
+
+        List<KeyValuePair<float,GameObject>> ProvisionalValue = new List<KeyValuePair<float, GameObject>>();
+        for(int i = 0; i < lockers.Length; i++)
+        {
+            ProvisionalValue.Add(new KeyValuePair<float, GameObject>((lockers[i].transform.position - agent.transform.position).magnitude, lockers[i]));
+            
+        }
+
+        var orderdList = ProvisionalValue.OrderBy(x => x.Key);
+        int index = 0;
+        foreach(var locker in orderdList)
+        {
+            lockers[index] = locker.Value;
+            Debug.Log(locker.Key);
+            index += 1;
+        }
+
+
+
+
 
     }
 
@@ -284,16 +327,18 @@ public class ZombieController : MonoBehaviour
                     behaviorMode = FIND_MODE;
                     return true;
                 }
+                /*
                 if (hit.transform.gameObject.tag == "Locker")
                 {
                     prey = hit.transform.gameObject;
 
                     InteractiveLocker = hit.transform.gameObject.GetComponentInChildren<LockerScript>();
                     
-                    seeLocker(hit.transform.gameObject,InteractiveLocker);
+                    seeLocker(hit.transform.gameObject);
                     
                     return true;
                 }
+                */
 
             }
 
@@ -349,6 +394,7 @@ public class ZombieController : MonoBehaviour
 
         }
 
+        /*
         if (collision.gameObject.CompareTag("Locker") && gameManager.sceneState == 1)
         {
             animator.SetBool("Run", false);
@@ -357,6 +403,7 @@ public class ZombieController : MonoBehaviour
             behaviorMode = SUSPECT_LOCKER_MODE;
             seeLocker(collision.gameObject,collision.gameObject.GetComponent<LockerScript>());
         }
+        */
     }
 
     public void gameOver()
@@ -364,25 +411,59 @@ public class ZombieController : MonoBehaviour
         gameManager.gameOver();
     }
 
-    public void seeLocker(GameObject locker,LockerScript lockerScript)
+    public void seeLocker(GameObject locker)
     {
+        targetLocker = locker;
         agent.SetDestination(locker.transform.GetChild(4).position);
-        
+        StartCoroutine("openLocker");
 
-        float a = Random.Range(0f, 1f);
-        Freeze();
-        OpenLocker(locker);
-      
-        
+        LockerScript lockerScript = locker.GetComponentInChildren<LockerScript>();
+
         lockerScript.open();
         
 
     }
 
+    IEnumerator openLocker()
+    {
+        Debug.Log("startOpenLocker");
+        float timer = 0;
+        while (true)
+        {
+            timer += Time.deltaTime;
+            if (timer > 10)
+            {
+                Debug.Log("timeOut");
+                yield break;
+            }
+            if ((targetLocker.transform.position - agent.transform.position).magnitude < 10f)
+            {
+                Debug.Log("reachLocker");
+                transform.LookAt(targetLocker.transform);
+                Freeze();
+                OpenLocker(targetLocker);
+                yield break;
+            }
+            yield return null;
+        }
+    }
+
     public void OpenLocker(GameObject locker)
     {
         animator.SetTrigger("Open");
-        Debug.Log("OpenLocker");
+        isSearching = false;
+        LockerScript lockerScript = locker.GetComponentInChildren<LockerScript>();
+        if (lockerScript.playerExistsInLocker)
+        {
+            isMovie = true;
+            vcam.enabled = true;
+            vcam.transform.position += transform.up * 1f;
+            vcam.Priority = 30;
+            gameOver();
+            lockerScript.getPlayerController().gameOver(this.gameObject);
+            gameManager.sceneState = 0;
+        }
+
     }
 
     public void Freeze()
@@ -432,6 +513,16 @@ public class ZombieController : MonoBehaviour
 
     public void SuspectLocker()
     {
+
+        
+        if (!isSearching)
+        {
+            SortLockerDistance();
+            isSearching = true;
+            seeLocker(lockers[0]);
+        }
+       
+        /*
         agent.speed = 0f;
         float ViewAngle = 60f;
         float deltaAngle = -ViewAngle;
@@ -449,11 +540,11 @@ public class ZombieController : MonoBehaviour
             {
                 if (hit.transform.gameObject.tag == "Locker")
                 {
-                    prey = hit.transform.gameObject;
+                    targetLocker = hit.transform.gameObject;
 
-                    InteractiveLocker = hit.transform.gameObject.GetComponentInChildren<LockerScript>();
+                    InteractiveLocker = targetLocker.GetComponentInChildren<LockerScript>();
 
-                    seeLocker(hit.transform.gameObject, InteractiveLocker);
+                    seeLocker(hit.transform.gameObject);
                 }
 
             }
@@ -463,5 +554,6 @@ public class ZombieController : MonoBehaviour
             Debug.DrawLine(ray3.origin, ray3.origin + ray3.direction * 30f, Color.red, 1f);
 
         }
+        */
     }
 }

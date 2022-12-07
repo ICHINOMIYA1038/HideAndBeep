@@ -12,6 +12,8 @@ public class LockerScript : InteractiveObject
     [SerializeField] AudioSource audio;
     [SerializeField] AudioClip clip1;
     [SerializeField] AudioClip clip2;
+    public bool playerExistsInLocker = false;
+   
     SoundManager soundManager;
     public void Start()
     {
@@ -31,6 +33,7 @@ public class LockerScript : InteractiveObject
         if (lockerIncheck.inLocker == true)
         {
             playerController.ExitLocker();
+            playerExistsInLocker = false;
         }
     }
 
@@ -46,6 +49,7 @@ public class LockerScript : InteractiveObject
         if (lockerIncheck.inLocker == true)
         {
             playerController.EnterLocker(cameraPosition.transform.position);
+            playerExistsInLocker = true;
         }
         StartCoroutine("close");
         closeSound();
@@ -167,5 +171,10 @@ public class LockerScript : InteractiveObject
     public void closeSound()
     {
         audio.PlayOneShot(clip2);
+    }
+
+    public PlayerController getPlayerController()
+    {
+        return playerController;
     }
 }

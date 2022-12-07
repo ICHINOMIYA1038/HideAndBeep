@@ -397,15 +397,21 @@ public class PlayerController: MonoBehaviourPun
     {
         if (collision.gameObject.CompareTag("Enemy") && collision.gameObject.GetComponent<ZombieController>().beingDamaged == false&&itemState!=Hasamulet)
         {
-            gameOvercamera.LookAt = collision.gameObject.transform;
-            NormalCamera.Priority = -1;
-            gameOvercamera.Priority = 10;
-            isMovie = true;
-            rb.constraints = RigidbodyConstraints.FreezePosition
-            | RigidbodyConstraints.FreezeRotationX
-            | RigidbodyConstraints.FreezeRotationY
-            | RigidbodyConstraints.FreezeRotationZ;
+            
+            gameOver(collision.gameObject);
         }
+    }
+
+    public void gameOver(GameObject enemy)
+    {
+        gameOvercamera.LookAt = enemy.transform;
+        NormalCamera.Priority = -1;
+        gameOvercamera.Priority = 10;
+        isMovie = true;
+        rb.constraints = RigidbodyConstraints.FreezePosition
+        | RigidbodyConstraints.FreezeRotationX
+        | RigidbodyConstraints.FreezeRotationY
+        | RigidbodyConstraints.FreezeRotationZ;
     }
 
     public void EnterLocker(Vector3 cameraPosition)

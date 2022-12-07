@@ -96,7 +96,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         {
             Vector3 spawnPosition = StartPosi.transform.position;
              player = PhotonNetwork.Instantiate(
-                    PhotonObject2.name,
+                    PhotonObject.name,
                     spawnPosition,
                     Quaternion.identity,
                     0
@@ -106,7 +106,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         {
             Vector3 spawnPosition = StartPosi.transform.position;
              player = PhotonNetwork.Instantiate(
-                    PhotonObject.name,
+                    PhotonObject2.name,
                     spawnPosition,
                     Quaternion.identity,
                     0

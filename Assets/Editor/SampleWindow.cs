@@ -8,6 +8,8 @@ public class SampleWindow : EditorWindow    //!< EditorWindowを継承してね�
     bool groupEnabled;
     bool myBool = true;
     float myFloat = 1.23f;
+    Vector3 position;
+    [SerializeField]GameObject target;
     
     //! MenuItem("メニュー名/項目名") のフォーマットで記載してね
     [MenuItem("Custom/SampleWindow")]
@@ -30,7 +32,7 @@ public class SampleWindow : EditorWindow    //!< EditorWindowを継承してね�
     {
         if (GUILayout.Button("ボタン"))
         {
-            Debug.Log("押された！");
+            //target.transform.position = position;
         }
         GUILayout.Label("Base Settings", EditorStyles.boldLabel);
         myString = EditorGUILayout.TextField("Text Field", myString);
@@ -38,11 +40,17 @@ public class SampleWindow : EditorWindow    //!< EditorWindowを継承してね�
         groupEnabled = EditorGUILayout.BeginToggleGroup("Optional Settings", groupEnabled);
         myBool = EditorGUILayout.Toggle("Toggle", myBool);
         myFloat = EditorGUILayout.Slider("Slider", myFloat, -3, 3);
+        position = EditorGUILayout.Vector3Field("position", position, null);
         EditorGUILayout.EndToggleGroup();
     }
 
     void Update()
     {
-
+        if (Input.GetMouseButtonDown(0))
+        {
+            var pos = Input.mousePosition;
+            position = pos;
+           
+        }
     }
 }

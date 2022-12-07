@@ -10,11 +10,13 @@ public class DoorController : InteractiveObject
     protected override void OnInteract()
     {
         door.transform.RotateAround(transform.position, transform.up, 90);
+        playerController.animator.SetTrigger("Open");
     }
 
     protected override void ReInteract()
     {
         door.transform.RotateAround(transform.position, transform.up, -90);
+        playerController.animator.SetTrigger("Open");
     }
 
     // Start is called before the first frame update
