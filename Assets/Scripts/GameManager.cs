@@ -39,6 +39,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] TextMeshProUGUI messageBox;
     Queue<string> stringList = new Queue<string>();
     int maxTextSize = 5;
+    PhotonView myphotonview;
 
     [SerializeField] PlayerController playerController;
 
@@ -176,6 +177,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void ActiveInputAssist()
     {
+
         InputAssist.SetActive(true);
     }
 
@@ -184,10 +186,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         InputAssist.SetActive(false);
     }
 
-    public void addNewPlayer(PlayerController controller)
+    public void addNewPlayer(PlayerController controller,PhotonView photonview)
     {
-       
-
+        myphotonview = photonview;
         playerController = controller;
         player1Name.SetText(PhotonNetwork.PlayerList[0].NickName);
         playerImg1.sprite = img1;

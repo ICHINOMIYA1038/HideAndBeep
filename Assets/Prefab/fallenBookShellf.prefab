@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5168528100658932123}
   - component: {fileID: 5204258751803888226}
   - component: {fileID: 241864021963681258}
+  - component: {fileID: 8548697343060481991}
   m_Layer: 0
   m_Name: fallenBookShellf
   m_TagString: Untagged
@@ -137,10 +138,11 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
   - {fileID: 5168528100658932123}
+  - {fileID: 8548697343060481991}
   - {fileID: 3031238400618225622}
   sceneViewId: 0
   InstantiationId: 0
@@ -158,6 +160,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.05, y: 0.0118161775, z: 0.05308206}
   m_Center: {x: 0, y: -0.0006873535, z: 0.027008684}
+--- !u!114 &8548697343060481991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7484641875401048465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 0
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1001 &6324865543366405270
 PrefabInstance:
   m_ObjectHideFlags: 0

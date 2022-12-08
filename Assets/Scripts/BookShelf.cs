@@ -26,10 +26,7 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
     // Update is called once per frame
     void Update()
     {
-        if (!photonView.IsMine)
-        {
-            return;
-        }
+
         if (playerEnterTrigger)
         {
             InputCheck();
@@ -55,9 +52,14 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
     {
         if (other.gameObject.CompareTag("Player"))
         {
+
             playerEnterTrigger = true;
             playerController = other.gameObject.GetComponent<PlayerController>();
-            gameManager.ActiveInputAssist();
+            if (playerController.getPhotonviewIsMine())
+            {
+                gameManager.ActiveInputAssist();
+            }
+ 
         }
 
     }
@@ -66,9 +68,13 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            if (playerController.getPhotonviewIsMine())
+            {
+                gameManager.DeactiveInputAssist();
+            }
             playerEnterTrigger = false;
             playerController = null;
-            gameManager.DeactiveInputAssist();
+
         }
     }
 

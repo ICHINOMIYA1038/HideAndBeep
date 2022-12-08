@@ -139,7 +139,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         PlayerController playerController = player.GetComponent<PlayerController>();
 
         playerController.setName(PhotonNetwork.NickName);
-        gamemanager.addNewPlayer(playerController);
+        gamemanager.addNewPlayer(playerController,playerController.getPhotonView());
 
         var hashtable = new ExitGames.Client.Photon.Hashtable();
         hashtable["ItemState"] = 0;

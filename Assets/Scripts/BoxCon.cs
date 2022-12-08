@@ -28,10 +28,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
     // Update is called once per frame
     void Update()
     {
-        if (!photonView.IsMine)
-        { 
-            return;
-        }
+
         if (playerEnterTrigger)
         {
             InputCheck();
@@ -54,31 +51,32 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
         
         if (other.gameObject.CompareTag("Player"))
         {
-            if (!photonview.IsMine)
-            {
-                return;
-            }
+
             Debug.Log("PlayerEnter");
             playerEnterTrigger = true;
             playerController = other.gameObject.GetComponent<PlayerController>();
-            gameManager.ActiveInputAssist();
+            if (playerController.getPhotonviewIsMine())
+            {
+                gameManager.ActiveInputAssist();
+            }
+            
         }
         
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!photonview.IsMine)
-        {
-            return;
-        }
+       
         if (other.gameObject.CompareTag("Player"))
-        {   
-
+        {
+            if (playerController.getPhotonviewIsMine())
+            {
+                gameManager.DeactiveInputAssist();
+            }
             Debug.Log("PlayerExit");
             playerEnterTrigger = false;
             playerController = null;
-            gameManager.DeactiveInputAssist();
+            
         }
     }
 
@@ -90,10 +88,6 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
     private void InputCheck()
     {
-        if (!photonview.IsMine)
-        {
-            return;
-        }
         if (Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("aa");
@@ -129,14 +123,13 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
         if (Input.GetKey(KeyCode.E) && progressBar.isActive == false&&playerController!=null)
         {
-
+            photonview.RequestOwnership();
             Debug.Log("BOXOPEN");
 
             if (!playerController.animator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
             {
                 return;
             }
-
 
             playerController.searchBox(transform.position - transform.forward*3f, transform.position);
             playerController.canMove = false;

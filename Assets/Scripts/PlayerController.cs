@@ -265,6 +265,15 @@ public class PlayerController: MonoBehaviourPun
 
     }
 
+    public bool getPhotonviewIsMine()
+    {
+        return photonView.IsMine;
+    }
+
+    public PhotonView getPhotonView()
+    {
+        return photonView;
+    }
     public void OnItemChange(int index)
     {
         itemState = index;

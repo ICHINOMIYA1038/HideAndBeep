@@ -28,10 +28,6 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
     // Update is called once per frame
     void Update()
     {
-        if (!photonView.IsMine)
-        {
-            return;
-        }
         if (playerEnterTrigger)
         {
             InputCheck();
@@ -63,6 +59,10 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
         {
             playerEnterTrigger = true;
             playerController = other.gameObject.GetComponent<PlayerController>();
+            if (playerController.getPhotonviewIsMine())
+            {
+                gameManager.ActiveInputAssist();
+            }
             gameManager.ActiveInputAssist();
         }
         
@@ -72,9 +72,13 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            if (playerController.getPhotonviewIsMine())
+            {
+                gameManager.DeactiveInputAssist();
+            }
             playerEnterTrigger = false;
             playerController = null;
-            gameManager.DeactiveInputAssist();
+            
         }
     }
 

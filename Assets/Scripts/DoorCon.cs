@@ -20,25 +20,18 @@ public class DoorCon : InteractiveObject
 
     protected override void OnInteract()
     {
-        if (!photonview.IsMine)
-        {
-            return;
-        }
         soundManager.soundDetect(transform.position, 12f, 0.8f);
         playerController.Freeze();
+        playerController.animator.SetTrigger("Open");
         StartCoroutine("open");
         openSound();
     }
 
     protected override void ReInteract()
     {
-        if (!photonview.IsMine)
-        {
-            return;
-        }
         soundManager.soundDetect(transform.position, 12f, 0.8f);
         playerController.Freeze();
-
+        playerController.animator.SetTrigger("Open");
         StartCoroutine("close");
         closeSound();
 
@@ -46,12 +39,14 @@ public class DoorCon : InteractiveObject
 
     public void Opend()
     {
+        
         StartCoroutine("EnemyOpen");
         openSound();
     }
 
     public void Closed()
     {
+
         StartCoroutine("EnemyClose");
         closeSound();
     }

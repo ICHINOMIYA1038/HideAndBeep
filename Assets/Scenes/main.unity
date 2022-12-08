@@ -36083,7 +36083,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
       propertyPath: OwnershipTransfer
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
       propertyPath: ObservedComponents.Array.size
@@ -50230,7 +50230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
       propertyPath: OwnershipTransfer
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
       propertyPath: ObservedComponents.Array.size
@@ -81988,8 +81988,12 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
+      propertyPath: Synchronization
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
       propertyPath: OwnershipTransfer
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
       propertyPath: ObservedComponents.Array.size
@@ -102244,6 +102248,10 @@ PrefabInstance:
     - target: {fileID: 5204258751803888226, guid: 3074b6a8a66121a4e97bd3280a5afc71, type: 3}
       propertyPath: sceneViewId
       value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 5204258751803888226, guid: 3074b6a8a66121a4e97bd3280a5afc71, type: 3}
+      propertyPath: OwnershipTransfer
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7484641875401048465, guid: 3074b6a8a66121a4e97bd3280a5afc71, type: 3}
       propertyPath: m_Name

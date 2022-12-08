@@ -157,17 +157,17 @@ namespace util
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!photonview.IsMine)
-            {
-                return;
-            }
             if (other.gameObject.CompareTag("Player"))
             {
                 playerEnterTrigger = true;
                 playerController = other.gameObject.GetComponent<PlayerController>();
                 if (canInteract)
                 {
-                    gameManager.ActiveInputAssist();
+                    if (playerController.getPhotonviewIsMine())
+                    {
+                        gameManager.ActiveInputAssist();
+                    }
+                    
                 }
               
  
@@ -177,25 +177,23 @@ namespace util
 
         private void OnTriggerExit(Collider other)
         {
-            if (!photonview.IsMine)
-            {
-                return;
-            }
+
             if (other.gameObject.CompareTag("Player"))
             {
+                if (playerController.getPhotonviewIsMine())
+                {
+                    gameManager.DeactiveInputAssist();
+                }
                 playerEnterTrigger = false;
                 playerController = null;
-                gameManager.DeactiveInputAssist();
+                
+                
             }
         }
 
 
         void Update()
         {
-            if (!photonview.IsMine)
-            {
-                return;
-            }
             if (playerEnterTrigger)
             {
                 InputCheck();
@@ -206,6 +204,7 @@ namespace util
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
+                photonview.RequestOwnership();
                 Interacted();
             }
         }
