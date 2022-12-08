@@ -11,8 +11,6 @@ using TMPro;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
-
-    string[] playerName;
     int pNum = 0;
     public int sceneState = 0;
 
@@ -38,9 +36,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip gameClearSE;
     [SerializeField] AudioClip gameOverSE;
+    [SerializeField] TextMeshProUGUI messageBox;
+    Queue<string> stringList = new Queue<string>();
+    int maxTextSize = 5;
 
-
-    PlayerController[] playerControllers;
+    [SerializeField] PlayerController playerController;
 
 
 
@@ -60,7 +60,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         mainCanvas.SetActive(false);
         gameClearCanvas.SetActive(true);
         StartCoroutine("gameClearPanel");
-        playerControllers[1].gameClear();
+        playerController.gameClear();
         gameClearCamera.SetActive(true);
         audioSource.PlayOneShot(gameClearSE);
 
@@ -133,15 +133,29 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         //DontDestroyOnLoad(gameObject);
 
-        playerName = new string[2];
-        playerControllers = new PlayerController[2];
-
-
-
     }
     void Start()
     {
-        
+        playerImg1.sprite = img0;
+        playerImg2.sprite = img0;
+    }
+
+    void AddText(string text)
+    {
+        Debug.Log(text);
+        stringList.Enqueue(text);
+        if (stringList.Count > maxTextSize)
+        {
+            stringList.Dequeue();
+        }
+
+        messageBox.text = "";
+        foreach(var elem in stringList)
+        {
+            messageBox.text += $"{elem}\n";
+        }
+
+
     }
 
     void Update()
@@ -172,28 +186,66 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void addNewPlayer(PlayerController controller)
     {
-        pNum += 1;
+       
 
-        playerControllers[pNum] = controller;
-        playerName[pNum] = controller.getName();
+        playerController = controller;
         player1Name.SetText(PhotonNetwork.PlayerList[0].NickName);
         playerImg1.sprite = img1;
+        var players = PhotonNetwork.PlayerList;
+        if (players.Length == 1)
+        {
+            player1Name.SetText(players[0].NickName);
+        }
+        if (players.Length == 2)
+        {
+            player1Name.SetText(players[0].NickName);
+            player2Name.SetText(players[1].NickName);
+        }
 
     }
+
+    
     
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        Debug.Log($"{otherPlayer.NickName}left Room");
+        
+        AddText($"{otherPlayer.NickName}が退出しました。");
+        if (!otherPlayer.IsLocal)
+        {
+            StartCoroutine("DisconnectMaster");
+        }
+        player2Name.SetText("NoPlayer");
+        playerImg2.sprite = img0;
+    }
+
+    IEnumerator DisconnectMaster()
+    {
+        AddText("マスターが退出したため、自動で終了します。");
+        AddText("5");
+        yield return new WaitForSeconds(1);
+        AddText("4");
+        yield return new WaitForSeconds(1);
+        AddText("3");
+        yield return new WaitForSeconds(1);
+        AddText("2");
+        yield return new WaitForSeconds(1);
+        AddText("1");
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+        PhotonNetwork.Disconnect();
+
     }
 
     public override void OnPlayerEnteredRoom(Player otherPlayer)
     {
-        Debug.Log("enterRoom");
+        AddText($"{otherPlayer.NickName}が入室しました。");
         var players = PhotonNetwork.PlayerList;
         player1Name.SetText(players[0].NickName);
         player2Name.SetText(players[1].NickName);
-        playerImg2.sprite = img1;
+        playerImg2.sprite = img2;
 
     }
 

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2300002}
   - component: {fileID: 1466954962686107636}
   - component: {fileID: 6427851505831574676}
+  - component: {fileID: 9195025679022755029}
   m_Layer: 3
   m_Name: door
   m_TagString: Untagged
@@ -100,10 +101,11 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 1
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 9195025679022755029}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -120,6 +122,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.62, y: 1.7774656, z: 0.022210775}
   m_Center: {x: 0.30766246, y: 0.014848888, z: 0.0014266967}
+--- !u!114 &9195025679022755029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &100002
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,6 +320,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   photonview: {fileID: 1466954962686107636}
   gameManager: {fileID: 0}
+  interacted: 0
+  canInteract: 1
   door: {fileID: 100000}
   openSpeed: 30
   lockerIncheck: {fileID: 1215151978275177547}
@@ -309,6 +329,7 @@ MonoBehaviour:
   audio: {fileID: 6196274170241001738}
   clip1: {fileID: 8300000, guid: 8c1b3917913014d3fb7024a08aba4685, type: 3}
   clip2: {fileID: 8300000, guid: 3dd645f09abd9483c8ef0fe860bac079, type: 3}
+  playerExistsInLocker: 0
 --- !u!65 &3098869529843442096
 BoxCollider:
   m_ObjectHideFlags: 0

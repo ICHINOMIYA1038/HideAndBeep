@@ -1779,8 +1779,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3662278840571923650}
-  m_LocalRotation: {x: 0.013269768, y: -0.8386911, z: 0.020455854, w: 0.5440613}
-  m_LocalPosition: {x: -1.1070724, y: -7.644616, z: -4.106003}
+  m_LocalRotation: {x: -0.12516293, y: -0.81645215, z: -0.1929434, w: 0.5296348}
+  m_LocalPosition: {x: -1.9776082, y: -7.167377, z: -4.494625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1813,7 +1813,7 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 1817268159364610850}
+  m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 40
@@ -1989,8 +1989,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3662278841207063261}
-  m_LocalRotation: {x: -0.0065019857, y: -0.8388807, z: -0.010023062, w: 0.54418427}
-  m_LocalPosition: {x: -1.1070724, y: -7.644616, z: -4.106003}
+  m_LocalRotation: {x: -0.14431925, y: -0.80890465, z: -0.22247367, w: 0.52473867}
+  m_LocalPosition: {x: -1.9776082, y: -7.167377, z: -4.494625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2023,7 +2023,7 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 2307413890784662360}
+  m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 40
@@ -2379,8 +2379,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3662278841442964136}
-  m_LocalRotation: {x: 0.0033713765, y: -0.83892447, z: 0.005197106, w: 0.54421264}
-  m_LocalPosition: {x: -1.1070724, y: -7.644616, z: -4.106003}
+  m_LocalRotation: {x: -0.134776, y: -0.8128075, z: -0.20776232, w: 0.52727056}
+  m_LocalPosition: {x: -1.9776082, y: -7.167377, z: -4.494625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2413,7 +2413,7 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 794358608506456602}
+  m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 40
@@ -2851,7 +2851,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3844313001967478731}
   - component: {fileID: 3662278841124165492}
-  - component: {fileID: 3662278841124165494}
   - component: {fileID: 3662278841124165490}
   - component: {fileID: 3662278841124165493}
   - component: {fileID: 3662278840520844971}
@@ -2876,7 +2875,7 @@ Transform:
   m_GameObject: {fileID: 4472759297899478385}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.9138527, y: 15.21, z: 17.34}
-  m_LocalScale: {x: 2.6, y: 2.6, z: 2.6}
+  m_LocalScale: {x: 3.05, y: 3.0500002, z: 3.0500002}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 794358608506456602}
@@ -2913,24 +2912,6 @@ CapsuleCollider:
   m_Height: 4.05
   m_Direction: 1
   m_Center: {x: 0, y: 1.93, z: 0}
---- !u!143 &3662278841124165494
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4472759297899478385}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!95 &3662278841124165490
 Animator:
   serializedVersion: 4
@@ -3824,7 +3805,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2
+  m_Intensity: 4
   m_Range: 18.4
   m_SpotAngle: 28.2
   m_InnerSpotAngle: 21.80208
@@ -4364,7 +4345,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4776016322006549981
 Transform:
   m_ObjectHideFlags: 0
@@ -4645,7 +4626,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2
+  m_Intensity: 3
   m_Range: 22.25
   m_SpotAngle: 71.4
   m_InnerSpotAngle: 3

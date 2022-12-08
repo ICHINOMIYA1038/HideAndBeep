@@ -64,6 +64,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
     {
         if (other.gameObject.CompareTag("Player"))
         {
+
             playerEnterTrigger = false;
             playerController = null;
             gameManager.DeactiveInputAssist();
@@ -109,7 +110,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
         if (Input.GetKey(KeyCode.E) && progressBar.isActive == false&&playerController!=null)
         {
-            photonview.RequestOwnership();
+            
 
 
             if (!playerController.animator.GetCurrentAnimatorStateInfo(0).IsName("stand"))

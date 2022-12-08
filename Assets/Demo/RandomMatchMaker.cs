@@ -20,6 +20,9 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
     [SerializeField] Button joinRoomBtn;
     [SerializeField] Button readyBtn;
+    [SerializeField] TextMeshProUGUI pName1;
+    [SerializeField] TextMeshProUGUI pName2;
+
 
     [SerializeField] TextMeshProUGUI playerName;
 
@@ -76,9 +79,25 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        var players = PhotonNetwork.PlayerList;
+        if (players.Length == 1)
+        {
+            pName1.text = players[0].NickName;
+        }
+        else if (players.Length == 2)
+        {
+            pName1.text = players[0].NickName;
+            pName2.text = players[1].NickName;
+        }
+        else
+        {
+            Debug.Log("Error");
+
+        }
         joinRoomCanvas.SetActive(false);
         readyRoomCanvas.SetActive(true);
         mainCanvas.SetActive(false);
+        
 
         readyBtn.onClick.AddListener(onReady);
 

@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class LockerIncheck : MonoBehaviour
 {
     [SerializeField] LockerScript lockerScript;
-    public bool inLocker; 
+    public bool inLocker;
+    [SerializeField]PhotonView photonView;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,11 +23,19 @@ public class LockerIncheck : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
         inLocker = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
         inLocker = false;
     }
 }
