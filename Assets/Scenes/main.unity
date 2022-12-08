@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.029086974, g: 0.029897794, b: 0.029896408, a: 1}
+  m_IndirectSpecularColor: {r: 0.029087335, g: 0.0298977, b: 0.029896766, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -36082,6 +36082,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
+      propertyPath: OwnershipTransfer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
       propertyPath: ObservedComponents.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -50223,6 +50227,10 @@ PrefabInstance:
     - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
       propertyPath: sceneViewId
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
+      propertyPath: OwnershipTransfer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
       propertyPath: ObservedComponents.Array.size
@@ -78488,8 +78496,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c0a27c26ba5d54c0dbcf8ad01fcbd79b, type: 2}
-  m_sharedMaterial: {fileID: -3355926007203152929, guid: c0a27c26ba5d54c0dbcf8ad01fcbd79b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -81978,6 +81986,10 @@ PrefabInstance:
     - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
       propertyPath: sceneViewId
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
+      propertyPath: OwnershipTransfer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 814982931, guid: 70d48710bb41a4936a62d26cb73f88f0, type: 3}
       propertyPath: ObservedComponents.Array.size

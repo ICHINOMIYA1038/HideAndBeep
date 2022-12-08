@@ -10,11 +10,11 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 {
     [SerializeField] GameManager gameManager;
     bool isOpen = false;
-    bool playerEnterTrigger = false;
+    [SerializeField]bool playerEnterTrigger = false;
     [SerializeField] GameObject progressbarInstance;
     [SerializeField] ProgressBarCon progressBar;
     [SerializeField] GameObject lid;
-    [SerializeField]PlayerController playerController;
+    [SerializeField] PlayerController playerController;
     [SerializeField] float waitTime = 3.0f;
     [SerializeField] PhotonView photonview;
     [SerializeField] int ItemState;
@@ -29,7 +29,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
     void Update()
     {
         if (!photonView.IsMine)
-        {
+        { 
             return;
         }
         if (playerEnterTrigger)
@@ -51,8 +51,14 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.gameObject.CompareTag("Player"))
         {
+            if (!photonview.IsMine)
+            {
+                return;
+            }
+            Debug.Log("PlayerEnter");
             playerEnterTrigger = true;
             playerController = other.gameObject.GetComponent<PlayerController>();
             gameManager.ActiveInputAssist();
@@ -62,9 +68,14 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (!photonview.IsMine)
         {
+            return;
+        }
+        if (other.gameObject.CompareTag("Player"))
+        {   
 
+            Debug.Log("PlayerExit");
             playerEnterTrigger = false;
             playerController = null;
             gameManager.DeactiveInputAssist();
@@ -79,8 +90,16 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
     private void InputCheck()
     {
-       
-        if(isOpen&&playerController!=null)
+        if (!photonview.IsMine)
+        {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("aa");
+        }
+
+            if (isOpen&&playerController!=null)
         {
             if (!playerController.animator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
             {
@@ -110,14 +129,13 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
         if (Input.GetKey(KeyCode.E) && progressBar.isActive == false&&playerController!=null)
         {
-            
 
+            Debug.Log("BOXOPEN");
 
             if (!playerController.animator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
             {
                 return;
             }
-
 
 
             playerController.searchBox(transform.position - transform.forward*3f, transform.position);
@@ -157,7 +175,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
     void IPunOwnershipCallbacks.OnOwnershipRequest(PhotonView targetView, Player requestingPlayer)
     {
-        targetView.TransferOwnership(requestingPlayer);
+        //targetView.TransferOwnership(requestingPlayer);
     }
 
     void IPunOwnershipCallbacks.OnOwnershipTransfered(PhotonView targetView, Player previousOwner)

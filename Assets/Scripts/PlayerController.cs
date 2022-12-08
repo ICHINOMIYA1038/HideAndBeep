@@ -43,6 +43,7 @@ public class PlayerController: MonoBehaviourPun
     [SerializeField] AudioSource seAudioSource;
     [SerializeField] AudioClip seMagic;
     [SerializeField] AudioClip seWhistle;
+    [SerializeField] AudioListener audioListener;
     bool isMovie = false;
     public bool inLocker = false;
     GameManager gameManager;
@@ -52,6 +53,11 @@ public class PlayerController: MonoBehaviourPun
     // Use this for initialization
     void Start()
     {
+        if (!photonView.IsMine)
+        {
+            audioListener.enabled = false;
+            return;
+        }
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         defaultLookAtPosition = CameraLookAtObject.transform.localPosition;
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
@@ -61,10 +67,7 @@ public class PlayerController: MonoBehaviourPun
             zombieControllers[i] = enemys[i].GetComponent<ZombieController>();
         }
         soundmanager = GameObject.FindWithTag("GameManager").GetComponent<SoundManager>();
-        if (!photonView.IsMine)
-        {
-            return;
-        }
+        
         TryGetComponent(out animator);
         targetRotation = transform.rotation;
         Cursor.lockState = CursorLockMode.Locked;
