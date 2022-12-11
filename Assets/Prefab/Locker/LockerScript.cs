@@ -22,16 +22,14 @@ public class LockerScript : InteractiveObject
     }
     protected override void OnInteract()
     {
-        if(!photonview.IsMine)
-        {
-            return;
-        }
+        
         soundManager.soundDetect(transform.position, 12f, 0.8f);
         playerController.Freeze();
         StartCoroutine("open");
         openSound();
         if (lockerIncheck.inLocker == true)
         {
+            
             playerController.ExitLocker();
             playerExistsInLocker = false;
         }
@@ -39,15 +37,12 @@ public class LockerScript : InteractiveObject
 
     protected override void ReInteract()
     {
-        if (!photonview.IsMine)
-        {
-            return;
-        }
         soundManager.soundDetect(transform.position, 12f, 0.8f);
         playerController.Freeze();
         
         if (lockerIncheck.inLocker == true)
         {
+            if (!playerController.getPhotonviewIsMine()) { return; }
             playerController.EnterLocker(cameraPosition.transform.position);
             playerExistsInLocker = true;
         }
@@ -64,7 +59,7 @@ public class LockerScript : InteractiveObject
 
     public void Closed()
     {
-        StartCoroutine("EnemyClose");
+        StartCoroutine("Enemyclose");
         closeSound();
     }
 
@@ -76,13 +71,13 @@ public class LockerScript : InteractiveObject
         }
         if (interacted == false)
         {
-
-            while (Mathf.Cos(door.transform.localEulerAngles.y * Mathf.PI / 180) > 0 && interacted == false)
+            interacted = true;
+            while (Mathf.Cos(door.transform.localEulerAngles.y * Mathf.PI / 180) > 0 )
             {
                 door.transform.Rotate(0, -Time.deltaTime * openSpeed, 0);
                 yield return null;
             }
-            playerController.Free();
+            
             yield break;
         }
     }
@@ -95,20 +90,15 @@ public class LockerScript : InteractiveObject
         }
         if (interacted == true)
         {
-
-            while (Mathf.Sin(door.transform.localEulerAngles.y * Mathf.PI / 180) < 0 && interacted == true)
+            interacted = false;
+            while (Mathf.Sin(door.transform.localEulerAngles.y * Mathf.PI / 180) < 0)
             {
                 door.transform.Rotate(0, +Time.deltaTime * openSpeed, 0);
                 yield return null;
             }
-            if (lockerIncheck.inLocker == true)
-            {
+            
                 yield break;
-            }
-            else
-            {
-                yield break;
-            }
+            
 
         }
     }

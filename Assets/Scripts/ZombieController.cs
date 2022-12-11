@@ -42,11 +42,13 @@ public class ZombieController : MonoBehaviour
     float detectSpeed = 5f;
     bool isMovie = false;
     bool canMove = true;
+    float detectionRange = 70f;
     public bool beingDamaged = false;
     [SerializeField]float detectRange;
     [SerializeField] AudioSource audiosource;
     [SerializeField] AudioClip damageSE;
     bool isSearching = false;
+   
 
     // Start is called before the first frame update
     void Start()
@@ -159,18 +161,15 @@ public class ZombieController : MonoBehaviour
             index += 1;
         }
 
-
-
-
-
     }
+
 
     void Wait()
     {
         isFinding = false;
         agent.speed = 0f;
         agent.SetDestination(agent.transform.position);
-        if ((targetPosition - agent.transform.position).magnitude < 70f)
+        if ((targetPosition - agent.transform.position).magnitude < detectionRange)
         {
             if (CatchSight())
             {
@@ -181,22 +180,35 @@ public class ZombieController : MonoBehaviour
         {
             behaviorMode = DETECT_MODE;;
         }
-
-
-
+ 
     }
     void MoveAround()
     {
         isFinding = false;
         agent.speed = walkSpeed;
-        targetPosition = new Vector3(Random.Range(-50f, 100f), Random.Range(-50f, 100f), Random.Range(-50f, 100f));
-        agent.SetDestination(targetPosition);
-        if ((targetPosition - agent.transform.position).magnitude < 50f)
+        
+        if ((targetPosition - agent.transform.position).magnitude < detectionRange)
         {
             CatchSight();
         }
+        if (HearSound())
+        {
+            behaviorMode = DETECT_MODE; ;
+        }
 
     }
+
+    IEnumerator DestinationSetting()
+    {
+        while (behaviorMode == MOVEAROUND_MODE)
+        {
+            targetPosition = new Vector3(Random.Range(-50f, 100f), Random.Range(-50f, 100f), Random.Range(-50f, 100f));
+            agent.SetDestination(targetPosition);
+            yield return new WaitForSeconds(8);
+            
+        }
+    }
+
     IEnumerator Detect()
     {
         agent.speed = detectSpeed;
@@ -256,7 +268,7 @@ public class ZombieController : MonoBehaviour
     {
         isFinding = false;
         agent.SetDestination(targetPosition);
-        if ((targetPosition - agent.transform.position).magnitude < 50f)
+        if ((targetPosition - agent.transform.position).magnitude < detectionRange)
         {
             behaviorMode = FIND_MODE;
         }
@@ -358,10 +370,7 @@ public class ZombieController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!photonView.IsMine)
-        {
-            return;
-        }
+
         if (collision.gameObject.CompareTag("Player")&&gameManager.sceneState==1)
         {
             PlayerController pcon;
@@ -370,6 +379,10 @@ public class ZombieController : MonoBehaviour
             if (pcon.itemState != PlayerController.Hasamulet)
             {
                 if (beingDamaged)
+                {
+                    return;
+                }
+                if (!pcon.getPhotonviewIsMine())
                 {
                     return;
                 }
@@ -453,6 +466,7 @@ public class ZombieController : MonoBehaviour
         animator.SetTrigger("Open");
         isSearching = false;
         LockerScript lockerScript = locker.GetComponentInChildren<LockerScript>();
+        lockerScript.Opend();
         if (lockerScript.playerExistsInLocker)
         {
             isMovie = true;
@@ -461,9 +475,24 @@ public class ZombieController : MonoBehaviour
             vcam.Priority = 30;
             gameOver();
             lockerScript.getPlayerController().gameOver(this.gameObject);
+            
             gameManager.sceneState = 0;
         }
+        else
+        {
+            StartCoroutine(CantFindPlayerinLocker(lockerScript));
+        }
+        
+    }
 
+    IEnumerator CantFindPlayerinLocker(LockerScript lockerScript)
+    {
+        yield return new WaitForSeconds(1);
+        animator.SetTrigger("Open");
+        lockerScript.Closed();
+        yield return new WaitForSeconds(1);
+        behaviorMode = MOVEAROUND_MODE;
+        StartCoroutine(DestinationSetting());
     }
 
     public void Freeze()

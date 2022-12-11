@@ -23,19 +23,11 @@ public class LockerIncheck : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!photonView.IsMine)
-        {
-            return;
-        }
         inLocker = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!photonView.IsMine)
-        {
-            return;
-        }
         inLocker = false;
     }
 }

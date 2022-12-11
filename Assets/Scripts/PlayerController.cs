@@ -2,6 +2,7 @@
 using System.Collections;
 using Photon.Pun;
 using Cinemachine;
+using UnityEngine.UI;
 
 public class PlayerController: MonoBehaviourPun
 {
@@ -47,6 +48,9 @@ public class PlayerController: MonoBehaviourPun
     bool isMovie = false;
     public bool inLocker = false;
     GameManager gameManager;
+    GameObject ItemCoolTimePanel;
+    float itemCooltime = 5f;
+    float coolTimeTimer = 0.0f;
 
 
 
@@ -58,6 +62,7 @@ public class PlayerController: MonoBehaviourPun
             audioListener.enabled = false;
             return;
         }
+        ItemCoolTimePanel = GameObject.FindGameObjectWithTag("cooltimePanel");
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         defaultLookAtPosition = CameraLookAtObject.transform.localPosition;
         enemys = GameObject.FindGameObjectsWithTag("Enemy");
@@ -76,7 +81,7 @@ public class PlayerController: MonoBehaviourPun
         ItemAmulet.SetActive(false);
         ItemWhistle.SetActive(false);
         ItemLight.SetActive(false);
-
+        ItemCoolTimePanel.GetComponent<Image>().fillAmount = 0f;
     }
 
     // Update is called once per frame
@@ -166,22 +171,25 @@ public class PlayerController: MonoBehaviourPun
         }
         if (itemState == HasWhistle)
         {
-            if (Input.GetMouseButtonDown(1) && !animator.GetCurrentAnimatorStateInfo(0).IsName("light"))
+            ItemCoolTime();
+            if (coolTimeTimer >= itemCooltime)
             {
-                animator.SetTrigger("Open");
-                
-                seAudioSource.PlayOneShot(seWhistle);
+                if (Input.GetMouseButtonDown(1) && !animator.GetCurrentAnimatorStateInfo(0).IsName("light"))
+                {
+                    animator.SetTrigger("Open");
 
-                soundmanager.soundDetect(this.transform.position, 30f, 30f);
+                    seAudioSource.PlayOneShot(seWhistle);
 
-                gameManager.enemyDamaged(transform.position, 30f);
+                    soundmanager.soundDetect(this.transform.position, 30f, 30f);
 
+                    gameManager.enemyDamaged(transform.position, 30f);
 
+                    coolTimeTimer = 0.0f;
+                }
             }
         }
 
 
-        //速度の取得
 
 
 
@@ -286,24 +294,31 @@ public class PlayerController: MonoBehaviourPun
             ItemLight.SetActive(false);
             ItemAmulet.SetActive(false);
             ItemWhistle.SetActive(false);
+            
         }
         if (index == HasLight)
         {
             ItemLight.SetActive(true);
             ItemAmulet.SetActive(false);
             ItemWhistle.SetActive(false);
+            if (photonView.IsMine)
+            {
+                gameManager.AddText("ライトを手に入れた。使用:右クリック");
+            }
         }
         if (index == Hasamulet)
         {
             ItemLight.SetActive(false);
             ItemAmulet.SetActive(true);
             ItemWhistle.SetActive(false);
+            gameManager.AddText("お守りを手に入れた");
         }
         if (index == HasWhistle)
         {
             ItemLight.SetActive(false);
             ItemAmulet.SetActive(false);
             ItemWhistle.SetActive(true);
+            gameManager.AddText("ホイッスルを手に入れた。使用:右クリック");
         }
     }
 
@@ -407,6 +422,10 @@ public class PlayerController: MonoBehaviourPun
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
         if (collision.gameObject.CompareTag("Enemy") && collision.gameObject.GetComponent<ZombieController>().beingDamaged == false&&itemState!=Hasamulet)
         {
             
@@ -428,6 +447,7 @@ public class PlayerController: MonoBehaviourPun
 
     public void EnterLocker(Vector3 cameraPosition)
     {
+
         canMove = false;
         speed = 0f;
         animator.SetFloat("speed", 0);
@@ -446,6 +466,16 @@ public class PlayerController: MonoBehaviourPun
     {
         canMove = false;
         StartCoroutine(gameClearCamera());
+    }
+
+    public void ItemCoolTime()
+    {
+        coolTimeTimer += Time.deltaTime;
+        if(coolTimeTimer/ itemCooltime > 1f)
+        {
+            coolTimeTimer = itemCooltime;
+        }
+        ItemCoolTimePanel.GetComponent<Image>().fillAmount = 1 - (coolTimeTimer/itemCooltime);
     }
 
     IEnumerator gameClearCamera()

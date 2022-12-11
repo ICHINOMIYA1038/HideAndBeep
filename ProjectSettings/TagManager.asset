@@ -10,6 +10,7 @@ TagManager:
   - Wall
   - Enemy
   - Locker
+  - cooltimePanel
   layers:
   - Default
   - TransparentFX

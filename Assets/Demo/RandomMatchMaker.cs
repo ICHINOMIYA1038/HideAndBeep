@@ -13,6 +13,7 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
     public GameObject PhotonObject;
     public GameObject PhotonObject2;
     [SerializeField] GameObject StartPosi;
+    [SerializeField] GameObject StartPosi2;
     [SerializeField] GameObject joinRoomCanvas;
     [SerializeField] GameObject readyRoomCanvas;
     [SerializeField] GameObject mainCanvas;
@@ -123,10 +124,10 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         }
         else
         {
-            Vector3 spawnPosition = StartPosi.transform.position;
+            Vector3 spawnPosition2 = StartPosi2.transform.position;
              player = PhotonNetwork.Instantiate(
                     PhotonObject2.name,
-                    spawnPosition,
+                    spawnPosition2,
                     Quaternion.identity,
                     0
                     );

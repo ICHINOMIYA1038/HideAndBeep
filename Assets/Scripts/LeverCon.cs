@@ -46,6 +46,8 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
         yield return new WaitForSeconds(1);
         for(int i = 0; i < 300; i++)
         {
+            photonview.RequestOwnership();
+
             gate.transform.Translate(new Vector3(0f, 0.1f, 0f));
             yield return null;
         }

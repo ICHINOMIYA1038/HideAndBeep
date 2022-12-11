@@ -1860,8 +1860,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3662278840835659094}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.3000004, z: 0.7199999}
+  m_LocalRotation: {x: -0.03287366, y: 0.8823781, z: -0.06234953, w: -0.46523198}
+  m_LocalPosition: {x: 17.504755, y: 16.596294, z: -11.9259205}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1945,11 +1945,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0.1
+  far clip plane: 5000
   field of view: 60
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -2379,7 +2379,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3662278841442964136}
-  m_LocalRotation: {x: -0.134776, y: -0.81280744, z: -0.20776232, w: 0.5272705}
+  m_LocalRotation: {x: -0.13477603, y: -0.8128075, z: -0.2077623, w: 0.52727056}
   m_LocalPosition: {x: -1.9776082, y: -7.167377, z: -4.494625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2960,7 +2960,7 @@ MonoBehaviour:
   soundmanager: {fileID: 0}
   enemys: []
   audiosource: {fileID: 1385173541328893644}
-  bgm: {fileID: 8300000, guid: 9791eb85d4b264d07aa6f3b4ded9e874, type: 3}
+  bgm: {fileID: 8300000, guid: 09faa8eda3dbf4a41927c9141451e617, type: 3}
   chaseBGM: {fileID: 8300000, guid: ef6da88faa7b02b45891e37be5c6e093, type: 3}
   NormalCamera: {fileID: 3662278841241994376}
   gameOvercamera: {fileID: 495027540396678001}

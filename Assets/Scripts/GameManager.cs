@@ -141,7 +141,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         playerImg2.sprite = img0;
     }
 
-    void AddText(string text)
+    public void AddText(string text)
     {
         Debug.Log(text);
         stringList.Enqueue(text);
