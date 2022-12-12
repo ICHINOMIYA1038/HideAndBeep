@@ -57,7 +57,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
             playerController = other.gameObject.GetComponent<PlayerController>();
             if (playerController.getPhotonviewIsMine())
             {
-                gameManager.ActiveInputAssist();
+                gameManager.ActiveInputAssist("E");
             }
             
         }
@@ -88,10 +88,6 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
     private void InputCheck()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("aa");
-        }
 
             if (isOpen&&playerController!=null)
         {
@@ -116,13 +112,14 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
                     playerController.stopAction();
                     progressBar.isActive = false;
                     progressbarInstance.SetActive(false);
-
-                }
+                    gameManager.ActiveInputAssist("E");
+            }
 
          }
 
         if (Input.GetKey(KeyCode.E) && progressBar.isActive == false&&playerController!=null)
         {
+            gameManager.ActiveInputAssist("Q");
             photonview.RequestOwnership();
             Debug.Log("BOXOPEN");
 

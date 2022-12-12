@@ -63,9 +63,8 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
             playerController = other.gameObject.GetComponent<PlayerController>();
             if (playerController.getPhotonviewIsMine())
             {
-                gameManager.ActiveInputAssist();
+                gameManager.ActiveInputAssist("E");
             }
-            gameManager.ActiveInputAssist();
         }
         
     }

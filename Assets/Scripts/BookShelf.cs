@@ -57,7 +57,7 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
             playerController = other.gameObject.GetComponent<PlayerController>();
             if (playerController.getPhotonviewIsMine())
             {
-                gameManager.ActiveInputAssist();
+                gameManager.ActiveInputAssist("E");
             }
  
         }

@@ -24,6 +24,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField] GameObject gameOverCanvas;
     [SerializeField] GameObject gameClearCanvas;
     [SerializeField] GameObject InputAssist;
+    [SerializeField] TextMeshProUGUI inputAssistText;
     [SerializeField] TextMeshProUGUI player1Name;
     [SerializeField] TextMeshProUGUI player2Name;
     [SerializeField] ZombieController[] zombieCon;
@@ -175,10 +176,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         }
     }
 
-    public void ActiveInputAssist()
+    public void ActiveInputAssist(string key)
     {
 
         InputAssist.SetActive(true);
+        inputAssistText.text = key;
     }
 
     public void DeactiveInputAssist()
@@ -191,22 +193,25 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         myphotonview = photonview;
         playerController = controller;
         player1Name.SetText(PhotonNetwork.PlayerList[0].NickName);
-        playerImg1.sprite = img1;
         var players = PhotonNetwork.PlayerList;
         if (players.Length == 1)
         {
             player1Name.SetText(players[0].NickName);
+            playerImg1.sprite = img1;
         }
         if (players.Length == 2)
         {
-            player1Name.SetText(players[0].NickName);
-            player2Name.SetText(players[1].NickName);
+            player1Name.SetText(players[1].NickName);
+            player2Name.SetText(players[0].NickName);
+            playerImg1.sprite = img2;
+            playerImg2.sprite = img1;
         }
 
     }
 
+
     
-    
+
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
@@ -246,7 +251,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         var players = PhotonNetwork.PlayerList;
         player1Name.SetText(players[0].NickName);
         player2Name.SetText(players[1].NickName);
-        playerImg2.sprite = img2;
+        if (players[0].IsLocal)
+        {
+            playerImg1.sprite = img1;
+            playerImg2.sprite = img2;
+        }
+
 
     }
 

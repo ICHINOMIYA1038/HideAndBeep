@@ -45306,7 +45306,7 @@ AnimationClip:
   - time: 0.36666667
     functionName: runSound
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 7294e61b35c6449b6b51ed129a5c89bd, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

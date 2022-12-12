@@ -165,7 +165,7 @@ namespace util
                 {
                     if (playerController.getPhotonviewIsMine())
                     {
-                        gameManager.ActiveInputAssist();
+                        gameManager.ActiveInputAssist("E");
                     }
                     
                 }

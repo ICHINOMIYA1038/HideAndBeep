@@ -39,7 +39,7 @@ AudioMixerController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BGM
+  m_Name: MAIN
   m_OutputGroup: {fileID: 0}
   m_MasterGroup: {fileID: 24300002}
   m_Snapshots:
@@ -51,6 +51,8 @@ AudioMixerController:
   m_ExposedParameters:
   - guid: 356afd207f743af409bf24101125fd6c
     name: BGM
+  - guid: ec96264956e9bc448aaa09b94b12c4f2
+    name: SE
   m_AudioMixerGroupViews:
   - guids:
     - 547e5286aec136b458fc9d5464ba798a
@@ -105,8 +107,10 @@ AudioMixerSnapshotController:
   m_SnapshotID: c570a1984a495a449a6f7a85efc8df3b
   m_FloatValues:
     356afd207f743af409bf24101125fd6c: -21.086708
-    ec96264956e9bc448aaa09b94b12c4f2: -0.30163765
-  m_TransitionOverrides: {}
+    ec96264956e9bc448aaa09b94b12c4f2: -18.10123
+  m_TransitionOverrides:
+    356afd207f743af409bf24101125fd6c: 6
+    ec96264956e9bc448aaa09b94b12c4f2: 6
 --- !u!243 &2761092201740904156
 AudioMixerGroupController:
   m_ObjectHideFlags: 0

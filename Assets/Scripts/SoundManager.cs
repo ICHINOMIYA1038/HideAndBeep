@@ -22,6 +22,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] float testRange = 30f;
     [SerializeField] Vector3 offset = new Vector3(0f,0f,0f);
     [SerializeField] float interval = 15f;
+    [SerializeField] bool visibleMap;
 
 
     void Awake()
@@ -54,7 +55,14 @@ public class SoundManager : MonoBehaviour
             text[i] = items[i].GetComponentInChildren<Text>();
             soundMap[i] = 0;
         }
+        if (!visibleMap)
+        {
+            for (int i = 0; i < pointNum; i++)
+            {
+                items[i].SetActive(false);
+            }
 
+        }
     }
 
     // Update is called once per frame

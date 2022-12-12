@@ -62,6 +62,7 @@ public class PlayerController: MonoBehaviourPun
             audioListener.enabled = false;
             return;
         }
+        OnItemChange(0);
         ItemCoolTimePanel = GameObject.FindGameObjectWithTag("cooltimePanel");
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         defaultLookAtPosition = CameraLookAtObject.transform.localPosition;
@@ -284,10 +285,13 @@ public class PlayerController: MonoBehaviourPun
     }
     public void OnItemChange(int index)
     {
+        if (!photonView.IsMine)
+        {
+            return; 
+        }
         itemState = index;
         var hashtable = new ExitGames.Client.Photon.Hashtable();
         hashtable["ItemState"] = index;
-        hashtable["Message"] = "こんにちは";
         PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
         if(index==HasNoItem)
         {
@@ -311,7 +315,7 @@ public class PlayerController: MonoBehaviourPun
             ItemLight.SetActive(false);
             ItemAmulet.SetActive(true);
             ItemWhistle.SetActive(false);
-            gameManager.AddText("お守りを手に入れた");
+            gameManager.AddText("お守りを手に入れた。敵の攻撃を一度防ぐ。");
         }
         if (index == HasWhistle)
         {

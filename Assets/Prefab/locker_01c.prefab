@@ -102,7 +102,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 1
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
   - {fileID: 9195025679022755029}
@@ -499,6 +499,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lockerScript: {fileID: 931811438157139387}
   inLocker: 0
+  photonView: {fileID: 0}
 --- !u!1 &7207807910827267881
 GameObject:
   m_ObjectHideFlags: 0

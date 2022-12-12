@@ -98,12 +98,16 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         joinRoomCanvas.SetActive(false);
         readyRoomCanvas.SetActive(true);
         mainCanvas.SetActive(false);
-        
 
         readyBtn.onClick.AddListener(onReady);
 
     }
 
+    /// <summary>
+    /// ReadyButtonを押した時の処理
+    /// プレイヤーインスタンスを生成し、メインキャンバスをアクティブにする。
+    /// 他のキャンバスはoff
+    /// </summary>
     public void onReady()
     {
         
@@ -144,7 +148,6 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
         var hashtable = new ExitGames.Client.Photon.Hashtable();
         hashtable["ItemState"] = 0;
-        hashtable["Message"] = "こんにちは";
         PhotonNetwork.LocalPlayer.SetCustomProperties(hashtable);
     }
 
