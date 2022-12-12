@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using util;
 
+/// <summary>
+/// ロッカーのスクリプト
+/// </summary>
 public class LockerScript : InteractiveObject
 {
     [SerializeField] GameObject door;

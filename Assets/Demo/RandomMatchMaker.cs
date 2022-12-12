@@ -9,22 +9,33 @@ using TMPro;
 
 public class RandomMatchMaker : MonoBehaviourPunCallbacks
 {
-    //?C???X?y?N?^?[??????????????
+    //プレイヤーのプレハブ1
     public GameObject PhotonObject;
+    //プレイヤーのプレハブ2
     public GameObject PhotonObject2;
+    //プレイヤー1のスポーン位置
     [SerializeField] GameObject StartPosi;
+    //プレイヤー2のスポーン位置
     [SerializeField] GameObject StartPosi2;
+    //名前を入力し、ロビーに入室するときのキャンバス
     [SerializeField] GameObject joinRoomCanvas;
+    //ロビーに入室後、準備完了するためのキャンバス
     [SerializeField] GameObject readyRoomCanvas;
+    //メイン画面のキャンバス
     [SerializeField] GameObject mainCanvas;
+    /// <summary>
+    /// UIを表示させるためのカメラ
+    /// </summary>
     [SerializeField] GameObject UICamera;
-
+    ///ロビーに入室するときのボタン
     [SerializeField] Button joinRoomBtn;
+    ///準備完了するときのボタン
     [SerializeField] Button readyBtn;
+    ///プレイヤー1の名前
     [SerializeField] TextMeshProUGUI pName1;
+    ///プレイヤー2の名前
     [SerializeField] TextMeshProUGUI pName2;
-
-
+    ///入力を受付するときのテキストボックス内のテキスト
     [SerializeField] TextMeshProUGUI playerName;
 
     private void Awake()
@@ -34,36 +45,29 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         joinRoomCanvas.SetActive(true);
         readyRoomCanvas.SetActive(false);
         mainCanvas.SetActive(false);
-
         joinRoomBtn.onClick.AddListener(joinRoomClick);
        
     }
 
-
-    void Start()
-    {
-       
-    }
-
-    // ?????f??
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// PhotonNetworkに接続
+    /// ニックネームを決定
+    /// </summary>
     void joinRoomClick()
-    {
+    {   
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.NickName = playerName.text;
     }
 
-    //?Z?c?]?N?X???g???o????
+    /// <summary>
+    /// 接続できたらランダムな部屋に入室
+    /// </summary>
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinRandomRoom();
     }
 
-    //?????????r?[?????p???????????A?????????????????????B
+    
     public override void OnJoinedLobby()
     {
        
@@ -71,6 +75,11 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
 
     }
 
+    /// <summary>
+    /// 接続できなかったときの処理
+    /// 接続できないときに部屋を作成する。
+    /// 最大人数は2人
+    /// </summary>
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         RoomOptions roomOptions = new RoomOptions();
@@ -78,6 +87,10 @@ public class RandomMatchMaker : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom("roomName", roomOptions);
     }
 
+    /// <summary>
+    /// ロビーに接続完了したときの処理。
+    /// 名前などを確定して、準備完了ボタンを表示する
+    /// </summary>
     public override void OnJoinedRoom()
     {
         var players = PhotonNetwork.PlayerList;
