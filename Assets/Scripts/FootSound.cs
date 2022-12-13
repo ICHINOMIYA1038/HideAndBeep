@@ -2,23 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 足音のクラス
+/// </summary>
 public class FootSound : MonoBehaviour
 {
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip soundClip;
     [SerializeField] AudioClip soundClip2;
     // Start is called before the first frame update
-    void Start()
-    {
-       
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// 走る足音を出す関数
+    /// 今回は右足と左足で同じ音源を使っているが、変える場合は、soundClipを変更する
+    /// </summary>
     public void runSound()
     {
         if (audioSource != null)
@@ -26,6 +23,9 @@ public class FootSound : MonoBehaviour
             audioSource.PlayOneShot(soundClip,1);
         }
     }
+    /// <summary>
+    /// 走る足音を出す関数2
+    /// </summary>
     public void runSound2()
     {
         if(audioSource == null)
@@ -38,6 +38,9 @@ public class FootSound : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 歩く足音を出す関数
+    /// </summary>
     public void walkSound()
     {
         if (audioSource == null)
@@ -50,6 +53,9 @@ public class FootSound : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 歩く足音を出す関数2
+    /// </summary>
     public void walkSound2()
     {
         if (audioSource == null)

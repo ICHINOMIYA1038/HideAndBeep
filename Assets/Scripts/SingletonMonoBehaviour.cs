@@ -3,6 +3,10 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 
+/// <summary>
+/// ゲームマネージャーをシングルトンにするためのクラス
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class SingletonMonoBehaviour<T> : MonoBehaviourPunCallbacks where T : MonoBehaviourPunCallbacks
 {
     private static T instance;

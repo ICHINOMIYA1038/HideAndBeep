@@ -5,6 +5,10 @@ using UnityEngine.UI;
 using System.Linq;
 using System;
 
+/// <summary>
+/// サウンドマネージャークラス
+/// プレイヤーやオブジェクトから発生する音を検知して、エネミーに伝える役割をする。
+/// </summary>
 public class SoundManager : MonoBehaviour
 {
     Text[] text;
@@ -15,13 +19,17 @@ public class SoundManager : MonoBehaviour
     [SerializeField] Renderer[] renderers;
      int pointNum=800;
     [SerializeField] GameManager gameManager;
-    
+    [SerializeField] float AttenuationLevel=30f;
     [SerializeField] Vector3 testPosition;
     float deltaTimeSound = 1f;
     [SerializeField] float testSoundLevel = 30f;
     [SerializeField] float testRange = 30f;
+    
     [SerializeField] Vector3 offset = new Vector3(0f,0f,0f);
     [SerializeField] float interval = 15f;
+    /// <summary>
+    /// マップを可視化するためのスクリプト
+    /// </summary>
     [SerializeField] bool visibleMap;
 
 
@@ -77,9 +85,7 @@ public class SoundManager : MonoBehaviour
         if(deltaTimeSound < 0)
         {
             deltaTimeSound = 1f;
-            attenuationSound(10f);
-            //testPosition = new Vector3(UnityEngine.Random.Range(0, heightNum * 7.5f), 0f, UnityEngine.Random.Range(-0, heightNum * 7.5f)) + offset;
-            //soundDetect(testPosition, testRange, testSoundLevel);
+            attenuationSound(AttenuationLevel);
         }
         upDateAllColor();
     }

@@ -4,6 +4,9 @@ using UnityEngine;
 using System.Linq;
 using System;
 
+/// <summary>
+/// マップの音を管理するスクリプト
+/// </summary>
 public class MapManager : MonoBehaviour
 {
     float[,] soundMap;
@@ -15,7 +18,6 @@ public class MapManager : MonoBehaviour
     [SerializeField] int heightNum = 3;
     [SerializeField] Vector3 testPosition;
       
-    // Start is called before the first frame update
     void Start()
     {
         soundMap = new float[heightNum, widthNum];

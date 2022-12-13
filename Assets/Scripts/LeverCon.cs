@@ -7,6 +7,9 @@ using Photon.Realtime;
 using Photon.Chat;
 using util;
 
+/// <summary>
+/// レバーの制御のスクリプト
+/// </summary>
 public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCallbacks, IcanInteract
 {
     bool isOpen = false;
@@ -18,12 +21,6 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
     [SerializeField] PhotonView photonview;
     [SerializeField] GameObject gate;
     [SerializeField] GameManager gameManager;
-     
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
@@ -34,6 +31,9 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
         }
     }
 
+    /// <summary>
+    /// タスクを完了したときのスクリプト
+    /// </summary>
     public void CompleteTask()
     {
         playerController.stopAction();
@@ -41,6 +41,10 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
         StartCoroutine("GateOpen");
     }
 
+    /// <summary>
+    /// ゲートを開ける非同期処理
+    /// </summary>
+    /// <returns></returns>
     IEnumerator GateOpen()
     {
         yield return new WaitForSeconds(1);
@@ -53,7 +57,11 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
         }
         
     }
-
+    /// <summary>
+    /// トリガーに入ったときの処理
+    /// インプットアシストをオンにしている。
+    /// </summary>
+    /// <param name="other">トリガーに入ったオブジェクト</param>
 
     private void OnTriggerEnter(Collider other)
     {
@@ -68,7 +76,11 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
         }
         
     }
-
+    /// <summary>
+    /// トリガーからでたときの処理
+    /// インプットアシストをオフにしている。
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -82,7 +94,9 @@ public class LeverCon: MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipC
             
         }
     }
-
+    /// <summary>
+    /// 入力の受付処理
+    /// </summary>
     private void InputCheck()
     {
 

@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using util;
-
+/// <summary>
+/// ドアを制御するスクリプト
+/// </summary>
 public class DoorCon : InteractiveObject
 {
     [SerializeField] GameObject door;
@@ -18,6 +20,9 @@ public class DoorCon : InteractiveObject
         soundManager = gameManager.GetComponent<SoundManager>();
     }
 
+    /// <summary>
+    /// インタラクトしたときの処理
+    /// </summary>
     protected override void OnInteract()
     {
         soundManager.soundDetect(transform.position, 12f, 0.8f);
@@ -27,6 +32,10 @@ public class DoorCon : InteractiveObject
         openSound();
     }
 
+    /// <summary>
+    /// 
+    /// 一度インタラクトしたオブジェクトにもう一度インタラクトするときの処理
+    /// </summary>
     protected override void ReInteract()
     {
         soundManager.soundDetect(transform.position, 12f, 0.8f);
@@ -36,7 +45,9 @@ public class DoorCon : InteractiveObject
         closeSound();
 
     }
-
+    /// <summary>
+    /// 敵がロッカーを開けるときの処理
+    /// </summary>
     public void Opend()
     {
         
@@ -44,6 +55,9 @@ public class DoorCon : InteractiveObject
         openSound();
     }
 
+    /// <summary>
+    /// 敵がロッカーをしめるときの処理
+    /// </summary>
     public void Closed()
     {
 
@@ -51,6 +65,9 @@ public class DoorCon : InteractiveObject
         closeSound();
     }
 
+    /// <summary>
+    /// 敵がロッカーを開けるときの非同期処理
+    /// </summary>
     public IEnumerator EnemyOpen()
     {
         if (interacted == true)
@@ -69,7 +86,9 @@ public class DoorCon : InteractiveObject
             yield break;
         }
     }
-
+    /// <summary>
+    /// 敵がロッカーを閉めるときの非同期処理
+    /// </summary>
     public IEnumerator Enemyclose()
     {
         if (interacted == false)
@@ -88,6 +107,11 @@ public class DoorCon : InteractiveObject
         }
     }
 
+    /// <summary>
+    /// ロッカーを開けるときの非同期処理
+    /// 三角関数で角度を制限
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator open()
     {
         if (interacted == true)
@@ -110,6 +134,12 @@ public class DoorCon : InteractiveObject
         
     }
 
+
+    /// <summary>
+    /// ロッカーを閉めるときの非同期処理
+    /// 三角関数で角度を制限
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator close()
     {
         if (interacted == false)
@@ -130,11 +160,17 @@ public class DoorCon : InteractiveObject
         }
     }
 
+    /// <summary>
+    /// ロッカーを開けるときの音
+    /// </summary>
     public void openSound()
     {
         audio.PlayOneShot(clip1);
     }
 
+    /// <summary>
+    /// ロッカーを閉めるときの音
+    /// </summary>
     public void closeSound()
     {
         audio.PlayOneShot(clip2);
