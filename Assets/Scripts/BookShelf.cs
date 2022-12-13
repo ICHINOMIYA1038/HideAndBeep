@@ -6,23 +6,23 @@ using Photon.Pun;
 using Photon.Realtime;
 
 /// <summary>
-/// “|‚ê‚Ä‚¢‚é–{’I‚ÌƒXƒNƒŠƒvƒg
-/// ƒvƒƒOƒŒƒXƒQ[ƒW‚ªŠ®—¹‚·‚é‚ÆARotation‚ğ•ÏX‚µA–{’I‚ğ—§‚½‚¹‚éB
+/// å€’ã‚Œã¦ã„ã‚‹æœ¬æ£šã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
+/// ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ã‚²ãƒ¼ã‚¸ãŒå®Œäº†ã™ã‚‹ã¨ã€Rotationã‚’å¤‰æ›´ã—ã€æœ¬æ£šã‚’ç«‹ãŸã›ã‚‹ã€‚
 /// /// </summary>
 public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCallbacks, IcanInteract
 {
-    ///ƒ^ƒXƒN‚ªŠ®—¹‚µ‚½‚©‚Ç‚¤‚©
+    ///ã‚¿ã‚¹ã‚¯ãŒå®Œäº†ã—ãŸã‹ã©ã†ã‹
     bool isCompleted = false;
-   /// <summary>
-   /// ƒvƒŒƒCƒ„[‚ªƒgƒŠƒK[‚Ì’†‚É“ü‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©B
-   /// </summary>
+    /// <summary>
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒˆãƒªã‚¬ãƒ¼ã®ä¸­ã«å…¥ã£ã¦ã„ã‚‹ã‹ã©ã†ã‹ã€‚
+    /// </summary>
     bool playerEnterTrigger = false;
     /// <summary>
-    /// ƒvƒƒOƒŒƒXƒo[‚ÌƒvƒŒƒnƒu
+    /// ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼ã®ãƒ—ãƒ¬ãƒãƒ–
     /// </summary>
     [SerializeField] GameObject progressbarInstance;
     /// <summary>
-    /// ƒvƒƒOƒŒƒXƒo[‚ÌƒXƒNƒŠƒvƒg
+    /// ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
     /// </summary>
     [SerializeField] ProgressBarCon progressBar;
     [SerializeField] PlayerController playerController;
@@ -30,7 +30,7 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
     [SerializeField] GameObject target;
     [SerializeField] GameManager gameManager;
     /// <summary>
-    /// –{‚ğ‹N‚±‚·‚Æ‚«‚É‰ñ“]‚³‚¹‚éŠp“x
+    /// æœ¬ã‚’èµ·ã“ã™ã¨ãã«å›è»¢ã•ã›ã‚‹è§’åº¦
     /// </summary>
     float dstRotation = -35.38f;
 
@@ -43,7 +43,7 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
     // Update is called once per frame
     void Update()
     {
-        ///ƒvƒŒƒCƒ„[‚ªƒgƒŠƒK[“à‚É‚¢‚é‚Æ‚«‚É‚¾‚¯A“ü—Í‚ğƒ`ƒFƒbƒN‚·‚éB
+        ///ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒˆãƒªã‚¬ãƒ¼å†…ã«ã„ã‚‹ã¨ãã«ã ã‘ã€å…¥åŠ›ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã€‚
         if (playerEnterTrigger)
         {
             InputCheck();
@@ -51,19 +51,23 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
     }
 
     /// <summary>
-    /// ƒ^ƒXƒN‚ªŠ®—¹‚µ‚½‚Æ‚«‚Ìˆ—
-    /// ƒvƒŒƒCƒ„[‚És“®‚ğ«‚ß‚³‚¹A”ñ“¯Šúˆ—‚ğŠJn‚·‚éB
+    /// ã‚¿ã‚¹ã‚¯ãŒå®Œäº†ã—ãŸã¨ãã®å‡¦ç†
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«è¡Œå‹•ã‚’è¾ã‚ã•ã›ã€éåŒæœŸå‡¦ç†ã‚’é–‹å§‹ã™ã‚‹ã€‚
     /// </summary>
     public void CompleteTask()
     {
-        
+
         playerController.stopAction();
         isCompleted = true;
         StartCoroutine("BookStand");
+        if (playerController.getPhotonviewIsMine())
+        {
+            gameManager.DeactiveInputAssist();
+        }
     }
 
     /// <summary>
-    /// –{‚ğ‹N‚±‚³‚¹‚é”ñ“¯Šúˆ—
+    /// æœ¬ã‚’èµ·ã“ã•ã›ã‚‹éåŒæœŸå‡¦ç†
     /// </summary>
     IEnumerator BookStand()
     {
@@ -75,8 +79,12 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
 
     private void OnTriggerEnter(Collider other)
     {
-        ///ƒvƒŒƒCƒ„[‚ªƒgƒŠƒK[“à‚É“ü‚é‚ÆAƒgƒŠƒK[‚ğtrue‚É‚µAƒvƒŒƒCƒ„[ƒRƒ“ƒgƒ[ƒ‰[‚ğŠi”[‚·‚éB
-        ///‚Ü‚½AƒQ[ƒ€ƒ}ƒl[ƒWƒƒ[Œo—R‚ÅAƒCƒ“ƒvƒbƒgƒAƒVƒXƒg‚ğ•\¦‚³‚¹‚éB
+        ///ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒˆãƒªã‚¬ãƒ¼å†…ã«å…¥ã‚‹ã¨ã€ãƒˆãƒªã‚¬ãƒ¼ã‚’trueã«ã—ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’æ ¼ç´ã™ã‚‹ã€‚
+        ///ã¾ãŸã€ã‚²ãƒ¼ãƒ ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼çµŒç”±ã§ã€ã‚¤ãƒ³ãƒ—ãƒƒãƒˆã‚¢ã‚·ã‚¹ãƒˆã‚’è¡¨ç¤ºã•ã›ã‚‹ã€‚
+        if (isCompleted)
+        {
+            return;
+        }
         if (other.gameObject.CompareTag("Player"))
         {
             playerEnterTrigger = true;
@@ -85,15 +93,19 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
             {
                 gameManager.ActiveInputAssist("E");
             }
- 
+
         }
 
     }
 
-    ///ƒvƒŒƒCƒ„[‚ªƒgƒŠƒK[ŠO‚É‚Å‚é‚ÆAƒgƒŠƒK[‚ğfalse‚É‚µAƒvƒŒƒCƒ„[ƒRƒ“ƒgƒ[ƒ‰[‚ğnull‚É‚·‚éB
-    ///‚Ü‚½AƒQ[ƒ€ƒ}ƒl[ƒWƒƒ[Œo—R‚ÅAƒCƒ“ƒvƒbƒgƒAƒVƒXƒg‚ğÁ‹‚³‚¹‚éB
+    ///ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒˆãƒªã‚¬ãƒ¼å¤–ã«ã§ã‚‹ã¨ã€ãƒˆãƒªã‚¬ãƒ¼ã‚’falseã«ã—ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’nullã«ã™ã‚‹ã€‚
+    ///ã¾ãŸã€ã‚²ãƒ¼ãƒ ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼çµŒç”±ã§ã€ã‚¤ãƒ³ãƒ—ãƒƒãƒˆã‚¢ã‚·ã‚¹ãƒˆã‚’æ¶ˆå»ã•ã›ã‚‹ã€‚
     private void OnTriggerExit(Collider other)
     {
+        if (isCompleted)
+        {
+            return;
+        }
         if (other.gameObject.CompareTag("Player"))
         {
             if (playerController.getPhotonviewIsMine())
@@ -106,16 +118,16 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
         }
     }
     /// <summary>
-    /// “ü—Í‚Ìó•t
-    /// 
+    /// å…¥åŠ›ã®å—ä»˜
     /// </summary>
     private void InputCheck()
     {
-        ///ƒAƒNƒVƒ‡ƒ“‚ªs‚í‚ê‚Ä‚¢‚é‚Æ‚«‚É‚ÍAƒAƒNƒVƒ‡ƒ“‚Ì’†~‚ğó•t
+        
+        ///ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãŒè¡Œã‚ã‚Œã¦ã„ã‚‹ã¨ãã«ã¯ã€ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ä¸­æ­¢ã‚’å—ä»˜
         if (progressBar.isActive)
         {
 
-            if (Input.GetKey(KeyCode.Q))
+            if (Input.GetKeyDown(KeyCode.Q))
             {
                 playerController.stopAction();
                 progressBar.isActive = false;
@@ -125,8 +137,8 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
 
         }
 
-        ///ƒAƒNƒVƒ‡ƒ“‚ªs‚í‚ê‚Ä‚¢‚È‚¢‚Æ‚«‚É‚ÍAƒAƒNƒVƒ‡ƒ“‚Ì“ü—Í‚ğó•t
-        if (Input.GetKey(KeyCode.E) && progressBar.isActive == false && playerController != null)
+        ///ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãŒè¡Œã‚ã‚Œã¦ã„ãªã„ã¨ãã«ã¯ã€ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®å…¥åŠ›ã‚’å—ä»˜
+        else if (Input.GetKeyDown(KeyCode.E) && progressBar.isActive == false && playerController != null)
         {
             photonview.RequestOwnership();
 
@@ -136,8 +148,7 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
                 return;
             }
             gameManager.ActiveInputAssist("Q");
-
-            playerController.canMove = false;
+            playerController.LiftUpBookShelf(this.transform.position);
             progressbarInstance.SetActive(true);
             progressBar.isActive = true;
 
@@ -147,8 +158,8 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
 
 
     /// <summary>
-    /// ’ÊM•”•ª
-    /// ƒ^ƒXƒN‚ªŠ®—¹‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ“¯Šú‚·‚éB
+    /// é€šä¿¡éƒ¨åˆ†
+    /// ã‚¿ã‚¹ã‚¯ãŒå®Œäº†ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’åŒæœŸã™ã‚‹ã€‚
     /// </summary>
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -159,7 +170,7 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
             {
                 return;
             }
-            
+
             stream.SendNext(isCompleted);
 
         }
@@ -181,7 +192,7 @@ public class BookShelf : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershi
 
     void IPunOwnershipCallbacks.OnOwnershipTransferFailed(PhotonView targetView, Player senderOfFailedRequest)
     {
-       
+
     }
     private void OnEnable()
     {

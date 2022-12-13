@@ -11,14 +11,10 @@ public class PlayerController: MonoBehaviourPun
     public Animator animator;
     public float speed;
     public Vector3 velocity;
-    Vector3 oldVelocity;
-    Quaternion rotation;
-    bool isJumping;
     public bool checkWait;
     public float walkSpeed = 1.0f;
     public float runSpeed = 2.0f;
     public bool canMove = true;
-    GameObject myCamera;
     Rigidbody rb;
     public int itemState;
     static readonly int HasNoItem = 0;
@@ -51,12 +47,14 @@ public class PlayerController: MonoBehaviourPun
     GameObject ItemCoolTimePanel;
     float itemCooltime = 5f;
     float coolTimeTimer = 0.0f;
+    float changeAnimationTime = 8.0f;
 
 
 
     // Use this for initialization
     void Start()
     {
+        soundmanager = GameObject.FindWithTag("GameManager").GetComponent<SoundManager>();
         if (!photonView.IsMine)
         {
             audioListener.enabled = false;
@@ -83,36 +81,68 @@ public class PlayerController: MonoBehaviourPun
         ItemWhistle.SetActive(false);
         ItemLight.SetActive(false);
         ItemCoolTimePanel.GetComponent<Image>().fillAmount = 0f;
+        ///アニメーターを取得。
+        if (animator == null)
+        {
+            TryGetComponent(out animator);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        ///Sound処理
+        ///走っている時に、サウンドマネージャーに音を拾わせる。
+        ///この処理に関しては、プレイヤーの所有者に関わらず行う。
+        ///
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("run"))
+        {
+            float range = 12f;
+            float soundLevel = 0.8f;
+            soundmanager.soundDetect(transform.position, range, soundLevel);
+        }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("searchChest"))
+        {
+            float range = 12f;
+            float soundLevel = 2f;
+            soundmanager.soundDetect(transform.position, range, soundLevel);
+        }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("LiftUp"))
+        {
+            float range = 12f;
+            float soundLevel = 2f;
+            soundmanager.soundDetect(transform.position, range, soundLevel);
+        }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("open"))
+        {
+            float range = 20f;
+            float soundLevel = 10f;
+            soundmanager.soundDetect(transform.position, range, soundLevel);
+        }
+        //このキャラクターの所有者が自分自身でないならば、処理を中止する。
         if (!photonView.IsMine)
         {
             return;
         }
 
-
+        ///ゲームクリアやゲームエンドの状態ならば、処理をしない。
         if (isMovie == true)
         {
             return;
         }
         
 
-        
+        ///Escapeキーを押すと、処理を終了する。
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Cursor.lockState = CursorLockMode.None;
         }
 
-        if (animator == null)
-        {
-            TryGetComponent(out animator);
-        }
+        
 
 
-        //Sound
+        //Soundの処理。
+        ///Enemyが近づくに連れて、音が大きくなる。
         float distance = 100;
 
         if (zombieControllers[0].getEnemyState() == ZombieController.FIND_MODE || zombieControllers[1].getEnemyState() == ZombieController.FIND_MODE)
@@ -135,8 +165,6 @@ public class PlayerController: MonoBehaviourPun
                 
         }
 
-        
-
         if (distance < audioMaxDistance && audiosource.isPlaying == false)
         {
             audiosource.Play();
@@ -152,13 +180,9 @@ public class PlayerController: MonoBehaviourPun
             audiosource.Stop();
             
         }
-        
 
-        if (itemState == 0)
-        {
-
-        }
-        if (itemState == 1)
+        ///ライトを持っている時の処理
+        if (itemState == HasLight)
         {
             if (Input.GetMouseButtonDown(1) && !animator.GetCurrentAnimatorStateInfo(0).IsName("light"))
             {
@@ -170,6 +194,8 @@ public class PlayerController: MonoBehaviourPun
                 animator.SetTrigger("Lightstop");
             }
         }
+
+        ///ホイッスルを持っている時の処理
         if (itemState == HasWhistle)
         {
             ItemCoolTime();
@@ -190,12 +216,7 @@ public class PlayerController: MonoBehaviourPun
             }
         }
 
-
-
-
-
-
-
+        ///
         if (canMove ==true)
         {
             //カメラの向きで補正した入力ベクトルの取得
@@ -203,16 +224,7 @@ public class PlayerController: MonoBehaviourPun
             var vertical = Input.GetAxis("Vertical");
             var horizontalRotation = Quaternion.AngleAxis(Camera.main.transform.eulerAngles.y, Vector3.up);
             var velocity = horizontalRotation * new Vector3(horizontal, 0, vertical).normalized;
-
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("jump"))
-            {
-                isJumping = true;
-            }
-            else
-            {
-                isJumping = false;
-            }
-
+            ///シフトを押しているときに、スピード走る速度を変える。
             speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
             if (horizontal == 0 && vertical == 0)
             {
@@ -221,8 +233,6 @@ public class PlayerController: MonoBehaviourPun
             var rotationSpeed = 600 * Time.deltaTime;
             transform.position += velocity * speed * 1f * Time.deltaTime;
 
-            
-
             //移動方向を向く
             if (velocity.magnitude > 0.5f)
             {
@@ -230,6 +240,7 @@ public class PlayerController: MonoBehaviourPun
             }
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed);
 
+            ///アニメーションの遷移
             if (speed == walkSpeed)
             { animator.SetFloat("speed", 3f); }
             else if (speed == runSpeed)
@@ -237,36 +248,32 @@ public class PlayerController: MonoBehaviourPun
             else if (speed == 0)
             { animator.SetFloat("speed", 0); }
 
+            /*
+            ///アニメーションの二重チェック
+            ///アニメーションに入っている時には、canMoveをfalseにしておく
+           
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("searchChest"))
+            {
+                canMove = false;
+            }
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("LiftUp"))
+            {
+                canMove = false;
+            }
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("open"))
+            {
+                canMove = false;
+            }
+            */
+
+            ///立って放置しているときに、待ちのモーションをチェックする。
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("stand") && checkWait == false)
             {
                 StartCoroutine(waitMotion());
                 checkWait = true;
             }
 
-            if (Input.GetButtonDown("Jump"))
-            {
-                isJumping = true;
-                animator.SetTrigger("isJump");
-            }
-
-            if (Input.GetMouseButtonDown(0) && !animator.GetCurrentAnimatorStateInfo(0).IsName("punch1"))
-            {
-                animator.SetTrigger("punch");
-            }
-            if (Input.GetMouseButtonDown(0) && animator.GetCurrentAnimatorStateInfo(0).IsName("punch1"))
-            {
-                animator.SetTrigger("punch2");
-            }
-            if (Input.GetMouseButtonDown(0) && animator.GetCurrentAnimatorStateInfo(0).IsName("punch2"))
-            {
-                animator.SetTrigger("punch3");
-            }
-
-            ///Sound処理
-            if (speed == runSpeed)
-            {
-                soundmanager.soundDetect(transform.position, 12f, 0.8f);
-            }
+            
 
         }
 
@@ -274,15 +281,27 @@ public class PlayerController: MonoBehaviourPun
 
     }
 
+    /// <summary>
+    /// このプレイヤーコントローラーが自分自身で操作しているものかをチェックする。
+    /// </summary>
+    /// <returns></returns>
     public bool getPhotonviewIsMine()
     {
         return photonView.IsMine;
     }
 
+    /// <summary>
+    /// このオブジェクトが持つPhotonViewを返す。
+    /// </summary>
     public PhotonView getPhotonView()
     {
         return photonView;
     }
+
+    /// <summary>
+    /// アイテムを変更した時の処理
+    /// </summary>
+    /// <param name="index">アイテムを指定するインデックス</param>
     public void OnItemChange(int index)
     {
         if (!photonView.IsMine)
@@ -326,6 +345,9 @@ public class PlayerController: MonoBehaviourPun
         }
     }
 
+    /// <summary>
+    /// 指定秒数を経過すると、だらけたアニメーションになる。
+    /// </summary>
     IEnumerator waitMotion()
     {
         float count = 0f;
@@ -340,7 +362,7 @@ public class PlayerController: MonoBehaviourPun
                 break;
 
             }
-            if (count > 3.0f)
+            if (count > changeAnimationTime)
             {
                 if (speed == 0)
                 {
@@ -357,6 +379,12 @@ public class PlayerController: MonoBehaviourPun
 
     }
 
+    /// <summary>
+    /// 箱を開けるスクリプト
+    /// 箱開けのアニメーションを開始する。
+    /// </summary>
+    /// <param name="playerPosi">プレイヤーが立つ位置</param>
+    /// <param name="targetPosi">箱の位置</param>
     public void searchBox(Vector3 playerPosi, Vector3 targetPosi)
     {
         transform.position = playerPosi;
@@ -371,6 +399,32 @@ public class PlayerController: MonoBehaviourPun
 
     }
 
+    /// <summary>
+    /// 本棚を持ち上げる処理
+    /// 持ち上げのアニメーションを再生する。
+    /// </summary>
+    /// <param name="playerPosi"></param>
+    /// <param name="targetPosi"></param>
+    public void LiftUpBookShelf(Vector3 targetPosi)
+    {
+        transform.LookAt(targetPosi);
+        animator.SetTrigger("LiftUp");
+        speed = 0f;
+        canMove = false;
+        rb.constraints = RigidbodyConstraints.FreezePosition
+            | RigidbodyConstraints.FreezeRotationX
+            | RigidbodyConstraints.FreezeRotationY
+            | RigidbodyConstraints.FreezeRotationZ;
+
+    }
+
+    /// <summary>
+    /// レバーを引く処理
+    /// プレイヤーを指定の位置に立たせて、レバーの方向を向かせる。
+    /// Rigidbodyで動きの制限と角度の制限を加える。
+    /// </summary>
+    /// <param name="playerPosi"></param>
+    /// <param name="targetPosi"></param>
     public void pullLever(Vector3 playerPosi, Vector3 targetPosi)
     {
         transform.position = playerPosi;
@@ -385,14 +439,21 @@ public class PlayerController: MonoBehaviourPun
 
     }
 
+    /// <summary>
+    /// アクションを辞める時の処理。Rigidbodyで動きの制限と角度の制限を変える。
+    /// </summary>
     public void stopAction()
     {
         canMove = true;
         animator.SetTrigger("stop");
-        rb.constraints = RigidbodyConstraints.FreezeRotationX
+        rb.constraints = RigidbodyConstraints.FreezePositionY
+            | RigidbodyConstraints.FreezeRotationX
             | RigidbodyConstraints.FreezeRotationZ;
     }
 
+    /// <summary>
+    /// アニメーションなどでキャラクターを固定するための関数
+    /// </summary>
     public void Freeze()
     {
         speed = 0f;
@@ -403,6 +464,9 @@ public class PlayerController: MonoBehaviourPun
             | RigidbodyConstraints.FreezeRotationY
             | RigidbodyConstraints.FreezeRotationZ;
     }
+    /// <summary>
+    /// 固定を解除するための関数
+    /// </summary>
     public void Free()
     {
         canMove = true;
@@ -410,20 +474,35 @@ public class PlayerController: MonoBehaviourPun
             | RigidbodyConstraints.FreezeRotationZ;
     }
 
+    /// <summary>
+    /// 名前を格納する。
+    /// </summary>
+    /// <param name="name"></param>
     public void setName(string name)
     {
         playerName = name;
     }
+    /// <summary>
+    /// 名前を取得する
+    /// </summary>
+    /// <returns></returns>
     public string getName()
     {
         return playerName;
     }
 
+    /// <summary>
+    /// お守りのアイテム効果が発動した時のスクリプト
+    /// </summary>
     public　void magic()
     {
         seAudioSource.PlayOneShot(seMagic);
     }
 
+    /// <summary>
+    /// エネミーと接触した時の処理
+    /// </summary>
+    /// <param name="collision"></param>
     private void OnCollisionEnter(Collision collision)
     {
         if (!photonView.IsMine)
@@ -437,6 +516,10 @@ public class PlayerController: MonoBehaviourPun
         }
     }
 
+    /// <summary>
+    /// ゲームオーバーの処理
+    /// </summary>
+    /// <param name="enemy"></param>
     public void gameOver(GameObject enemy)
     {
         gameOvercamera.LookAt = enemy.transform;
@@ -449,6 +532,10 @@ public class PlayerController: MonoBehaviourPun
         | RigidbodyConstraints.FreezeRotationZ;
     }
 
+    /// <summary>
+    /// ロッカーに入る時の処理
+    /// </summary>
+    /// <param name="cameraPosition">カメラの変更位置</param>
     public void EnterLocker(Vector3 cameraPosition)
     {
 
@@ -459,6 +546,9 @@ public class PlayerController: MonoBehaviourPun
         inLocker = true;
     }
 
+    /// <summary>
+    /// ロッカーを出る時の処理
+    /// </summary>
     public void ExitLocker()
     {
         canMove = true;
@@ -466,12 +556,19 @@ public class PlayerController: MonoBehaviourPun
         inLocker = false;
     }
 
+    /// <summary>
+    /// ゲームクリアの処理
+    /// </summary>
     public void gameClear()
     {
         canMove = false;
         StartCoroutine(gameClearCamera());
     }
 
+    /// <summary>
+    /// アイテムのクールタイムの処理
+    /// アイテムを使った後に、呼び出す。
+    /// </summary>
     public void ItemCoolTime()
     {
         coolTimeTimer += Time.deltaTime;
@@ -482,6 +579,10 @@ public class PlayerController: MonoBehaviourPun
         ItemCoolTimePanel.GetComponent<Image>().fillAmount = 1 - (coolTimeTimer/itemCooltime);
     }
 
+    /// <summary>
+    /// ゲームクリア時のカメラの動き。
+    /// </summary>
+    /// <returns></returns>
     IEnumerator gameClearCamera()
     {
         for(int i = 0; i < 100; i++)

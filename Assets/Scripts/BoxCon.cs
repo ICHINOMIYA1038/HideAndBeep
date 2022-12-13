@@ -6,6 +6,9 @@ using Photon.Pun;
 using Photon.Realtime;
 using Photon.Chat;
 using util;
+/// <summary>
+/// 宝箱の処理を決めるクラス
+/// </summary>
 public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCallbacks,IcanInteract
 {
     [SerializeField] GameManager gameManager;
@@ -13,10 +16,15 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
     [SerializeField]bool playerEnterTrigger = false;
     [SerializeField] GameObject progressbarInstance;
     [SerializeField] ProgressBarCon progressBar;
+    /// <summary>
+    /// lidは宝箱の蓋のインスタンス
+    /// </summary>
     [SerializeField] GameObject lid;
     [SerializeField] PlayerController playerController;
-    [SerializeField] float waitTime = 3.0f;
     [SerializeField] PhotonView photonview;
+    /// <summary>
+    /// 宝箱に入っているアイテムのインデックス
+    /// </summary>
     [SerializeField] int ItemState;
      
     // Start is called before the first frame update
@@ -28,13 +36,16 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
     // Update is called once per frame
     void Update()
     {
-
+        ///プレイヤーがトリガー内に入っている時に入力の処理をする。
         if (playerEnterTrigger)
         {
             InputCheck();
         }
     }
 
+    /// <summary>
+    /// プログレスバーのタスクが完了した時のスクリプト
+    /// </summary>
     public void CompleteTask()
     {
         lid.transform.localEulerAngles = new Vector3(90f, 0f, 0f);
@@ -43,16 +54,22 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
         playerController.OnItemChange(ItemState);
         ItemState = charaItem;
         isOpen = true;
+        if (playerController.getPhotonviewIsMine())
+        {
+            gameManager.DeactiveInputAssist();
+        }
     }
 
-
+    /// <summary>
+    /// トリガーに入った時のスクリプト
+    /// playerEnterTriggerをTrueにしてPlayerControllerを取得する。
+    /// 対象のプレイヤーがプレイヤー自身ならばインプットアシストをOnにする。
+    /// </summary>
     private void OnTriggerEnter(Collider other)
     {
         
         if (other.gameObject.CompareTag("Player"))
         {
-
-            Debug.Log("PlayerEnter");
             playerEnterTrigger = true;
             playerController = other.gameObject.GetComponent<PlayerController>();
             if (playerController.getPhotonviewIsMine())
@@ -64,6 +81,11 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
         
     }
 
+    /// <summary>
+    /// トリガーから出た時のスクリプト
+    /// playerEnterTriggerをTrueにしてPlayerControllerを取得する。
+    /// 対象のプレイヤーがプレイヤー自身ならばインプットアシストをOnにする。
+    /// </summary>
     private void OnTriggerExit(Collider other)
     {
        
@@ -73,7 +95,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
             {
                 gameManager.DeactiveInputAssist();
             }
-            Debug.Log("PlayerExit");
+           
             playerEnterTrigger = false;
             playerController = null;
             
@@ -85,16 +107,23 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
 
 
-
+    /// <summary>
+    /// 入力処理の受付
+    /// 
+    /// </summary>
     private void InputCheck()
     {
 
-            if (isOpen&&playerController!=null)
+        ///箱が開いている時の処理
+        if(isOpen&&playerController!=null)
         {
+            ///プレイヤーが静止している時以外の処理は拒否する。
             if (!playerController.animator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
             {
                 return;
             }
+            ///Eを押した時の処理
+            ///箱が空いている時には、自分の持っているアイテムと箱の中のアイテムを入れ替える。
             if (Input.GetKeyDown(KeyCode.E))
                 {
                     int charaItem = playerController.itemState;
@@ -104,10 +133,11 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
                 }
         }
 
+        ///プログレスバ-が起動中の時(アクション中)の入力受付
         if (progressBar.isActive)
             {
-
-                if(Input.GetKey(KeyCode.Q))
+                ///Qを押すと、行動を辞める。
+                if(Input.GetKeyDown(KeyCode.Q))
                 {
                     playerController.stopAction();
                     progressBar.isActive = false;
@@ -117,16 +147,17 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
          }
 
-        if (Input.GetKey(KeyCode.E) && progressBar.isActive == false&&playerController!=null)
+        ///Eを押した時の処理。箱を開け始める。
+        ///この時、インプットのアシストをQに変える。
+        ///また、プレイヤーに箱を開けるアニメーションをさせる。
+        if (Input.GetKeyDown(KeyCode.E) && progressBar.isActive == false&&playerController!=null)
         {
-            gameManager.ActiveInputAssist("Q");
-            photonview.RequestOwnership();
-            Debug.Log("BOXOPEN");
-
             if (!playerController.animator.GetCurrentAnimatorStateInfo(0).IsName("stand"))
             {
                 return;
             }
+            gameManager.ActiveInputAssist("Q");
+            photonview.RequestOwnership();
 
             playerController.searchBox(transform.position - transform.forward*3f, transform.position);
             playerController.canMove = false;
@@ -139,7 +170,9 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
 
      
 
-
+    /// <summary>
+    ///  通信処理
+    /// </summary>
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         
@@ -151,7 +184,7 @@ public class BoxCon : MonoBehaviourPunCallbacks, IPunObservable, IPunOwnershipCa
             {
                 return;
             }
-            //?f?[?^?????M
+            //箱が開いているかどうかと箱の中身を同期する。
             stream.SendNext(isOpen);
             stream.SendNext(ItemState);
 
