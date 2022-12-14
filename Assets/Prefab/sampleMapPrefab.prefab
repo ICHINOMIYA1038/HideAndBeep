@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3847656110160083764}
   - component: {fileID: 3847656110160083771}
   m_Layer: 0
-  m_Name: Cube (8)
+  m_Name: sampleMapPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
