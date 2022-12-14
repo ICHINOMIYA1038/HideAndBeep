@@ -17,7 +17,7 @@
 
 # FEATURES
 ・マップ上の音を管理し、優先度の高い順にゾンビが索敵します。
-![代替テキスト](./soundDemo.md "サウンド管理のデモ")
+![サウンドのデモ画像](./soundDemo.gif "サウンド管理のデモ画像")
 ・PUN2（PhotonUnityNetworking2）を用いたP2P通信
 
 ・
