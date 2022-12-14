@@ -7,13 +7,24 @@ using static SoundManager;
 using Cinemachine;
 using Photon.Pun;
 
+/// <summary>
+/// ゾンビを動かすためのクラス
+/// </summary>
 public class ZombieController : MonoBehaviour
 {
-    Rigidbody rb;
+    /// <summary>
+    /// エネミーの片方の視界。これを二倍したものが、実際の検知範囲
+    /// </summary>
+    private const float VIEW_ANGLE = 60f;
+    private const float MOVE_AROUND_TIMER = 7f;
+    private const float WAIT_TIMER = 1.5f;
     Animator animator;
     NavMeshAgent agent;
     [SerializeField] GameObject effect;
-    [SerializeField] CinemachineVirtualCamera vcam;
+    /// <summary>
+    /// 敵の顔をアップで映すスクリプト
+    /// </summary>
+    [SerializeField] CinemachineVirtualCamera enemyCam;
     [SerializeField] Vector3 targetPosition;
     [SerializeField] bool isFinding;
     [SerializeField] GameObject prey;
@@ -24,31 +35,99 @@ public class ZombieController : MonoBehaviour
     LockerScript InteractiveLocker;
     [SerializeField] GameObject targetLocker;
     [SerializeField]GameObject[] lockers;
-    [SerializeField]
     /// <summary>
-    /// behaviorMode :0 Wait 1 MoveAround 2 Detect 3 MoveTo 4 Arrive 5 Find 
+    /// エネミーの状態を表すオートマトン
+    /// behaviorMode :0 Wait 1 MoveAround 2 Detect 3 MoveTo 4 Arrive 5 Find 6Damaged
     /// </summary>
-    [Range(0, 5)]
+    [SerializeField]
+    [Range(0, 6)]
     public int behaviorMode = 0;
+    /// <summary>
+    /// 待機モード
+    /// </summary>
     public static readonly int WAITING_MODE = 0;
+    /// <summary>
+    /// ランダムで動き回るモード
+    /// </summary>
     public static readonly int MOVEAROUND_MODE = 1;
+    /// <summary>
+    /// 音を検知した時のモード
+    /// 変更時に、サブルーチンを呼び出す。フレームごとには何もしない
+    /// </summary>
     public static readonly int DETECT_MODE = 2;
+    /// <summary>
+    /// 使用しない
+    /// </summary>
     public static readonly int MOVETO_MODE = 3;
+    /// <summary>
+    /// プレイヤーを発見した時のモード
+    /// </summary>
     public static readonly int FIND_MODE = 4;
+    /// <summary>
+    /// ロッカーに入っていることを疑っている時のモード
+    /// </summary>
     public static readonly int SUSPECT_LOCKER_MODE = 5;
+    /// <summary>
+    /// プレイヤーのアイテムなどで怯んでいる時のモード
+    /// </summary>
     public static readonly int DAMAGED_MODE = 6;
+    /// <summary>
+    /// 歩く速度
+    /// </summary>
     float walkSpeed = 3.5f;
+    /// <summary>
+    /// 走る速度
+    /// </summary>
     float runSpeed = 10f;
     float detectSpeed = 5f;
+    /// <summary>
+    /// 索敵時のタイマーで、この時間を超えると、待機モードに移行する。
+    /// </summary>
+    float detectTimer = 20f;
+    /// <summary>
+    /// ゲームオーバーあるいは、ゲームクリアの状態かどうか
+    /// </summary>
     bool isMovie = false;
+    /// <summary>
+    /// canMoveがfalseだと敵は止まっている。
+    /// </summary>
     bool canMove = true;
-    float detectionRange = 70f;
+    /// <summary>
+    /// ダメージを受けているかどうか
+    /// これがtrueの時、エネミーはプレイヤーを攻撃できない
+    /// </summary>
     public bool beingDamaged = false;
+    /// <summary>
+    /// プレイヤーを検知できる最大距離
+    /// </summary>
     [SerializeField]float detectRange;
+    /// <summary>
+    /// 音源 うめき声などを再生する
+    /// </summary>
     [SerializeField] AudioSource audiosource;
+    /// <summary>
+    /// ダメージを受けた時のうめき声
+    /// </summary>
     [SerializeField] AudioClip damageSE;
+    /// <summary>
+    /// プレイヤー追跡状態に移行したかどうか
+    /// </summary>
     bool isSearching = false;
-   
+    /// <summary>
+    /// 検知する音の最小の閾値
+    /// これを超えると検知する。
+    /// </summary>
+    [SerializeField]float detectSoundLevel;
+    /// <summary>
+    /// 待機する時のカウント
+    /// これを超えると、moveAroundへ移行する
+    /// </summary>
+    float waitTimer = 0f;
+    /// <summary>
+    /// moveAroundにおいて、新しい目的地を設定するためのタイマー
+    /// </summary>
+    float moveAroundTimer = 0f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -98,10 +177,6 @@ public class ZombieController : MonoBehaviour
         {
 
         }
-        if (behaviorMode == MOVETO_MODE)
-        {
-            MoveTo();
-        }
         if (behaviorMode == FIND_MODE)
         {
             Find();
@@ -116,7 +191,8 @@ public class ZombieController : MonoBehaviour
         }
 
         //アニメーション制御
-
+    　  //スピードが一定の値を下回った時に、待機のアニメーションに移行する。
+       //0.5は閾値
         if (agent.speed < 0.5)
         {
             animator.SetBool("Wait", true);
@@ -163,52 +239,75 @@ public class ZombieController : MonoBehaviour
 
     }
 
-
+    /// <summary>
+    /// 待機時の処理
+    /// </summary>
     void Wait()
     {
         isFinding = false;
         agent.speed = 0f;
         agent.SetDestination(agent.transform.position);
-        if ((targetPosition - agent.transform.position).magnitude < detectionRange)
+        if ((targetPosition - agent.transform.position).magnitude < detectRange)
         {
             if (CatchSight())
             {
                 return;
             }
         }
-        if (HearSound())
+        else if (HearSound())
         {
             behaviorMode = DETECT_MODE;;
         }
+        waitTimer += Time.deltaTime;
+        if (waitTimer > WAIT_TIMER)
+        {
+            waitTimer = 0f;
+            behaviorMode = MOVEAROUND_MODE;
+            setDestination();
+        }
  
     }
+    /// <summary>
+    /// 動き回る処理
+    /// </summary>
     void MoveAround()
     {
         isFinding = false;
         agent.speed = walkSpeed;
-        
-        if ((targetPosition - agent.transform.position).magnitude < detectionRange)
+        moveAroundTimer += Time.deltaTime;
+        if ((targetPosition - agent.transform.position).magnitude < detectRange)
         {
             CatchSight();
         }
-        if (HearSound())
+        else if (HearSound())
         {
-            behaviorMode = DETECT_MODE; ;
+            behaviorMode = DETECT_MODE;
+        }
+        else if (moveAroundTimer > MOVE_AROUND_TIMER)
+        {
+            moveAroundTimer = 0f;
+            behaviorMode = WAITING_MODE;
+            agent.SetDestination(agent.transform.position);
         }
 
     }
 
-    IEnumerator DestinationSetting()
+    /// <summary>
+    /// 目的地の設定
+    /// </summary>
+    /// <returns></returns>
+    void setDestination()
     {
-        while (behaviorMode == MOVEAROUND_MODE)
-        {
             targetPosition = new Vector3(Random.Range(-50f, 100f), Random.Range(-50f, 100f), Random.Range(-50f, 100f));
             agent.SetDestination(targetPosition);
-            yield return new WaitForSeconds(8);
             
-        }
     }
 
+    /// <summary>
+    ///　音を検出して動き出すときの処理
+    ///　タイマーを設定して、指定時間を超えたら待機モードにうつる。
+    /// </summary>
+    /// <returns></returns>
     IEnumerator Detect()
     {
         agent.speed = detectSpeed;
@@ -221,7 +320,7 @@ public class ZombieController : MonoBehaviour
             {
                 yield break;
             }
-            if (timer > 20f)
+            if (timer > detectTimer)
             {
                 
                 behaviorMode = WAITING_MODE;
@@ -235,6 +334,10 @@ public class ZombieController : MonoBehaviour
 
     }
 
+    /// <summary>
+    ///　ランダムで動き回る時のモード
+    /// </summary>
+    /// <returns></returns>
     IEnumerator SearchAround()
     {
 
@@ -263,16 +366,9 @@ public class ZombieController : MonoBehaviour
 
     }
 
-
-    void MoveTo()
-    {
-        isFinding = false;
-        agent.SetDestination(targetPosition);
-        if ((targetPosition - agent.transform.position).magnitude < detectionRange)
-        {
-            behaviorMode = FIND_MODE;
-        }
-    }
+    /// <summary>
+    /// プレイヤーを発見した時のモード
+    /// </summary>
     void Find()
     {
         isFinding = true;
@@ -295,6 +391,11 @@ public class ZombieController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// マップ上から音を検出する
+    /// もし、大きな音がなったら、detectモードへ移行する
+    /// </summary>
+    /// <returns></returns>
     bool HearSound()
     {
         if (soundManager == null)
@@ -315,23 +416,27 @@ public class ZombieController : MonoBehaviour
             return false;
         }
     }
+
+    /// <summary>
+    /// プレイヤーを視界に検知するスクリプト
+    /// rayの角度をy軸周り(transform.up方向)で変えて、視界を検知する。
+    /// プレイヤーがrayで検出された場合に、FIND_MODEへ移行する。
+    /// </summary>
+    /// <returns></returns>
     bool CatchSight()
     {
-        //Quaternion.AngleAxis(deltaAngle, transform.up)
 
-        float ViewAngle = 60f;
+        float ViewAngle = VIEW_ANGLE;
         float deltaAngle = -ViewAngle;
         RaycastHit hit;
-        //Ray ray = new(agent.transform.position + new Vector3(0f, 15f, 0f), Quaternion.AngleAxis(deltaAngle, transform.up) * agent.transform.forward);
-        //Ray ray2 = new Ray(agent.transform.position + new Vector3(0f, 15f, 0f), agent.transform.up);
-        Ray ray3 = new Ray(agent.transform.position + new Vector3(0f, 10f, 0f), agent.transform.forward);
+        Ray ray = new Ray(agent.transform.position + new Vector3(0f, 10f, 0f), agent.transform.forward);
 
 
         while (deltaAngle < ViewAngle)
         {
             deltaAngle += 5f;
-            ray3.direction = Quaternion.AngleAxis(deltaAngle, transform.up) * agent.transform.forward;
-            if (Physics.Raycast(ray3, out hit, detectRange))
+            ray.direction = Quaternion.AngleAxis(deltaAngle, transform.up) * agent.transform.forward;
+            if (Physics.Raycast(ray, out hit, detectRange))
             {
                 if (hit.transform.gameObject.tag == "Player")
                 {
@@ -353,16 +458,17 @@ public class ZombieController : MonoBehaviour
                 */
 
             }
-
-            //Debug.DrawLine(ray.origin, ray.direction * 30f, Color.blue, 1f);
-            //Debug.DrawLine(ray2.origin, ray2.direction * 30f, Color.green, 1f);
-            Debug.DrawLine(ray3.origin, ray3.origin + ray3.direction * 30f, Color.red, 1f);
+            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 30f, Color.red, 1f);
 
         }
 
         return false;
     }
 
+    /// <summary>
+    /// エネミーの現在の状況を取得する
+    /// </summary>
+    /// <returns></returns>
     public int getEnemyState()
     {
         return behaviorMode;
@@ -387,8 +493,8 @@ public class ZombieController : MonoBehaviour
                     return;
                 }
                 isMovie = true;
-                vcam.enabled = true;
-                vcam.Priority = 30;
+                enemyCam.enabled = true;
+                enemyCam.Priority = 30;
                 gameOver();
                 animator.SetTrigger("jump");
                 gameManager.sceneState = 0;
@@ -419,11 +525,18 @@ public class ZombieController : MonoBehaviour
         */
     }
 
+    /// <summary>
+    /// ゲームオーバー時の処理
+    /// </summary>
     public void gameOver()
     {
         gameManager.gameOver();
     }
 
+    /// <summary>
+    /// ロッカーに近づくスクリプト
+    /// </summary>
+    /// <param name="locker"></param>
     public void seeLocker(GameObject locker)
     {
         targetLocker = locker;
@@ -437,6 +550,10 @@ public class ZombieController : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// ロッカーを開けるスクリプト
+    /// </summary>
+    /// <returns></returns>
     IEnumerator openLocker()
     {
         Debug.Log("startOpenLocker");
@@ -444,9 +561,10 @@ public class ZombieController : MonoBehaviour
         while (true)
         {
             timer += Time.deltaTime;
-            if (timer > 10)
+            if (timer > 10f)
             {
                 Debug.Log("timeOut");
+                behaviorMode = MOVEAROUND_MODE;
                 yield break;
             }
             if ((targetLocker.transform.position - agent.transform.position).magnitude < 10f)
@@ -461,6 +579,12 @@ public class ZombieController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ロッカーを開けるスクリプト
+    /// プレイヤーが入っていたら、ゲームオーバーに移行する。
+    /// そうでないならば、別の動作をする
+    /// </summary>
+    /// <param name="locker"></param>
     public void OpenLocker(GameObject locker)
     {
         animator.SetTrigger("Open");
@@ -470,9 +594,9 @@ public class ZombieController : MonoBehaviour
         if (lockerScript.playerExistsInLocker)
         {
             isMovie = true;
-            vcam.enabled = true;
-            vcam.transform.position += transform.up * 1f;
-            vcam.Priority = 30;
+            enemyCam.enabled = true;
+            enemyCam.transform.position += transform.up * 1f;
+            enemyCam.Priority = 30;
             gameOver();
             lockerScript.getPlayerController().gameOver(this.gameObject);
             
@@ -492,9 +616,12 @@ public class ZombieController : MonoBehaviour
         lockerScript.Closed();
         yield return new WaitForSeconds(1);
         behaviorMode = MOVEAROUND_MODE;
-        StartCoroutine(DestinationSetting());
+        setDestination();
     }
 
+    /// <summary>
+    /// エネミーをフリーズさせる関数
+    /// </summary>
     public void Freeze()
     {
         canMove = false;
@@ -503,12 +630,19 @@ public class ZombieController : MonoBehaviour
         animator.SetFloat("speed", 0);
 
     }
+
+    /// <summary>
+    /// エネミーをフリーズから解放させる関数
+    /// </summary>
     public void Free()
     {
         canMove = true;
         agent.speed = 0f;
         animator.SetFloat("speed", 0);
     }
+    /// <summary>
+    /// 攻撃を受けた時の関数
+    /// </summary>
     public void damaged()
     {
         behaviorMode = DAMAGED_MODE;
@@ -519,6 +653,7 @@ public class ZombieController : MonoBehaviour
         audiosource.PlayOneShot(damageSE);
     }
 
+    ///ダメージを受けた時の非同期処理
     IEnumerator DamageEvent()
     {
         yield return new WaitForSeconds(3);
@@ -527,62 +662,18 @@ public class ZombieController : MonoBehaviour
         behaviorMode = WAITING_MODE;
         yield break;
     }
-    public bool changeStateEvent(int i)
-    {
-        if(behaviorMode == i)
-        {
-            return false;
-        }
-        if(behaviorMode != i)
-        {
-            return true;
-        }
-        return false;
-    }
 
+    /// <summary>
+    /// ロッカーに入っていることを疑っている時に処理される関数
+    /// ロッカーをエネミーから近い順番に並べて、一番近いロッカーを探す。
+    /// </summary>
     public void SuspectLocker()
     {
-
-        
         if (!isSearching)
         {
             SortLockerDistance();
             isSearching = true;
             seeLocker(lockers[0]);
         }
-       
-        /*
-        agent.speed = 0f;
-        float ViewAngle = 60f;
-        float deltaAngle = -ViewAngle;
-        RaycastHit hit;
-        //Ray ray = new(agent.transform.position + new Vector3(0f, 15f, 0f), Quaternion.AngleAxis(deltaAngle, transform.up) * agent.transform.forward);
-        //Ray ray2 = new Ray(agent.transform.position + new Vector3(0f, 15f, 0f), agent.transform.up);
-        Ray ray3 = new Ray(agent.transform.position + new Vector3(0f, 10f, 0f), agent.transform.forward);
-
-
-        while (deltaAngle < ViewAngle)
-        {
-         
-            deltaAngle += 5f;
-            if (Physics.Raycast(ray3, out hit, detectRange))
-            {
-                if (hit.transform.gameObject.tag == "Locker")
-                {
-                    targetLocker = hit.transform.gameObject;
-
-                    InteractiveLocker = targetLocker.GetComponentInChildren<LockerScript>();
-
-                    seeLocker(hit.transform.gameObject);
-                }
-
-            }
-
-            //Debug.DrawLine(ray.origin, ray.direction * 30f, Color.blue, 1f);
-            //Debug.DrawLine(ray2.origin, ray2.direction * 30f, Color.green, 1f);
-            Debug.DrawLine(ray3.origin, ray3.origin + ray3.direction * 30f, Color.red, 1f);
-
-        }
-        */
     }
 }

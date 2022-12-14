@@ -65,6 +65,9 @@ namespace util
             canInteract = false;
         }
     }
+    /// <summary>
+    /// プログレスバーを必要とするゲームオブジェクトにアタッチする。
+    /// </summary>
     public class ProgressBar: MonoBehaviourPunCallbacks
     {
         [SerializeField] public bool isActive = false;
@@ -82,6 +85,11 @@ namespace util
             panelTransform = progressPanel.GetComponent<RectTransform>();
         }
 
+        /// <summary>
+        /// パネルの大きさを進行度に応じて変更する。
+        /// </summary>
+        /// <param name="rectTransform"></param>
+        /// <param name="size"></param>
         protected void changePanelSize(ref RectTransform rectTransform, float size)
         {
             Vector2 rectSize = rectTransform.sizeDelta;
@@ -89,7 +97,9 @@ namespace util
             rectTransform.sizeDelta = rectSize;
         }
 
-
+        /// <summary>
+        /// 進行度をフレームごとに進める働き
+        /// </summary>
         protected void Progress()
         {
             progressTime += Time.deltaTime;
@@ -107,16 +117,24 @@ namespace util
 
         }
 
+        /// <summary>
+        /// タスクが終わった時の処理
+        /// </summary>
         virtual public void CompleteTask()
         {
             istaskCompleted = true;
         }
-
+        /// <summary>
+        /// タスクを止めた時の処理
+        /// </summary>
         protected void TaskStop()
         {
             isActive = false;
             this.gameObject.SetActive(false);
         }
+        /// <summary>
+        /// タスクを始めた時の処理
+        /// </summary>
         protected void TaskStart()
         {
             isActive = true;
@@ -125,12 +143,18 @@ namespace util
 
     }
 
-
+    /// <summary>
+    /// インタラクトできるオブジェクトのインターフェース
+    /// タスクを完了した時の関数を持つことを保証する
+    /// </summary>
     public interface IcanInteract
     {
         void CompleteTask();
     }
 
+    /// <summary>
+    /// インタラクトできるオブジェクトの抽象クラス
+    /// </summary>
     public abstract class InteractiveObject : MonoBehaviour
     {
         protected PlayerController playerController;

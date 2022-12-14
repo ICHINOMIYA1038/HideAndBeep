@@ -1003,7 +1003,7 @@ GameObject:
   - component: {fileID: 8755151613749946071}
   - component: {fileID: 1608796913907742640}
   m_Layer: 8
-  m_Name: Zombie3
+  m_Name: Zombie
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1085,7 +1085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effect: {fileID: 304595516495008782, guid: 9bc141ed56df8654bb04627d333abe1c, type: 3}
-  vcam: {fileID: 5097994679061421260}
+  enemyCam: {fileID: 5097994679061421260}
   targetPosition: {x: 0, y: 0, z: 0}
   isFinding: 0
   prey: {fileID: 0}
@@ -1097,9 +1097,10 @@ MonoBehaviour:
   lockers: []
   behaviorMode: 0
   beingDamaged: 0
-  detectRange: 100
+  detectRange: 120
   audiosource: {fileID: 1759284647}
   damageSE: {fileID: 8300000, guid: 7549e4030a33b464b88809bf46690ce0, type: 3}
+  detectSoundLevel: 5
 --- !u!82 &1759284647
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1293,7 +1294,7 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: Open
   - Type: 9
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Damaged
   m_SynchronizeLayers:
   - SynchronizeType: 2

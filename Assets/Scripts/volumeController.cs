@@ -4,6 +4,9 @@ using UnityEngine.Audio;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// タイトル画面で音量を調整するためのクラス
+/// </summary>
 public class volumeController : MonoBehaviour
 {
     [SerializeField] AudioMixer audioMixer;
