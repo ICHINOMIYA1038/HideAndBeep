@@ -12,8 +12,6 @@
 **Pleaze click image, then video will start.**
 [!['altテキスト'](./topImage.png)](https://youtu.be/KxBCKCH05N8)
 
-
-
 # Rule
 * プレイヤーは門を開けて小学校を**脱出すること**が目的です。<br>
 * 敵のゾンビに触れてしまうと**ゲームオーバー**です。<br>
