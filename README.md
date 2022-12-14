@@ -9,7 +9,7 @@
 
 
 # Demo
-Pleaze click image, then video will start.
+**Pleaze click image, then video will start.**
 [!['altテキスト'](./topImage.png)](https://youtu.be/KxBCKCH05N8)
 
 
