@@ -26,7 +26,7 @@ Pleaze click image, then video will start.
 * マップ上の音を管理し、優先度の高い順にゾンビが索敵します。<br>
 ![サウンドのデモ画像](./soundDemo.gif "サウンド管理のデモ画像")<br>
 * PUN2（PhotonUnityNetworking2）を用いたP2P通信<br>
-![P2P通信のデモ画像](./P2Psample.gif "P2P通信のデモ画像")<br>
+![P2P通信のデモ画像](./SampleP2P.gif "P2P通信のデモ画像")<br>
 
 # Requirement
 * Unity 2021.3.11f1
