@@ -41,7 +41,7 @@ classDiagram
     SoundObject <-- Radiocon
     SoundObject <-- ClockController
     ProgressBar <-- ProgressBarCon
-    note for SoundObject "utilクラスの中に作成\n共通して利用"
+    note for InteractiveObject "utilクラスの中に作成\n共通して利用"
     IcanInteract <.. BookShelf :Interface
     IcanInteract <.. BoxCon :Interface
     IcanInteract <.. LeverCon :Interface
