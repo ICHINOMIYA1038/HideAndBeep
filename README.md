@@ -45,7 +45,8 @@ classDiagram
     IcanInteract <.. BookShelf :Interface
     IcanInteract <.. BoxCon :Interface
     IcanInteract <.. LeverCon :Interface
-    IcanInteract <.. BoxCon :Interface    
+    IcanInteract <.. BoxCon :Interface  
+```
    
 ```mermaid
     ---
