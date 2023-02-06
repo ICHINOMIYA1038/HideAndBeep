@@ -57,8 +57,9 @@ classDiagram
     IcanInteract <.. BoxCon :Interface
     IcanInteract <.. LeverCon :Interface
     IcanInteract <.. BoxCon :Interface
-    LeverCon
-    FootSound
+
+    class FootSound
+    link FootSound "https://www.github.com" "This is a tooltip for a link"
     MapSoundManager
     GameManager
     GoalTrigger
