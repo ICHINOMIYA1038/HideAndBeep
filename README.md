@@ -43,7 +43,7 @@ so you need to download font assets corresponding to Japanese.
 title: Animal example
 ---
 classDiagram
-    note "From Duck till Zebra"
+    note "メンバは主要な部分のみ抜粋"
     Animal <|-- Duck
     note for Duck "can fly\ncan swim\ncan dive\ncan help in debugging"
     Animal <|-- Fish
