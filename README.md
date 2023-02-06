@@ -40,12 +40,12 @@ so you need to download font assets corresponding to Japanese.
 # Class Diagram (now on Creating)
 ```mermaid
 ---
-title: Animal example
+title: クラス図
 ---
 classDiagram
     note "メンバは主要な部分のみ抜粋"
-    Animal <|-- Duck
-    note for Duck "can fly\ncan swim\ncan dive\ncan help in debugging"
+    InteractiveObject <|-- SoundObject
+    note for SoundObject "can fly\ncan swim\ncan dive\ncan help in debugging"
     Animal <|-- Fish
     Animal <|-- Zebra
     Animal : +int age
