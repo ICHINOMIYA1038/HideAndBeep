@@ -38,7 +38,7 @@ so you need to download font assets corresponding to Japanese.
 * 九州デザイナー学院ゲームCG学科ゲームプログラミング専攻
 
 # Class Diagram (now on Creating)
-```
+```mermaid
 graph TD
     A[Christmas] -->|Get money| B(Go shopping)
     B --> C{Let me think}
