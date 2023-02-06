@@ -26,17 +26,6 @@
 * PUN2（PhotonUnityNetworking2）を用いたP2P通信<br>
 ![P2P通信のデモ画像](./SampleP2P.gif "P2P通信のデモ画像")<br>
 
-# Requirement
-* Unity 2021.3.11f1
-
-# Note
-this repository rid font assets off because the size is too large.
-so you need to download font assets corresponding to Japanese.
-
-# Author
-* 一ノ宮綾平
-* 九州デザイナー学院ゲームCG学科ゲームプログラミング専攻
-
 # Class Diagram (now on Creating)
 ```mermaid
 ---
@@ -73,3 +62,16 @@ classDiagram
     
    
 ```
+
+
+# Requirement
+* Unity 2021.3.11f1
+
+# Note
+this repository rid font assets off because the size is too large.
+so you need to download font assets corresponding to Japanese.
+
+# Author
+* 一ノ宮綾平
+* 九州デザイナー学院ゲームCG学科ゲームプログラミング専攻
+
