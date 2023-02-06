@@ -59,7 +59,7 @@ classDiagram
     IcanInteract <.. BoxCon :Interface
 
     class FootSound
-    link FootSound "https://github.com/ICHINOMIYA1038/HideAndBeep/blob/main/Assets/Scripts/FootSound.cs" "This is a tooltip for a link"
+    link FootSound "https://github.com/ICHINOMIYA1038/HideAndBeep/blob/main/Assets/Scripts/FootSound.cs"
     MapSoundManager
     GameManager
     GoalTrigger
