@@ -40,7 +40,7 @@ so you need to download font assets corresponding to Japanese.
 # Class Diagram (now on Creating)
 ```mermaid
 graph TD
-    A[Christmas] -->|Get money| B(Go shopping)
+    A[InteractiveObject] <-- B[SoundObject]
     B --> C{Let me think}
     C -->|One| D[Laptop]
     C -->|Two| E[iPhone]
