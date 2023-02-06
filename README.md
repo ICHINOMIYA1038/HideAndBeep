@@ -47,7 +47,7 @@ classDiagram
     IcanInteract <.. LeverCon :Interface
     IcanInteract <.. BoxCon :Interface
     
-    subgraph one
+    subclass one
     class FootSound
     link FootSound "https://github.com/ICHINOMIYA1038/HideAndBeep/blob/main/Assets/Scripts/FootSound.cs"
     class MapSoundManager
