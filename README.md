@@ -45,7 +45,7 @@ title: クラス図
 classDiagram
     note "メンバは主要な部分のみ抜粋"
     InteractiveObject <|-- SoundObject
-    note for SoundObject "can fly\ncan swim\ncan dive\ncan help in debugging"
+    note for SoundObject "utilクラスの中に作成\n共通して利用"
     Animal <|-- Fish
     Animal <|-- Zebra
     Animal : +int age
