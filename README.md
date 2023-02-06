@@ -52,6 +52,18 @@ classDiagram
     ---
 title: クラス図
 ---
+    class SoundManager
+    class RandomMatchMaker
+    class PlayerController
+    class ZombieController
+    class volumeController
+    class LockerIncheck
+```
+
+```mermaid
+    ---
+title: クラス図
+---
     classDiagram
     class FootSound
     link FootSound "https://github.com/ICHINOMIYA1038/HideAndBeep/blob/main/Assets/Scripts/FootSound.cs"
@@ -59,12 +71,6 @@ title: クラス図
     click MapSoundManager href "https://www.github.com" "This is a tooltip for a link"
     class GameManager
     class GoalTrigger
-    class SoundManager
-    class RandomMatchMaker
-    class PlayerController
-    class ZombieController
-    class volumeController
-    class LockerIncheck
 ```
 
 
