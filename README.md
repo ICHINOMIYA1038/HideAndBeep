@@ -62,14 +62,14 @@ classDiagram
     link FootSound "https://github.com/ICHINOMIYA1038/HideAndBeep/blob/main/Assets/Scripts/FootSound.cs"
     class MapSoundManager
     click MapSoundManager href "https://www.github.com" "This is a tooltip for a link"
-    GameManager
-    GoalTrigger
-    SoundManager
-    RandomMatchMaker
-    PlayerController
-    ZombieController
-    volumeController
-    LockerIncheck
+    class GameManager
+    class GoalTrigger
+    class SoundManager
+    class RandomMatchMaker
+    class PlayerController
+    class ZombieController
+    class volumeController
+    class LockerIncheck
     
    
 ```
