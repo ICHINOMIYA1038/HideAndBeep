@@ -45,8 +45,30 @@ title: クラス図
 classDiagram
     note "メンバは主要な部分のみ抜粋"
     InteractiveObject <|-- SoundObject
+    InteractiveObject <|-- DoorCon
+    InteractiveObject <|-- LockerScript
+    
+    SoundObject <-- PianoCon
+    SoundObject <-- Radiocon
+    SoundObject <-- ClockController
+    ProgressBar <-- ProgressBarCon
     note for SoundObject "utilクラスの中に作成\n共通して利用"
     IcanInteract <.. BookShelf :Interface
+    IcanInteract <.. BoxCon :Interface
+    IcanInteract <.. LeverCon :Interface
+    IcanInteract <.. BoxCon :Interface
+    LeverCon
+    FootSound
+    MapSoundManager
+    GameManager
+    GoalTrigger
+    SoundManager
+    RandomMatchMaker
+    PlayerController
+    ZombieController
+    volumeController
+    LockerIncheck
+    
     Animal <|-- Zebra
     Animal : +int age
     Animal : +String gender
