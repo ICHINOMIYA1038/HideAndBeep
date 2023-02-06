@@ -59,7 +59,7 @@ classDiagram
     IcanInteract <.. BoxCon :Interface
 
     class FootSound
-    link FootSound href "https://github.com/ICHINOMIYA1038/HideAndBeep/blob/main/Assets/Scripts/FootSound.cs"
+    link FootSound "https://github.com/ICHINOMIYA1038/HideAndBeep/blob/main/Assets/Scripts/FootSound.cs"
     class MapSoundManager
     click MapSoundManager href "https://www.github.com" "This is a tooltip for a link"
     GameManager
