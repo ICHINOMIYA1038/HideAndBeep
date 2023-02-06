@@ -29,7 +29,7 @@
 # Class Diagram (now on Creating)
 ```mermaid
 ---
-title: クラス図
+title: クラス図(1/3)
 ---
 classDiagram
     note "メンバは主要な部分のみ抜粋"
@@ -49,9 +49,10 @@ classDiagram
 ```
    
 ```mermaid
-    ---
-title: クラス図
 ---
+title: クラス図(2/3)
+---
+    classDiagram
     class SoundManager
     class RandomMatchMaker
     class PlayerController
@@ -61,8 +62,8 @@ title: クラス図
 ```
 
 ```mermaid
-    ---
-title: クラス図
+---
+title: クラス図(3/3)
 ---
     classDiagram
     class FootSound
