@@ -38,9 +38,11 @@ so you need to download font assets corresponding to Japanese.
 * 九州デザイナー学院ゲームCG学科ゲームプログラミング専攻
 
 # Class Diagram (now on Creating)
+```
 graph TD
     A[Christmas] -->|Get money| B(Go shopping)
     B --> C{Let me think}
     C -->|One| D[Laptop]
     C -->|Two| E[iPhone]
     C -->|Three| F[fa:fa-car Car]
+```
