@@ -45,8 +45,9 @@ classDiagram
     IcanInteract <.. BookShelf :Interface
     IcanInteract <.. BoxCon :Interface
     IcanInteract <.. LeverCon :Interface
-    IcanInteract <.. BoxCon :Interface
-    
+    IcanInteract <.. BoxCon :Interface    
+   
+```mermaid
     ---
 title: クラス図
 ---
@@ -63,11 +64,8 @@ title: クラス図
     class ZombieController
     class volumeController
     class LockerIncheck
-    
-   
-    
-   
 ```
+
 
 
 # Requirement
