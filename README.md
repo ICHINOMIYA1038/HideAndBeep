@@ -10,7 +10,7 @@
 
 # Demo
 **Pleaze click image, then video will start.**
-[!['altテキスト'](./ShootingImage.png)](https://youtu.be/KxBCKCH05N8)
+[!['altテキスト'](./topImage.png)](https://youtu.be/KxBCKCH05N8)
 
 # Rule
 * プレイヤーは門を開けて小学校を**脱出すること**が目的です。<br>
