@@ -46,7 +46,7 @@ classDiagram
     note "メンバは主要な部分のみ抜粋"
     InteractiveObject <|-- SoundObject
     note for SoundObject "utilクラスの中に作成\n共通して利用"
-    Animal <|-- Fish
+    IcanInteract <.. BookShelf :Interface
     Animal <|-- Zebra
     Animal : +int age
     Animal : +String gender
